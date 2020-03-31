@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="首先说明一下这里并不打算展开讲函数式异常处理因为这篇文章的主题是介绍薛定谔类型. 关于前者我推荐medium上的一篇文章“Functional Error Handling”.本文很大程度上是受到这篇文章的启发 一句话来说很多语言都有自己函数式处理异常的方式也许你已经用过了只是没有认识到这一点而已:   Typescript的Union类型 Swif的Option类型 Haskell的Maybe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)">
+<meta property="og:url" content="https://twitter.com/zhuobinggang/2020/03/30/p20200330/index.html">
+<meta property="og:site_name" content="盒子在日本">
+<meta property="og:description" content="首先说明一下这里并不打算展开讲函数式异常处理因为这篇文章的主题是介绍薛定谔类型. 关于前者我推荐medium上的一篇文章“Functional Error Handling”.本文很大程度上是受到这篇文章的启发 一句话来说很多语言都有自己函数式处理异常的方式也许你已经用过了只是没有认识到这一点而已:   Typescript的Union类型 Swif的Option类型 Haskell的Maybe">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://twitter.com/imgs/p20200330/04.png">
+<meta property="og:image" content="https://twitter.com/imgs/p20200330/01.png">
+<meta property="og:image" content="https://twitter.com/imgs/p20200330/02.png">
+<meta property="og:image" content="https://twitter.com/imgs/p20200330/03.png">
+<meta property="article:published_time" content="2020-03-30T12:04:11.000Z">
+<meta property="article:modified_time" content="2020-03-30T12:04:11.000Z">
+<meta property="article:author" content="kobako">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://twitter.com/imgs/p20200330/04.png">
+    <meta name="google-site-verification" content="OZsvRA2rPRV_qX--Vm8FgrLOyJLbwa28Mbn7Ah1viOQ" />
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/03/30/Monad-And-Real-World/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/03/30/p20200330/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&text=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&is_video=false&description=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)&body=Check out this article: https://twitter.com/zhuobinggang/2020/03/30/p20200330/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&name=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&t=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#怎么用薛定谔类型处理空指针异常"><span class="toc-number">1.</span> <span class="toc-text">怎么用薛定谔类型处理空指针异常?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从薛定谔类型异常处理看本质"><span class="toc-number">2.</span> <span class="toc-text">从薛定谔类型异常处理看本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#薛定谔类型-数学与现实世界的桥梁"><span class="toc-number">3.</span> <span class="toc-text">薛定谔类型: 数学与现实世界的桥梁</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">盒子在日本</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-03-30T12:04:11.000Z" itemprop="datePublished">2020-03-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="/imgs/p20200330/04.png" alt="01"></p>
+<p>首先说明一下<br>这里并不打算展开讲函数式异常处理<br>因为这篇文章的主题是介绍薛定谔类型.</p>
+<p>关于前者我推荐medium上的一篇文章<a href="https://medium.com/techtron/functional-errors-handling-1d1b4688769d" target="_blank" rel="noopener">“Functional Error Handling”</a>.<br>本文很大程度上是受到这篇文章的启发</p>
+<p>一句话来说<br>很多语言都有自己函数式处理异常的方式<br>也许你已经用过了<br>只是没有认识到这一点而已: </p>
+<ol>
+<li>Typescript的Union类型</li>
+<li>Swif的Option类型</li>
+<li>Haskell的Maybe类型</li>
+</ol>
+<p>如果要给这种类型下个定义<br>那就是薛定谔类型(非公式说法)</p>
+<h2 id="怎么用薛定谔类型处理空指针异常"><a href="#怎么用薛定谔类型处理空指针异常" class="headerlink" title="怎么用薛定谔类型处理空指针异常?"></a>怎么用薛定谔类型处理空指针异常?</h2><p>这里用Typescript作为例子<br>如果一个函数没有处理Null会怎样: </p>
+<p><img src="/imgs/p20200330/01.png" alt="01"><br><img src="/imgs/p20200330/02.png" alt="02"></p>
+<p>答案是编译器会报错<br>我们通过Union类型杜绝了出现空指针异常的可能性</p>
+<h2 id="从薛定谔类型异常处理看本质"><a href="#从薛定谔类型异常处理看本质" class="headerlink" title="从薛定谔类型异常处理看本质"></a>从薛定谔类型异常处理看本质</h2><p>从表象上看<br>我们通过编译器报错<br>回避了空指针异常<br>但是这个现象的本质是什么？</p>
+<p>我会告诉你：<br>如果使用函数式编程, 且输入是合法的(排除非法数据导致异常的可能性，比如除以输入0)，就能够回避所有的异常</p>
+<p>你可能会说:这怎么可能?<br>但是这是事实<br>下面是推理过程: </p>
+<ol>
+<li>函数式编程的函数是纯函数，对于任何合法输入，都有唯一确定的输出.</li>
+<li>纯函数没有副作用，不会改变函数域外的变量(杜绝了绝大部分稀奇古怪的异常).</li>
+</ol>
+<p>根据以上定义<br>将纯函数看作一个map<br>对于任意合法的key 都存在唯一一个对应value<br>所以请你告诉我y = map[key]这样一个简单的操作如何发生异常？</p>
+<p>你会说:<br>要求输入合法是犯规啊!<br>现实中怎么能这样处理问题？</p>
+<p>那么请你把纯函数看作一个数学函数y = f(x)<br>合法的key其实就是符合定义域的x<br>从这个角度去思考<br>你就不会纠结”合法key”这样一个定义了</p>
+<p>可能你还会反驳<br>我在面向对象编程里<br>如果有合法输入也不会发生异常啊！</p>
+<p>可是这是错的<br>无论你在函数里throw一个异常<br>或者是改一些全局变量<br>或者执行了一句”rm -rf /“<br>都有十足的可能发生异常<br>而纯函数杜绝了这些可能性.</p>
+<p>纯函数通过消灭了可变性，回归数学，构造了一个绝对稳定，逻辑严谨的系统。<br>可是问题随之而来: 一个不变的系统，如何反应一个持续变化的客观世界？</p>
+<p>也许这样说的太玄乎<br>举个例子:<br>在c语言里我用getChar()函数来获取用户的输入<br>先别纠结函数是不是写错了因为我也好久没用c了<br>这个操作本身是没有问题的<br>刚学写程序的人最熟悉这个</p>
+<p>可是有人不乐意了<br>他们是函数式编程的推崇者<br>一群有洁癖的人(我不是在贬低他们，有洁癖的人最值得尊敬)<br>他们说：<br>getChar的输入永远为空<br>可是输出却有许多可能<br>这根本不是一个纯函数！<br>我们函数式编程不能容忍这种东西的存在!</p>
+<p>所以问题就暴露了出来: 一个不变的系统，如何反应一个持续变化的客观世界(用户输入)？</p>
+<p>如果有人告诉你是Monad<br>请你打断他的腿(Monad我会另找时间介绍, 我发现网上的说法很容易误导人)<br>真正的答案是薛定谔类型</p>
+<h2 id="薛定谔类型-数学与现实世界的桥梁"><a href="#薛定谔类型-数学与现实世界的桥梁" class="headerlink" title="薛定谔类型: 数学与现实世界的桥梁"></a>薛定谔类型: 数学与现实世界的桥梁</h2><p>在函数式世界里，我们用薛定谔类型表现一个持续变化的世界</p>
+<p>如果以用户输入为例子<br>在Haskell里这个薛定谔类型就是IO<br>怎么理解IO呢？<br>我们可以认为它是一个所有用户输入的集合<br>但是在取出来之前<br>谁都不知道里面是什么<br>所以它是一个薛定谔类型</p>
+<p>这里最重要的问题在于<br>纯函数是如何处理薛定谔类型的？</p>
+<p>接下来我不用IO作为例子<br>因为我们通常用一个变量去接住这个输入，比如:<br>palindrome &lt;- getLine<br>然后再用这个变量作为函数输入<br>这样一来函数就跟薛定谔类型(在这里就是IO)解耦了<br>起不到说明作用<br>我会以Maybe Num作为例子</p>
+<p>假设一个有一个函数名叫maybeAdd2<br>接受一个MaybeNum类型作为输入<br>MaybeNum类型可能为null也可能为某个数字<br>下面是它的实现(原谅我用typescript作为例子):<br><img src="/imgs/p20200330/03.png" alt="03"></p>
+<p>编译通过了<br>我们得到了一个处理薛定谔类型的函数！<br>这是非常了不起的<br>因为： 所有不确定的东西都可以用薛定谔类型表示<br>所以： 我们能处理现实世界的东西(We can deal with the <code>f**king</code> real world)</p>
+<p>可是你可能会问: 这个真的是纯函数吗, 看起来不大像啊？<br>很好的问题<br>如果不符合纯函数<br>我们就又回到了交互式编程<br>函数式洁癖者也不会认同这种东西的存在</p>
+<p>下面是推理:<br>输入maybe 2 =&gt; 输出maybe 4<br>输入maybe 3 =&gt; 输出maybe 5<br>输入maybe 4 =&gt; 输出maybe 6<br>…</p>
+<p>好了这下你应该会同意这个函数是纯函数了.</p>
+<p>下一篇文章我会谈谈Monad<br>也许这个系列就只有两篇文章<br>也许更多也说不定<br>我花了不少时间去码字<br>希望看完有帮助的能点个👍 </p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#怎么用薛定谔类型处理空指针异常"><span class="toc-number">1.</span> <span class="toc-text">怎么用薛定谔类型处理空指针异常?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从薛定谔类型异常处理看本质"><span class="toc-number">2.</span> <span class="toc-text">从薛定谔类型异常处理看本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#薛定谔类型-数学与现实世界的桥梁"><span class="toc-number">3.</span> <span class="toc-text">薛定谔类型: 数学与现实世界的桥梁</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/03/30/p20200330/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&text=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&is_video=false&description=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)&body=Check out this article: https://twitter.com/zhuobinggang/2020/03/30/p20200330/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&title=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&name=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/03/30/p20200330/&t=从函数式编程如何处理异常到薛定谔类型 -- 函数式编程本质(I)" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 kobako
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
