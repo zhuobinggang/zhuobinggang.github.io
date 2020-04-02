@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Fluent API – DSL的救赎  论文导读系列(I)Formal Language Recognition with the Java Type Checker[2016] 为什么Fluent API?我们为什么需要DSL(领域特化语言)？从个人观点来看 是为了更精简地表达人们喜欢函数式语言的原因也是一样的在函数式编程里杜绝所有的状态变化是为了从交互式编程(Imperative progr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluent API and DSL">
+<meta property="og:url" content="https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/index.html">
+<meta property="og:site_name" content="盒子在日本">
+<meta property="og:description" content="Fluent API – DSL的救赎  论文导读系列(I)Formal Language Recognition with the Java Type Checker[2016] 为什么Fluent API?我们为什么需要DSL(领域特化语言)？从个人观点来看 是为了更精简地表达人们喜欢函数式语言的原因也是一样的在函数式编程里杜绝所有的状态变化是为了从交互式编程(Imperative progr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://twitter.com/imgs/p20200402/01.png">
+<meta property="article:published_time" content="2020-04-02T03:40:07.000Z">
+<meta property="article:modified_time" content="2020-04-02T03:40:07.000Z">
+<meta property="article:author" content="kobako">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://twitter.com/imgs/p20200402/01.png">
+    <meta name="google-site-verification" content="OZsvRA2rPRV_qX--Vm8FgrLOyJLbwa28Mbn7Ah1viOQ" />
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Fluent API and DSL</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/03/30/p20200330/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&text=Fluent API and DSL"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&is_video=false&description=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Fluent API and DSL&body=Check out this article: https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&name=Fluent API and DSL&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&t=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么Fluent-API"><span class="toc-number">1.</span> <span class="toc-text">为什么Fluent API?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要类型检查？"><span class="toc-number">2.</span> <span class="toc-text">为什么要类型检查？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么写一个支持类型检查的Fluent-API"><span class="toc-number">3.</span> <span class="toc-text">怎么写一个支持类型检查的Fluent API?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么写一个语义正确的支持类型检查的Fluent-API"><span class="toc-number">4.</span> <span class="toc-text">怎么写一个语义正确的支持类型检查的Fluent API?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自动化Fluent-API生成"><span class="toc-number">5.</span> <span class="toc-text">自动化Fluent API生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Fluent API and DSL
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">盒子在日本</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-04-02T03:40:07.000Z" itemprop="datePublished">2020-04-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Fluent API – DSL的救赎 </p>
+<p>论文导读系列(I)<br>Formal Language Recognition with the Java Type Checker[2016]</p>
+<h3 id="为什么Fluent-API"><a href="#为什么Fluent-API" class="headerlink" title="为什么Fluent API?"></a>为什么Fluent API?</h3><p>我们为什么需要DSL(领域特化语言)？<br>从个人观点来看 是为了更精简地表达<br>人们喜欢函数式语言的原因也是一样的<br>在函数式编程里杜绝所有的状态变化<br>是为了从交互式编程(Imperative programming)转向指令式编程(Declarative programming)<br>从而实现更精简的表达</p>
+<p>可是世界上无数的系统 无数的领域<br>难道每个都实现自己的一套语言吗？<br>我觉得这是难以接受的<br>虽然现在想实现一个语言已经很方便了<br>只要提供一个BNF就会有工具帮我们实现自动机<br>可是不可否认这个过程门槛仍然是很高的</p>
+<p>Fluent API是什么？<br>以防有人不知道我在这里简单描述一下<br>它就是能够串起来调用的一些函数，比如<code>a().b().c()...</code><br>但是这里需要明确一点，Java的StringBuilder不属于Fluent API<br>因为它返回的永远是同一个对象，意味着所有的调用都发生在这个对象上<br>而Fluent API每个函数的返回类型都是任意的<br>StringBuilder这种调用方式被称为method chaining<br>Fluent API != Method Chaining</p>
+<p>Fluent API将变量声明给省略了<br>这就是它的威力所在<br>极大地提高了语言的表达能力(精简性)<br>函数式语言不就是想要这个效果么？</p>
+<p>也许聪明的你已经意识到<br>Fluent API是不是可以代替DSL呢？<br>事实上Fluent API就是DSL<br>但它是被嵌到宿主语言(实现语言)上的DSL<br>所以被称为EDSL(Embed DSL)</p>
+<p>Fluent API就是DSL<br>似乎人们最近几年才理解到这一点<br>因为它拥有跟DSL同等的表达力<br>还能够用宿主语言的特性<br>它的性质决定了Fluent API今后一定会大火</p>
+<h3 id="为什么要类型检查？"><a href="#为什么要类型检查？" class="headerlink" title="为什么要类型检查？"></a>为什么要类型检查？</h3><p>原因是:</p>
+<ol>
+<li>从经验上判断，对Fluent API进行类型检查是可行的</li>
+<li>既然类型检查可行，我们就希望在编译时检查出问题减少运行时出现错误的几率</li>
+</ol>
+<h3 id="怎么写一个支持类型检查的Fluent-API"><a href="#怎么写一个支持类型检查的Fluent-API" class="headerlink" title="怎么写一个支持类型检查的Fluent API?"></a>怎么写一个支持类型检查的Fluent API?</h3><p>这里引入一个Box系统作为例子:<br>盒子支持两种操作,close &amp; open<br>这也是最简单的一个DSL</p>
+<p>现在我们来给它编码以支持类型检查</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Box&#123;</span><br><span class="line">  open(): Box;</span><br><span class="line">  close(): Box;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> TheBox <span class="keyword">implements</span> Box&#123;</span><br><span class="line">  open()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  close()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> TheBox().close().open().close()</span><br></pre></td></tr></table></figure>
+
+<p>注意这里的open和close返回的是一个Box，以支持Fluent API<br>这样算是实现了类型检查吗？<br>当然 至少保证了Box类型不能调用explode函数</p>
+<p>然后问题就暴露出来了:<br>众所周知，一个打开的盒子不能再打开，一个关闭的盒子不能再关闭<br>也就是说: <code>box.open().open()</code> or <code>box.close().open()</code> 都是不合法的</p>
+<h3 id="怎么写一个语义正确的支持类型检查的Fluent-API"><a href="#怎么写一个语义正确的支持类型检查的Fluent-API" class="headerlink" title="怎么写一个语义正确的支持类型检查的Fluent API?"></a>怎么写一个语义正确的支持类型检查的Fluent API?</h3><p>Box类型其实应该细分为OpenBox和CloseBox</p>
+<p>上个自己画的图, 这是一个自动机(伪), 由图可知，函数close, open，实际上是partial function:<br><img src="/imgs/p20200402/01.png" alt=""></p>
+<p>这种内部实际上拥有复杂状态的类型叫做stated-type<br>与此相对的举个例子就是Java的StringBuilder，就不细说了</p>
+<p>下面是实现:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> CloseBox <span class="keyword">implements</span> Box&#123;</span><br><span class="line">  open()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> OpenBox();</span><br><span class="line">  &#125;</span><br><span class="line">  close(): never&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="string">"No I should not call this method"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> OpenBox <span class="keyword">implements</span> Box&#123;</span><br><span class="line">  open(): never&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="string">"No I should not call this method"</span></span><br><span class="line">  &#125;</span><br><span class="line">  close(): CloseBox&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> CloseBox();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">new</span> OpenBox().open() <span class="comment">// I want the type checker to report an error.</span></span><br></pre></td></tr></table></figure>
+
+<p>当我调用OpenBox的open方法的时候, 最理想的情况是编译器能报一个错误:<br>但是我发现typescript好像没办法做到这件事情 让我十分苦恼<br>我在stackoverflow上问了这个问题<a href="https://stackoverflow.com/questions/60983245/can-typescript-define-uncallable-method-in-a-class" target="_blank" rel="noopener">Can typescript define uncallable method in a class?</a><br>论文中用的是java，作者用了一点trick去实现了这件事情但是可读性贼差<br>我认为语言完全应该实现这个feature<br>比如我返回never类型那么类型系统就不应该让我调用这个方法<br>我也在typescript的github项目上提了个issue<br>这里我直接throw一个error，让我们的脑内编译器抛出一个错误吧</p>
+<p>这就是一个语义正确的支持类型检查的Fluent API的实现</p>
+<h3 id="自动化Fluent-API生成"><a href="#自动化Fluent-API生成" class="headerlink" title="自动化Fluent API生成"></a>自动化Fluent API生成</h3><p>上下文无关文法是可以描述stated-type的<br>比如我们给Box系统提供一个BNF, 他会是这个样子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; epsilon是希腊字母那个, 代表空</span><br><span class="line">Box :&#x3D; open close Box | epsilon</span><br></pre></td></tr></table></figure>
+<p>在Box这个语言里 <code>open open</code> 这样一个语句是不合法的<br>没办法通过编译</p>
+<p><em>换个角度， stated-type实际上是一个语义问题</em></p>
+<p>我们能从BNF手动写出一个 语义正确的提供类型检查的Fluent API<br>然后我们思考，从BNF中识别出stated-type的规律是什么?<br>如果发现了这个规律，不单只手写API的效率大幅提高，不用动脑子<br>我们甚至能够 自动生成Fluent API</p>
+<p>然后就是论文的精髓所在了</p>
+<p>识别语义？这不就是下推自动机的工作么？<br>下推自动机有一个栈<br>这个栈的本质其实就是语义<br>只有在当前栈(语义)状态下，才能够调用sigma方法</p>
+<p>这就是: 通过对下推自动机的模仿(mimic)实现语义类型系统</p>
+<p>然后按部就班将自动机翻译成Fluent API就好了<br>这就是自动化Fluent API的生成逻辑</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Fluent API🐂🍺</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么Fluent-API"><span class="toc-number">1.</span> <span class="toc-text">为什么Fluent API?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要类型检查？"><span class="toc-number">2.</span> <span class="toc-text">为什么要类型检查？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么写一个支持类型检查的Fluent-API"><span class="toc-number">3.</span> <span class="toc-text">怎么写一个支持类型检查的Fluent API?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么写一个语义正确的支持类型检查的Fluent-API"><span class="toc-number">4.</span> <span class="toc-text">怎么写一个语义正确的支持类型检查的Fluent API?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自动化Fluent-API生成"><span class="toc-number">5.</span> <span class="toc-text">自动化Fluent API生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&text=Fluent API and DSL"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&is_video=false&description=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Fluent API and DSL&body=Check out this article: https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&title=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&name=Fluent API and DSL&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/04/02/Fluent-API-and-DSL/&t=Fluent API and DSL" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 kobako
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
