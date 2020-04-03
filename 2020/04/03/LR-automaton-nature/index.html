@@ -160,6 +160,23 @@
 
 <p>Q: 一共会有多少个state?<br>A: 也就是，一共会有多少个itemset? 总所周知symbol集里的每一个symbol产生一个itemset, 对itemset里面的rule移动dot之后产生新的symbol集, 所以很难量化</p>
 <p>Q: 步骤简述:<br>A: move -&gt; extend -&gt; get symbols -&gt; split itemset by symbols</p>
+<p>Q: Reduce是盲目的，这样会出现什么问题？什么样的文法会违反这个规则？</p>
+<p>Q: 什么样的文法是non-LR grammar?<br>A: 1. reduce-shift conflict grammar, 比如dangling else. 2. reduce-reduce conflict, 定义重复, 同样的规则不同的nonterminal</p>
+<p>Q: 为Box construct一个LR table</p>
+<p>Box : open close Box<br>Box : e</p>
+<hr>
+<p>split ^ {Box := open close Box}<br>move {Box := . open close Box}<br>extend itemset0 {Box := . open close Box}<br>xs { open }</p>
+<hr>
+<p>split open {Box := . open close Box}<br>move {Box := open . close Box}<br>extend itemset1 {Box := open . close Box}<br>xs {close}</p>
+<hr>
+<p>split close {Box := open . close Box}<br>move {Box := open close . Box}<br>// extend itemset2 {Box := open close . Box, Box := . open close Box, Box := . $}<br>// Q: 我是不是可以不要epsilon? =&gt;<br>// extend itemset2 {Box := open close . Box, Box := . open close Box}<br>// A: 没有epsilon永远到不了state3<br>extend itemset2 {Box := open close . Box, Box := . open close Box, Box := . e}<br>xs {Box, open, e}</p>
+<hr>
+<p>split Box {Box := open close . Box}<br>move {Box := open close Box .}<br>extend itemset3 {Box := open close Box .}<br>all cols reduce</p>
+<p>split open {Box := . open close Box}<br>move {Box := open . close Box}<br>extend {Box := open . close Box} the same as itemset1<br>goto itemset1</p>
+<p>split e {Box := . e}<br>move {Box := e .}<br>extend itemset4 {Box := e .}<br>reduce all cols</p>
+<hr>
+<p>split $ {Box := open close Box .}</p>
+<p>Q: 在move之后，会不会发生，itemset隶属于某个itemset的情况？<br>A: itemset是由根节点扩展来的？假如同时出现了set1, set2, set2属于set1？ 因为set2不能为set1的kernel item, 不然完全可以分化成set1跟set1等价，所以只能为分化的item, 因为分化item都是从^开始的，所以set2的item必然是从^开始的, 因为从^开始，所以它必须由某个东西分化而来。不好意思，他们就是等价的</p>
 
   </div>
 </article>
