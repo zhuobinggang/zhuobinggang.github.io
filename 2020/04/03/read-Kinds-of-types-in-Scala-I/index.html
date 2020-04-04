@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="疑问区Q: 集论为什么重要？A: 集论成为了所有数学分支的基础. Q: 为什么我们会忘记捕捉异常?A: 因为在每个人的意识里，不管是自己写的函数还是系统提供的函数, 发生函数异常的地方都是不需要指明的 Q: 什么是Modifier?A: Modifier就是一个函数，在unit调用时生效，参数为monad &amp; 输入, 意味着我可以对函数调用做手脚 Q: 什么是Turn Based Proc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala Type Study Questions">
+<meta property="og:url" content="https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/index.html">
+<meta property="og:site_name" content="盒子在日本">
+<meta property="og:description" content="疑问区Q: 集论为什么重要？A: 集论成为了所有数学分支的基础. Q: 为什么我们会忘记捕捉异常?A: 因为在每个人的意识里，不管是自己写的函数还是系统提供的函数, 发生函数异常的地方都是不需要指明的 Q: 什么是Modifier?A: Modifier就是一个函数，在unit调用时生效，参数为monad &amp; 输入, 意味着我可以对函数调用做手脚 Q: 什么是Turn Based Proc">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-03T14:42:52.000Z">
+<meta property="article:modified_time" content="2020-04-03T14:42:52.000Z">
+<meta property="article:author" content="kobako">
+<meta property="article:tag" content="Daily">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary">
+    <meta name="google-site-verification" content="OZsvRA2rPRV_qX--Vm8FgrLOyJLbwa28Mbn7Ah1viOQ" />
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Scala Type Study Questions</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/04/04/post20200404-Why-I-choose-NLP/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/04/03/Monad-for-functional-programming/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&text=Scala Type Study Questions"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&is_video=false&description=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scala Type Study Questions&body=Check out this article: https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&name=Scala Type Study Questions&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&t=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#疑问区"><span class="toc-number">1.</span> <span class="toc-text">疑问区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#笔记区"><span class="toc-number">2.</span> <span class="toc-text">笔记区</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Scala Type Study Questions
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">盒子在日本</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-04-03T14:42:52.000Z" itemprop="datePublished">2020-04-03</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Daily/" rel="tag">Daily</a>, <a class="tag-link" href="/tags/Study/" rel="tag">Study</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="疑问区"><a href="#疑问区" class="headerlink" title="疑问区"></a>疑问区</h2><p>Q: 集论为什么重要？<br>A: 集论成为了所有数学分支的基础.</p>
+<p>Q: 为什么我们会忘记捕捉异常?<br>A: 因为在每个人的意识里，不管是自己写的函数还是系统提供的函数, 发生函数异常的地方都是不需要指明的</p>
+<p>Q: 什么是Modifier?<br>A: Modifier就是一个函数，在unit调用时生效，参数为monad &amp; 输入, 意味着我可以对函数调用做手脚</p>
+<p>Q: 什么是Turn Based Processing?<br>A: 像Node那样的单线程队列机制</p>
+<p>Q: 都说scala跟haskell的类型系统比java高级，但是实际上高级在哪里？</p>
+<p>Q: 什么是Monadic Comprehension? 为什么他能减少boiler-plate code?</p>
+<p>Q: Can Turn Based Processing replace Concurrency?</p>
+<p>Q: 我如何用Modifier制作一个Writer Monad?</p>
+<p>Q: Promise跟普通Monad的区别？</p>
+<p>Q: Writer Monad违背了Monad的本质吗？</p>
+<hr>
+<p>20200402 继续研读</p>
+<p>Q: 类型是如何解决集论悖论的？</p>
+<p>Q: 类型系统和数学中的类型又有什么本质共通之处？</p>
+<p>Q: 文章目录结构?<br>A:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- 类型的由来</span><br><span class="line">+ 类型，直觉</span><br><span class="line">  - In scala</span><br><span class="line">- Type inference and Least Upper Bounds</span><br><span class="line">- 代数数据类型</span><br><span class="line">- Compound and intersection types</span><br><span class="line">- Classes</span><br><span class="line">- Unit</span><br><span class="line">- Summary</span><br></pre></td></tr></table></figure>
+
+<p>Q: 什么是Least Upper Bounds?<br>A: 像最小公倍数一样的东西, 对于Some[Int]和None来说就是Option[Int]</p>
+<p>Q: 什么是Zermelo–Fraenkel axioms(公理)?<br>A: 利用 1. power set永远比original set大 2. set of all set应该包含所有的集，包括自己的super set 构成矛盾来证明set of all set不可构造</p>
+<p>Q: Bertrand Russell是怎么回避悖论的？</p>
+<h2 id="笔记区"><a href="#笔记区" class="headerlink" title="笔记区"></a>笔记区</h2><p>An example of Monad.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MONAD</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unit</span>(<span class="params">v</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> monad = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    monad.bind = <span class="function"><span class="keyword">function</span>(<span class="params">f</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> f(v)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> monad</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> identity = MONAD();</span><br><span class="line"><span class="keyword">const</span> monad = identity(<span class="string">'Hello Monad'</span>);</span><br><span class="line">monad.bind(alert);</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#疑问区"><span class="toc-number">1.</span> <span class="toc-text">疑问区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#笔记区"><span class="toc-number">2.</span> <span class="toc-text">笔记区</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&text=Scala Type Study Questions"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&is_video=false&description=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scala Type Study Questions&body=Check out this article: https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&title=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&name=Scala Type Study Questions&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/04/03/read-Kinds-of-types-in-Scala-I/&t=Scala Type Study Questions" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 kobako
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
