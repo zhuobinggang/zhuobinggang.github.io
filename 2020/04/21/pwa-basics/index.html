@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="本文是一个PWA的入门教程，也算是一个introduction(导读)，不会太深入主要聊聊三个重点: PWA的本质，构成PWA的两个文件，PWA APP如何更新 PWA的本质Q: 网站和原生app在存储上的本质区别是什么？A: 网站中使用的素材都是通过请求实时获取的, app中使用的素材都是本机中存储的。在离线或者素材过大的情况下，前者每次访问都要加载，加载过慢的缺点就暴露了出来。离线使用体验永远">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwa basics">
+<meta property="og:url" content="https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/index.html">
+<meta property="og:site_name" content="盒子在日本">
+<meta property="og:description" content="本文是一个PWA的入门教程，也算是一个introduction(导读)，不会太深入主要聊聊三个重点: PWA的本质，构成PWA的两个文件，PWA APP如何更新 PWA的本质Q: 网站和原生app在存储上的本质区别是什么？A: 网站中使用的素材都是通过请求实时获取的, app中使用的素材都是本机中存储的。在离线或者素材过大的情况下，前者每次访问都要加载，加载过慢的缺点就暴露了出来。离线使用体验永远">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-21T07:22:13.000Z">
+<meta property="article:modified_time" content="2020-04-21T07:22:13.000Z">
+<meta property="article:author" content="kobako">
+<meta property="article:tag" content="Daily">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary">
+    <meta name="google-site-verification" content="OZsvRA2rPRV_qX--Vm8FgrLOyJLbwa28Mbn7Ah1viOQ" />
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>pwa basics</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/04/20/April-20/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&text=pwa basics"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&is_video=false&description=pwa basics" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwa basics&body=Check out this article: https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&name=pwa basics&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&t=pwa basics" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PWA的本质"><span class="toc-number">1.</span> <span class="toc-text">PWA的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个文件"><span class="toc-number">2.</span> <span class="toc-text">两个文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest-json"><span class="toc-number">2.1.</span> <span class="toc-text">manifest.json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#service-worker-js-简称sw"><span class="toc-number">2.2.</span> <span class="toc-text">service-worker.js(简称sw)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PWA-APP如何更新"><span class="toc-number">3.</span> <span class="toc-text">PWA APP如何更新</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        pwa basics
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">盒子在日本</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-04-21T07:22:13.000Z" itemprop="datePublished">2020-04-21</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Daily/" rel="tag">Daily</a>, <a class="tag-link" href="/tags/Study/" rel="tag">Study</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>本文是一个PWA的入门教程，也算是一个introduction(导读)，不会太深入<br>主要聊聊三个重点: PWA的本质，构成PWA的两个文件，PWA APP如何更新</p>
+<h2 id="PWA的本质"><a href="#PWA的本质" class="headerlink" title="PWA的本质"></a>PWA的本质</h2><p>Q: 网站和原生app在存储上的本质区别是什么？<br>A: 网站中使用的素材都是通过请求实时获取的, app中使用的素材都是本机中存储的。在离线或者素材过大的情况下，前者每次访问都要加载，加载过慢的缺点就暴露了出来。离线使用体验永远大于在线使用体验</p>
+<p>有了这个前置知识之后，补充一个事实: chrome在版本43, 2015年5月的时候提供了chache API<br>而cache API就是PWA的魔法： 通过预先下载素材缓存到cache里，下次打开就不用经过网络请求，实现离线的效果</p>
+<p>个人感觉这样解释应该很清晰了，所以下面进入实际操作环节:</p>
+<h2 id="两个文件"><a href="#两个文件" class="headerlink" title="两个文件"></a>两个文件</h2><p>从表面上看，要将一个网站转成PWA网站，只需要添加两个文件: manifest.json和service-worker.js<br>前者是对APP的说明，后者是我们进行cache操作的地方</p>
+<h3 id="manifest-json"><a href="#manifest-json" class="headerlink" title="manifest.json"></a>manifest.json</h3><p>在这个配置文件里我们可以定义:</p>
+<ol>
+<li>name: APP的名称</li>
+<li>short_name: 被添加到桌面(相当于安装)后, app图标下面的名称</li>
+<li>start_url: 打开应用时所处URL</li>
+<li>display: 指定成standlone就能显示的跟原生APP一样(没有浏览器导航栏之类的东西)</li>
+</ol>
+<p>其他还有背景颜色和图标之类的，都是些简单的属性在MDN上查一下就完事了: <a href="https://developer.mozilla.org/en-US/docs/Web/Manifest" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/Manifest</a></p>
+<h3 id="service-worker-js-简称sw"><a href="#service-worker-js-简称sw" class="headerlink" title="service-worker.js(简称sw)"></a>service-worker.js(简称sw)</h3><p>要用sw，首先要在index.html里对sw进行注册</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">navigator.serviceWorker.register(<span class="string">'/sw.js'</span>)</span><br><span class="line">      .then(<span class="function"><span class="params">reg</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'service worker registered'</span>))</span><br><span class="line">      .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'service worker not registered'</span>, err));</span><br></pre></td></tr></table></figure>
+
+<p>sw相当于一个安装器+拦截器，简单说下这个安装过程是怎么实现的: 每次执行<code>navigator.serviceWorker.register(&#39;/sw.js&#39;)</code>都会重新下载sw.js这个文件，就像每次打开网络游戏都要先检查更新登陆器一样, 然后登陆器会告诉我们是不是要下载安装补丁包。如果新下载的sw.js跟之前稍微有点不一样，我们的网站都会被认为是一个新版本，然后重新触发install事件(在sw.js里面监听), 反之如果文件完全一样就不会触发install事件. 就像更新结束之后网游会要求用户重启游戏一样, install结束之后，我们进入一个等待状态，只有用户重新打开网站，我们才会进入激活状态触发activate事件(和install事件一样activate事件一个版本只触发一次).</p>
+<p>请仔细阅读上面这个描述，我已经尽可能用简单易懂的方式去描述了。上面提到的两个事件install和activate是最重要的，前者我们通常新建一个cache，然后预加载素材。用户重启网站后，在activate事件里我们通常删除上个版本的cache。</p>
+<p>下面是无聊的代码(占了整个sw文件的三分之二)，就是做了上述的两件事情, 不想看就跳过吧</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> staticCacheName = <span class="string">'site-static-v1'</span>;</span><br><span class="line"><span class="keyword">const</span> assets = [</span><br><span class="line">  <span class="string">'/'</span>,</span><br><span class="line">  <span class="string">'/index.html?v=4'</span>,</span><br><span class="line">  <span class="string">'/assets/js/ui.js'</span>,</span><br><span class="line">  <span class="string">'/assets/css/main.css'</span>,</span><br><span class="line">  <span class="string">'/assets/images/background-home.jpg'</span>,</span><br><span class="line">  <span class="string">'https://fonts.googleapis.com/css?family=Lato:300,400,700'</span>,</span><br><span class="line">];</span><br><span class="line"><span class="comment">// install event</span></span><br><span class="line">self.addEventListener(<span class="string">'install'</span>, evt =&gt; &#123;</span><br><span class="line">  evt.waitUntil(</span><br><span class="line">    caches.open(staticCacheName).then(<span class="function">(<span class="params">cache</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'caching shell assets'</span>);</span><br><span class="line">      cache.addAll(assets);</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// activate event</span></span><br><span class="line">self.addEventListener(<span class="string">'activate'</span>, evt =&gt; &#123;</span><br><span class="line">  evt.waitUntil(</span><br><span class="line">    caches.keys().then(<span class="function"><span class="params">keys</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.all(keys</span><br><span class="line">        .filter(<span class="function"><span class="params">key</span> =&gt;</span> key !== staticCacheName)</span><br><span class="line">        .map(<span class="function"><span class="params">key</span> =&gt;</span> caches.delete(key))</span><br><span class="line">      );</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在sw里，我们主要做的事情有两件:</p>
+<ol>
+<li>管理cache(增删查改)</li>
+<li>拦截网络请求, 从而实现像动态cache之类的骚操作</li>
+</ol>
+<p>拦截网络请求就是剩下的三分之一代码, 针对一个请求我们先检查cache里面有没有，如果有就直接返回，没有就继续请求:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">self.addEventListener(<span class="string">'fetch'</span>, evt =&gt; &#123;</span><br><span class="line">  evt.respondWith(</span><br><span class="line">    caches.match(evt.request).then(<span class="function"><span class="params">cacheRes</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> cacheRes || fetch(evt.request);</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上面就是整个sw的代码和工作原理</p>
+<p>用谷歌教程上的话来说，sw的生命周期是pwa最大的难点, 全部的工作原理我都在上面说明了, 如果看明白了那你就是掌握了pwa最难的部分，接下来我再总结一下(三个状态):</p>
+<ol>
+<li>预加载素材时的安装中状态installing</li>
+<li>install完之后, 新的sw + chache没有立即生效，而是进入等待用户重新打开网站的waiting状态</li>
+<li>用户重新打开网站之后，进入激活状态activate</li>
+</ol>
+<h2 id="PWA-APP如何更新"><a href="#PWA-APP如何更新" class="headerlink" title="PWA APP如何更新"></a>PWA APP如何更新</h2><p>从上面sw的工作原理部分可以得知，sw.js是每次打开网站都会重新加载的！<br>所以想要更新网站很简单，只要更改sw.js(比如加上一行新的素材路径), 然后在install事件里新开一个cache，然后在activate事件里删除旧版本cache就OK了</p>
+<p>比如上面的代码, activate事件里已经做了删除旧cache的操作(如果cache和当前版本cache名不一样就删掉)，所以只要更改staticCacheName就可以了</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PWA的本质"><span class="toc-number">1.</span> <span class="toc-text">PWA的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个文件"><span class="toc-number">2.</span> <span class="toc-text">两个文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest-json"><span class="toc-number">2.1.</span> <span class="toc-text">manifest.json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#service-worker-js-简称sw"><span class="toc-number">2.2.</span> <span class="toc-text">service-worker.js(简称sw)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PWA-APP如何更新"><span class="toc-number">3.</span> <span class="toc-text">PWA APP如何更新</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&text=pwa basics"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&is_video=false&description=pwa basics" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwa basics&body=Check out this article: https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&title=pwa basics" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&name=pwa basics&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/04/21/pwa-basics/&t=pwa basics" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 kobako
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
