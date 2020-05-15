@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="这个专栏是昨天刚开的，说实话只是用来记录自己读过的好博客，看过的好视频，学过的好教程，等等这些资源. 关于文学，关于音乐，关于哲学，当然还有关于我的专业方向 我从4月开始在东京当家里蹲第一篇文章就用来记录这段时间学深度学习(机器学习)和自然语言处理的资源汇总其实一直都在Gist上面记录的，所以只是复制过来，简单修整一下罢了 在进入正题之前先说一下我认为的，深度学习的最好入门路径（再往后的我也没学到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DL-and-NLP(I)">
+<meta property="og:url" content="https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/index.html">
+<meta property="og:site_name" content="盒子在日本">
+<meta property="og:description" content="这个专栏是昨天刚开的，说实话只是用来记录自己读过的好博客，看过的好视频，学过的好教程，等等这些资源. 关于文学，关于音乐，关于哲学，当然还有关于我的专业方向 我从4月开始在东京当家里蹲第一篇文章就用来记录这段时间学深度学习(机器学习)和自然语言处理的资源汇总其实一直都在Gist上面记录的，所以只是复制过来，简单修整一下罢了 在进入正题之前先说一下我认为的，深度学习的最好入门路径（再往后的我也没学到">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://miro.medium.com/max/1400/1*sSIeU-WhsuHCQlOA00IBXg.jpeg">
+<meta property="article:published_time" content="2020-05-15T05:04:42.000Z">
+<meta property="article:modified_time" content="2020-05-15T05:04:42.000Z">
+<meta property="article:author" content="kobako">
+<meta property="article:tag" content="Daily">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://miro.medium.com/max/1400/1*sSIeU-WhsuHCQlOA00IBXg.jpeg">
+    <meta name="google-site-verification" content="OZsvRA2rPRV_qX--Vm8FgrLOyJLbwa28Mbn7Ah1viOQ" />
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>DL-and-NLP(I)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/05/14/bayes-theorem/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&text=DL-and-NLP(I)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&is_video=false&description=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DL-and-NLP(I)&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&name=DL-and-NLP(I)&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&t=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        DL-and-NLP(I)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">盒子在日本</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-05-15T05:04:42.000Z" itemprop="datePublished">2020-05-15</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Daily/" rel="tag">Daily</a>, <a class="tag-link" href="/tags/Study/" rel="tag">Study</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>这个专栏是昨天刚开的，说实话只是用来记录自己读过的好博客，看过的好视频，学过的好教程，等等这些资源. 关于文学，关于音乐，关于哲学，当然还有关于我的专业方向</p>
+<p>我从4月开始在东京当家里蹲<br>第一篇文章就用来记录这段时间学深度学习(机器学习)和自然语言处理的资源汇总<br>其实一直都在Gist上面记录的，所以只是复制过来，简单修整一下罢了</p>
+<p>在进入正题之前先说一下我认为的，深度学习的最好入门路径（再往后的我也没学到，所以只说我知道的）, 同时也是人类发明神经网络的历史:<br>单Perceptron(线性2分) -&gt; 单层多Perceptron(线性多分) -&gt; 由XOR问题引入隐藏层，入门Multilayer Perceptron -&gt; Backpropagation</p>
+<p>下面第一篇文章是我认为最好的，所以将它抽离了时序，如果有兴趣一定不要错过这个</p>
+<a href="http://www.andreykurenkov.com/writing/ai/a-brief-history-of-neural-nets-and-deep-learning/" target="_blank" rel="noopener">A ‘Brief’ History of Neural Nets and Deep Learning<dl><dt></a></dt><dd>2020/04/30 本来我是抱着看多层神经网络的知识找到了这篇文章， 发现溯源历史真的是学习一个学科的最好方式， 从单层的单神经元到多神经元， 随后经历AI寒冬， 最终通过找到backpropagation算法抵达多层神经元， 历史在这篇文章里唯妙唯俏。 试问如果不知道backpropagation算法开发的原因， 我们还有什么动力去学习它？ 但是这篇文章只是告诉我们用微积分的The Chain Rule来解决多层反馈学习问题， 但是却没有一个例子帮助我们理解， 所以第二天的现在我还在为理解这个而奋斗。</dd></dl><ul>
+<li>怎么理解感受器模型算法的变种 w = w + rate * (expected - predicted) * x ?</li>
+<li>Fully connected与非Fully connected神经网络有什么区别？</li>
+<li>为什么需要多层神经网络？ 为什么需要非完全链接？</li>
+<li>手写双输出单层感受器</li>
+<li>Activation函数是必须的吗？</li>
+<li>怎么理解隐藏层用于提取feature? 比如用猫和狗的例子， 第一层提取出‘毛色是否条纹’， 第二层才输出猫狗， 但是这样的第一层是人工提取的， 没办法泛用， 而且这个不是隐藏层， 那么隐藏层提取出来的是什么？</li>
+<li>一张图片（20 * 20 * 2）， 提取出来的input是什么样的？ 它是多少维空间上的一个点？</li>
+<li>隐藏层是如何获得反馈的？</li>
+<li>加入不给隐藏层的输出下定义， 那么隐藏层神经元的输出又代表了什么呢？</li>
+<li>反向传播是什么？</li>
+<li>为什么说perceptron算法不适用于多层神经网络？</li>
+<li>解决中间层无法接反馈的核心算法是什么？ The _ Rule?</li>
+<li>微积分的链式求解是怎样的？</li>
+<li>即使知道了用链式求解， 如何同时调整复数个参数？ 按照什么规则去调整？</li>
+<li>Derivative Rules是怎么推算出来的？</li>
+<li>两种不同引入backpropagation的解释是怎样的？ 哪种是错的？ 错在哪里？</li>
+</ul>
+<dl><dt><a href="https://towardsdatascience.com/mcculloch-pitts-model-5fdf65ac5dd1" target="_blank" rel="noopener">McCulloch-Pitts Neuron — Mankind’s First Mathematical Model Of A Biological Neuron</a></dt><dd>2020/04/27 MCP模型， 人类第一个神经元模型， 接下来又读了续篇-&gt;</dd></dl><ul>
+<li>MCP -&gt; Perceptron -&gt; 手写单层神经网络并验证 -&gt; 回到书本学习 这样的规划路线对不对？</li>
+<li>x in {0, 1}, f, g, y in {0, 1} 分别代表什么？ 哪个是聚合函数？</li>
+<li>怎么理解Inhibitory input和Excitatory input?</li>
+<li>怎么用MCP precise representation来画出And, Or函数？</li>
+</ul>
+<dl><dt><a href="https://towardsdatascience.com/perceptron-the-artificial-neuron-4d8c70d5cc8d" target="_blank" rel="noopener">Perceptron: The Artificial Neuron (An Essential Upgrade To The McCulloch-Pitts Neuron)</a></dt><dd>2020/04/27 Peceptron模型， MCP模型的进化(就我个人来说， 少了Not Function的定义而是用权重代替真是帮了大忙)</dd></dl><ul>
+<li>Q:Perceptron模型中的w0又被称为什么？ 为什么？ 假设有一个决策是否观看⚽️赛的模型， w0表达了什么真实含义？</li>
+<li>Perceptron模型的优化体现在哪？</li>
+<li>根据定义<code>y=1 if sum([wi*xi for i from (1, n)]) &gt;= theta</code>  怎么写出or(x1, x2)的线性不等式系统？</li>
+<li>多项式和线性方程组的区别？</li>
+<li>为什么要引入sigmoid函数以代替threshold? sigmoid函数的最终输出不再是是非({0, 1})而是什么？</li>
+<li>怎么理解Inhibitory input和Excitatory input?模型</li>
+</ul>
+<dl><dt><a href="https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975" target="_blank" rel="noopener">Perceptron Learning Algorithm: A Graphical Explanation Of Why It Works</a></dt><dd>2020/04/28 又是perceptron模型， 但是这篇讲的是实际算法。 大概是这样的逻辑： 因为perceptron模型的性质， 我们可以将它理解成向量点积， 结果以0为分界线， 因为模型的实际输出y就是根据0来分界的， 因为向量点积用空间几何来理解的话就是，向量a在向量b方向上能跑多远–数值越小就代表几乎垂直。 假设有一组输入（空间向量）， 每个输入都有label表示自己的属性是Positive还是Negative， 通过不断地调整， 收敛weights向量逼近分界线。 一些阅读问题：</dd></dl><ul>
+<li>perceptron的模型， 可以说是vector w和x的点积， 以dot(w, x) = 0 （也就是垂直）为分界线， 根据intuion, 对于label为1和0的输入， 向量w分别要满足什么角度关系？</li>
+<li>通过不断收敛我们最终得到的是什么？ 是一条分割所有P和N向量的分界线吗？ 如果不是， 那最终的结果是什么？</li>
+<li>向量加法在空间中意味着什么？</li>
+<li>两个向量在满足什么样的角度关系时点积大于0， 什么时候小于0？</li>
+<li>手写perceptron算法伪代码？</li>
+<li>给定向量a， 可以马上给出与之垂直的向量b吗？</li>
+<li>Perceptron Learning algorithm算法中的终止条件是什么？</li>
+<li>怎么把图片声音等转化为vector？</li>
+</ul>
+<dl><dt><a href="https://computing.dcu.ie/~humphrys/Notes/Neural/single.neural.html" target="_blank" rel="noopener">Single-layer Neural Networks (Perceptrons)</a></dt><dd>2020/04/29 单层神经网络实际上就是Perceptron， 只不过可以有多个输出， 实际上意味着同一坐标系下的多分类</dd></dl><ul>
+<li>什么是XOR函数？</li>
+<li>最基本的用电路实现的逻辑门是什么？ XOR是怎么用电路实现的？</li>
+<li>numpy array和普通的array有什么区别？ data[labels == 1, :]是什么意思？</li>
+<li>Numpy的主要object是什么？ homogeneous的特性是什么。 怎么理解？</li>
+<li><ul>
+<li>的element-wised product和 @ 的matrix pruduct有什么区别？ </li>
+</ul>
+</li>
+<li>多维vector的点积结果是？ 比如(a, b, c), (d, e)</li>
+<li>make uninstall和make clean分别的作用是什么？ uninstall是一直可以生效的吗？ 为什么需要包管理器？</li>
+<li>logistic regression是最简单的神经网络吗？ 是perceptron模型怎样的改进？ </li>
+<li>单层多神经元模型能解决什么问题？ </li>
+<li>怎么将w向量画成boundary?</li>
+<li>证明XOR函数不可以用perceptron模型实现</li>
+<li>多组输出的模型怎么画？</li>
+<li>根据width, height, 两个输入画出Chari Bed Table三种物品的空间分布图， 并由此画出perceptron模型？</li>
+<li>多神经元的perceptorn模型实际上解决了什么问题？</li>
+</ul>
+<dl><dt><a href="https://towardsdatascience.com/understanding-backpropagation-algorithm-7bb3aa2f95fd" target="_blank" rel="noopener">Understanding Backpropagation Algorithm</a></dt><dd>2020/05/03 如果想知道我这这几天干什么去了， 那我会告诉你1号主要是在找反向传播的博客看， 结果是大部分的博客的介绍都不尊重历史时序， 反向传播是为了解决多层神经网络学习的问题而不是为了其他目的， 这是让人无法接受的误解， 所以说Deep Learning这本书也是令人诟病， 但是在1号下午我终于找到了这篇文章， 主要的内容就是介绍反向传播算法， 用的算法和解释都是正统的， 谢谢茄子。 所以一号和二号的半天都是在读这篇文章， 二号的研读因为partial derivative收到了阻碍， 所以我想了想， 就到可汗学院上看看partial derivative了。 三号的下午我醒悟过来。 拿着大概的multivariables derivative的知识继续读之前的文章， 然后在黄昏终于理解了。</dd></dl><ul>
+<li>4层神经网络实际上是怎样的四层？ </li>
+<li>为了理解这篇文章的内容， w_ij^l 是什么意思？</li>
+<li>什么是partial derivative?</li>
+<li>如果C = xw, x和w都是向量， Partial Derivation函数是PD， ，那么PD(C) / PD(x)的结果是什么？</li>
+<li>我们表示一个vector时。 通常用column还是row? </li>
+<li>multivariables -&gt; backpropagation -&gt; MLP 这样的学习顺序对不对？ </li>
+<li>什么是parametric curves,  parametric surfaces和vector fields?</li>
+<li>Multivariable 和 vector-valued function分别指的是什么样的函数？</li>
+<li>怎么理解XOY上的[2 5]可以写成2hat(i) + 5hat(j)的形式？</li>
+<li>怎么理解calculus两大基本主题中的integral?</li>
+<li>在From time 2 Location的例子里， 导数反映了什么？</li>
+<li>龙骑士07的作品牛逼在哪里？ </li>
+<li>w -&gt; z -&gt; C 怎么用chain rule来理解？<br><img src="https://miro.medium.com/max/1400/1*sSIeU-WhsuHCQlOA00IBXg.jpeg" alt="模型示意图"></li>
+<li>怎么推导PD(C)/PD(w_ij^l)？ </li>
+<li>每增加一层， 进行gradient计算时， 相当于给哪个变量增加了次方？</li>
+<li>Chain Rule是怎样推导出来的？ </li>
+</ul>
+<p><a href="http://www.cs.toronto.edu/~rgrosse/courses/csc321_2018/" target="_blank" rel="noopener">Multilayer Perceptrons</a><br>2020/05/04 尝试手动实现一个XOR函数来理解双层模型到底是做了一个什么样的操作，这才发现一个严重的问题:  线性层的叠加跟单层是一样的，没办法做出非线性操&gt;作。醒悟过来之后就开始找答案，最后找到了这篇文章，谷歌万岁。总的来说这个问题的答案是非线性函数activative才是关键。明天会将前面4篇先全部读完。下面是例行问题</p>
+<ul>
+<li>为什么需要not-fully connected layers?</li>
+<li>能不能手写演算一个2 layers模型？</li>
+<li>为什么多层神经网络能够有非线性输出？就我摸的情况来看所有wb都是固定的，那<br>么化简之后也不会得到高次方之类的东西，那么最后也还是线性的才对？</li>
+<li>Threshold就能解决所恶友非线性分类问题吗？</li>
+<li>经过threshold之后的分界线长什么样？ 可以画图出来吗？（这个用坐标变换来解<br>释）</li>
+<li>2层2神经元的极限在哪里？增加隐藏神经元增加了什么自由度？</li>
+<li>输出层同时响应问题怎么解决？通过threshold跟weights能够获得独一无二的输吗？</li>
+<li>深层的layer表达了什么？</li>
+<li>Threshold函数的derivative是什么？</li>
+<li>我是不是应该系统上一遍课程？ 多伦多那个课程或者couorsera上面？</li>
+<li>我线性回归线性2分逻辑回归的unit区别在哪里？</li>
+<li>手写数字识别重的oriented-edge是啥？</li>
+<li>为什么说n个binary input 会有2^n种组合？</li>
+<li>如何理解lecture5重universility的例子？ 如何理解universal approximation theorem？</li>
+<li>为什么说threshold函数无法用于自主学习？</li>
+<li>为什么说更深层的网络能够表达的更加简洁？</li>
+<li>我怎么理解每一层compute一个函数，所以整个网络是一串函数的组合？</li>
+<li>如何理解layer的递进式坐标的代换？</li>
+<li>如何从坐标代换和线性分割的角度分析XOR函数？</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&text=DL-and-NLP(I)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&is_video=false&description=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DL-and-NLP(I)&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&title=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&name=DL-and-NLP(I)&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/15/DL-and-NLP-I/&t=DL-and-NLP(I)" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 kobako
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
