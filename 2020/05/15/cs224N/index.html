@@ -169,7 +169,16 @@
 <li>怎么通过一个word来预测它的context？</li>
 <li>jupyter notebook怎么用？</li>
 <li>在用copus来统计数据的时候，我们应该可以得到这样一个最终结果： 一个table, 行是所有的word，列也是所有的word，对应的cell是出现的可能性，然后某一行所有的列加起来等于1。这样就完事了？神经网络呢？隐藏层呢？(附带练习，随便取一个网站，尝试生成这样一个table，然后提供一个接口: getMostRelativeWords(inputWord), 输出10个最相关的单词)</li>
-<li></li>
+</ul>
+<hr>
+<p>Tag: skip-gram model</p>
+<ul>
+<li>也就是说，最后算出的可能性vector，用来跟统计得到的vector(或者直接跟target的one-hot数组?)相减，这样会得到一个新的vector，所以update的目标就是让这个相差数组清零？ 具体怎么做？ 之前loss function得到的是一个数字，现在得到的是一个向量？ 用向量的模可以得到数值，可是真的是这样吗？</li>
+<li>error vector怎么得到？</li>
+<li>什么是localist representation? 跟Distributed Representations相比有什么不好的地方？</li>
+<li>假设loss函数得到的是向量，那应该如何用backprop修正？</li>
+<li>什么是cosine distance?</li>
+<li>为什么神经网络模型里的hidden layer在word2veco模型里被称为projection layer?</li>
 </ul>
 <p>资源:</p>
 <ul>
@@ -178,10 +187,14 @@
 <li><a href="https://medium.com/@zafaralibagh6/a-simple-word2vec-tutorial-61e64e38a6a1" target="_blank" rel="noopener">https://medium.com/@zafaralibagh6/a-simple-word2vec-tutorial-61e64e38a6a1</a></li>
 <li><a href="https://embeddings.macheads101.com/word?word=fuck" target="_blank" rel="noopener">https://embeddings.macheads101.com/word?word=fuck</a></li>
 <li>最好的word2vec教程<a href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/" target="_blank" rel="noopener">http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/</a></li>
+<li>最好的word2vec教程第二弹，教更新weights, <a href="https://iksinc.online/tag/skip-gram-model/" target="_blank" rel="noopener">https://iksinc.online/tag/skip-gram-model/</a></li>
+<li>NLP Research Lab系列 <a href="https://medium.com/district-data-labs/nlp-research-lab-part-1-distributed-representations-b7296b522d38" target="_blank" rel="noopener">https://medium.com/district-data-labs/nlp-research-lab-part-1-distributed-representations-b7296b522d38</a></li>
+<li>假设loss函数得到的是向量，那应该如何用backprop修正？</li>
 </ul>
-<p>目标：</p>
+<p>练习：</p>
 <ul>
 <li>用爬虫爬网站然后用word2vec算法酸楚vector，然后投影到2维平面展示出来</li>
+<li>手动实现双层MLP，XOR函数</li>
 </ul>
 
   </div>
