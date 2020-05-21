@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="这几天在尝试手写双层神经网络解决XOR问题–也就是所谓的classic问题看似简单的问题其实藏了很多坑下面随便说说自己解决问题的思路和过程，还有一些实验图像 一开始我是打算用sigmoid + Cross Entropy来解决的但是阴差阳错发现了ReLU是Sigmoid的上位互换(轻喷)所以实现的时候用了ReLu, 一开始的设计如图所示[图] 实现好之后，出现了各种稀奇古怪的问题因为我是第一次手写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XOR-with-relu">
+<meta property="og:url" content="https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/index.html">
+<meta property="og:site_name" content="盒子在日本">
+<meta property="og:description" content="这几天在尝试手写双层神经网络解决XOR问题–也就是所谓的classic问题看似简单的问题其实藏了很多坑下面随便说说自己解决问题的思路和过程，还有一些实验图像 一开始我是打算用sigmoid + Cross Entropy来解决的但是阴差阳错发现了ReLU是Sigmoid的上位互换(轻喷)所以实现的时候用了ReLu, 一开始的设计如图所示[图] 实现好之后，出现了各种稀奇古怪的问题因为我是第一次手写">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-21T05:25:59.000Z">
+<meta property="article:modified_time" content="2020-05-21T05:25:59.000Z">
+<meta property="article:author" content="kobako">
+<meta property="article:tag" content="Daily">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary">
+    <meta name="google-site-verification" content="OZsvRA2rPRV_qX--Vm8FgrLOyJLbwa28Mbn7Ah1viOQ" />
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>XOR-with-relu</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/05/19/When-I-start-coding-neural-networl/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&text=XOR-with-relu"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&is_video=false&description=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=XOR-with-relu&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&name=XOR-with-relu&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&t=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        XOR-with-relu
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">盒子在日本</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-05-21T05:25:59.000Z" itemprop="datePublished">2020-05-21</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Daily/" rel="tag">Daily</a>, <a class="tag-link" href="/tags/Study/" rel="tag">Study</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>这几天在尝试手写双层神经网络解决XOR问题–也就是所谓的classic问题<br>看似简单的问题其实藏了很多坑<br>下面随便说说自己解决问题的思路和过程，还有一些实验图像</p>
+<p>一开始我是打算用sigmoid + Cross Entropy来解决的<br>但是阴差阳错发现了ReLU是Sigmoid的上位互换(轻喷)<br>所以实现的时候用了ReLu, 一开始的设计如图所示<br>[图]</p>
+<p>实现好之后，出现了各种稀奇古怪的问题<br>因为我是第一次手写实现所以对自己宽容一点<br>去问了同领域的大佬，然后帮我改了个Bug: 求导的时候乘错了vector(dw才对，结果乘了w)</p>
+<p>本来这个问题解决了就该走上人生巅峰, 这时候tricky的事情开始了，大佬跑了1w遍，告诉我除了那个bug其他实现是对的，Loss收敛了<br>我看了一下他的结果确实没问题，<br>然后把大佬的代码拿过来（就改了个bug，其他基本没动） 跑了一千遍，发现没有收敛<br>怎么回事？<br>因为大佬说是对的，然后结果也出来了，我就默认代码是对的<br>那是不是只能怪ReLU函数了？<br>因为我学的课程比较古典，对线性函数还是相当有好感的，现在告诉我非线性的ReLU是Sigmoid的上位互换<br>内心总是有些不服，嗯，一定是ReLU的锅</p>
+<p>但是改也要不少时间<br>想到肯定不止我一个人打算手写XOR<br>就跑到谷歌去搜了几个关键字”relu XOR not work”(对relu就是那么偏见)<br>然后浏览了不少答案<br>首先是leaky-relu，可以解决unit死掉的问题(后来我确认过，绝大多数bug都出自dead unit)<br>这个就先记下了<br>然后果然有一些人跟我有同样的问题，但是下面的回答基本都没什么帮助</p>
+<p>我一边敲着run()，发现了一个问题, 那就是一个样本的Loss值减少了，另一个样本的Loss会增加<br>这不就是压住一边另一边翘起来嘛，一定是这个的锅<br>怎么解决呢？ 因为样本就只有4个，那我直接用Cost函数代替Loss如何，一次性考虑4个Loss, 每次update都确实地走向成功, 岂不美哉<br>然后今天早上我就把这个想法付诸了实践<br>写好后想着这次总该成功了吧，就run了一千次，发现Cost在0.13左右的地方就更新不动了<br>结果大概像是这样子:<br>[图]</p>
+<p>这不跟昨天一样嘛，什么都没有解决<br>这次真的手足无措了，我又到谷歌去找解决方案<br>这时候看到一个实现，仔细一看，中间层用了几个unit？ 3个吗。。？ 居然是30个！<br>准备直接关掉浏览器，但是转念一想, 如果增加神经元会不会有不同的结果？</p>
+<p>今早的重写不是没有意义的，我将所有用到vector的地方做了泛化<br>所以想要增加中间层的unit，就几句命令的事情<br>所以我把神经元加到了5个，结果是一发通过</p>
+<p>我开始思考一个可能性： 神经网咯并不是那么严谨的东西，在训练的过程中，网络是有可能走到死状态的<br>只有这个能够解释训练成功率的问题, 这一瞬间，神经网络被拉下了神的宝座</p>
+<p>这时候还有一个悬念。<br>明明是用着最严谨的数学语言，各种导数都用上了, 在更新的过程中，理想状态应该是Loss平滑归零才对啊<br>但是在我手动run的过程中，Loss总有一种趋近某个莫名其妙数值的感觉<br>所以我输出了Loss vs RunTimes的图<br>发现在偶然成功归零的过程中，往往会经过一个非常平坦的平原，经过这个平原之后，才会出现第二次下滑<br>我再次理解到神经网络不是那么Robust的东西<br>[图]</p>
+<p>最后一个猜测：如果用leaky-relu会不会有望离开死状态？<br>直接上结论： 不能<br>只要gradient趋近0，那weights的更新基本是不动的了，不管是relu还是leaky-relu都一样<br>下面是用了leaky-relu的图:<br>[图]</p>
+<p>我实验了各种更新rate，各种隐藏层神经元数量(2-5)<br>rate在0.1的时候是比较合适的，0.5就基本没有成功过了<br>然后神经元数量越多越好，简直就是强欲的神经网络</p>
+<p>以上就是实验总结</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&text=XOR-with-relu"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&is_video=false&description=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=XOR-with-relu&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&title=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&name=XOR-with-relu&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/21/XOR-with-relu/&t=XOR-with-relu" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 kobako
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
