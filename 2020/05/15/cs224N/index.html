@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="无数的单词，怎么用vector来表示？ 如果2个单词有近似关系，我们希望在搜索的时候，同时显示另一个单词的结果。假设我们有一个N * N的table，用来表示单词之间拥有近似关系与否，为什么不可行？ 什么是Distributional semantics? 为什么它可以用来解决近似问题？ 什么是word2vec算法？ 什么是softmax函数？ softmax的含义是什么？  word2vec中">
+    <meta name="description" content="怎么将多维投影到2维？ 什么是n-gram model? 它跟word2vec有什么关系？  keywords:  Markov assumption: p(wt |w1,…,wt−1) &#x3D; p(wt |wt−3,wt−2,wt−1)  练习：  用爬虫爬网站然后用word2vec算法酸楚vector，然后投影到2维平面展示出来 手动实现双层MLP，XOR函数 [OK]">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cs224N">
+<meta property="og:title" content="word2vec-0">
 <meta property="og:url" content="https://twitter.com/zhuobinggang/2020/05/15/cs224N/index.html">
 <meta property="og:site_name" content="盒子在日本">
-<meta property="og:description" content="无数的单词，怎么用vector来表示？ 如果2个单词有近似关系，我们希望在搜索的时候，同时显示另一个单词的结果。假设我们有一个N * N的table，用来表示单词之间拥有近似关系与否，为什么不可行？ 什么是Distributional semantics? 为什么它可以用来解决近似问题？ 什么是word2vec算法？ 什么是softmax函数？ softmax的含义是什么？  word2vec中">
+<meta property="og:description" content="怎么将多维投影到2维？ 什么是n-gram model? 它跟word2vec有什么关系？  keywords:  Markov assumption: p(wt |w1,…,wt−1) &#x3D; p(wt |wt−3,wt−2,wt−1)  练习：  用爬虫爬网站然后用word2vec算法酸楚vector，然后投影到2维平面展示出来 手动实现双层MLP，XOR函数 [OK]">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-15T06:38:32.000Z">
 <meta property="article:modified_time" content="2020-05-15T06:38:32.000Z">
@@ -37,7 +37,7 @@
         
     
     <!-- title -->
-    <title>cs224N</title>
+    <title>word2vec-0</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
@@ -96,16 +96,16 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/05/15/cs224N/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&text=cs224N"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&is_video=false&description=cs224N" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=cs224N&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/15/cs224N/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&name=cs224N&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&t=cs224N" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&text=word2vec-0"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&is_video=false&description=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=word2vec-0&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/15/cs224N/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&name=word2vec-0&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&t=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -122,7 +122,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        cs224N
+        word2vec-0
     </h1>
 
 
@@ -155,49 +155,17 @@
 
   <div class="content" itemprop="articleBody">
     <ul>
-<li>无数的单词，怎么用vector来表示？</li>
-<li>如果2个单词有近似关系，我们希望在搜索的时候，同时显示另一个单词的结果。假设我们有一个N * N的table，用来表示单词之间拥有近似关系与否，为什么不可行？</li>
-<li>什么是Distributional semantics? 为什么它可以用来解决近似问题？</li>
-<li>什么是word2vec算法？</li>
-<li>什么是softmax函数？ softmax的含义是什么？ </li>
-<li>word2vec中两个word vec的点积有什么含义？</li>
-<li>CBOW和Skip-Gram，两种word2vec算法有什么区别？</li>
-<li>neural word embeddings是指什么？</li>
-<li>凭什么Skp-Gram比CBOW算法精准？</li>
 <li>怎么将多维投影到2维？</li>
-<li>为什么我看具体实现都看不懂？是缺少了什么知识？</li>
-<li>怎么通过一个word来预测它的context？</li>
-<li>jupyter notebook怎么用？</li>
-<li>在用copus来统计数据的时候，我们应该可以得到这样一个最终结果： 一个table, 行是所有的word，列也是所有的word，对应的cell是出现的可能性，然后某一行所有的列加起来等于1。这样就完事了？神经网络呢？隐藏层呢？(附带练习，随便取一个网站，尝试生成这样一个table，然后提供一个接口: getMostRelativeWords(inputWord), 输出10个最相关的单词)</li>
+<li>什么是n-gram model? 它跟word2vec有什么关系？</li>
 </ul>
-<hr>
-<p>Tag: skip-gram model</p>
+<p>keywords:</p>
 <ul>
-<li>也就是说，最后算出的可能性vector，用来跟统计得到的vector(或者直接跟target的one-hot数组?)相减，这样会得到一个新的vector，所以update的目标就是让这个相差数组清零？ 具体怎么做？ 之前loss function得到的是一个数字，现在得到的是一个向量？ 用向量的模可以得到数值，可是真的是这样吗？</li>
-<li>error vector怎么得到？</li>
-<li>什么是localist representation? 跟Distributed Representations相比有什么不好的地方？</li>
-<li>假设loss函数得到的是向量，那应该如何用backprop修正？</li>
-<li>什么是cosine distance?</li>
-<li>为什么神经网络模型里的hidden layer在word2veco模型里被称为projection layer?</li>
-<li>假设loss函数得到的是向量，那应该如何用backprop修正？</li>
-<li>什么是forward-propagation</li>
-<li></li>
-</ul>
-<p>资源:</p>
-<ul>
-<li>Gist: Understanding word vectors <a href="https://gist.github.com/aparrish/2f562e3737544cf29aaf1af30362f469" target="_blank" rel="noopener">https://gist.github.com/aparrish/2f562e3737544cf29aaf1af30362f469</a></li>
-<li>What is word2vec? 基于上面的Gist做的视频 <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6aQ0oh9nH8c6U1j9gCg-GdF" target="_blank" rel="noopener">https://www.youtube.com/playlist?list=PLRqwX-V7Uu6aQ0oh9nH8c6U1j9gCg-GdF</a></li>
-<li><a href="https://medium.com/@zafaralibagh6/a-simple-word2vec-tutorial-61e64e38a6a1" target="_blank" rel="noopener">https://medium.com/@zafaralibagh6/a-simple-word2vec-tutorial-61e64e38a6a1</a></li>
-<li><a href="https://embeddings.macheads101.com/word?word=fuck" target="_blank" rel="noopener">https://embeddings.macheads101.com/word?word=fuck</a></li>
-<li>最好的word2vec教程<a href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/" target="_blank" rel="noopener">http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/</a></li>
-<li>最好的word2vec教程第二弹，教更新weights, <a href="https://iksinc.online/tag/skip-gram-model/" target="_blank" rel="noopener">https://iksinc.online/tag/skip-gram-model/</a></li>
-<li>NLP Research Lab系列(May 18, best) <a href="https://medium.com/district-data-labs/nlp-research-lab-part-1-distributed-representations-b7296b522d38" target="_blank" rel="noopener">https://medium.com/district-data-labs/nlp-research-lab-part-1-distributed-representations-b7296b522d38</a></li>
-<li><a href="https://iksinc.online/tag/skip-gram-model/" target="_blank" rel="noopener">https://iksinc.online/tag/skip-gram-model/</a></li>
+<li>Markov assumption: p(wt |w1,…,wt−1) = p(wt |wt−3,wt−2,wt−1)</li>
 </ul>
 <p>练习：</p>
 <ul>
 <li>用爬虫爬网站然后用word2vec算法酸楚vector，然后投影到2维平面展示出来</li>
-<li>手动实现双层MLP，XOR函数</li>
+<li>手动实现双层MLP，XOR函数 [OK]</li>
 </ul>
 
   </div>
@@ -232,16 +200,16 @@
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/05/15/cs224N/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&text=cs224N"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&is_video=false&description=cs224N" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=cs224N&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/15/cs224N/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=cs224N" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&name=cs224N&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&t=cs224N" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&text=word2vec-0"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&is_video=false&description=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=word2vec-0&body=Check out this article: https://twitter.com/zhuobinggang/2020/05/15/cs224N/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&title=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&name=word2vec-0&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/05/15/cs224N/&t=word2vec-0" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
