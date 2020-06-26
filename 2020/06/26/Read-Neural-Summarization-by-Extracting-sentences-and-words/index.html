@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="刚刚看完这篇论文，做一下总结 首先这篇文章的架构摆到今天来看算是很好懂的了然后就我来看，有不少地方可以改进虽然只是想法，能否生效就是另一个问题了觉得不少想法都可以放到研究计划书里虽然只是目测，估计7月前就能搞定前置工作然后7月1号出计划书 随手谷歌了一下Daily Mail数据集发现了新世界NLP-progress这个项目我早就star了，所以才说宝藏就埋在脚边(想起来ACL也是，明明之前在小町研">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Read: Neural Summarization by Extracting sentences and words">
+<meta property="og:url" content="https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/index.html">
+<meta property="og:site_name" content="盒子在日本">
+<meta property="og:description" content="刚刚看完这篇论文，做一下总结 首先这篇文章的架构摆到今天来看算是很好懂的了然后就我来看，有不少地方可以改进虽然只是想法，能否生效就是另一个问题了觉得不少想法都可以放到研究计划书里虽然只是目测，估计7月前就能搞定前置工作然后7月1号出计划书 随手谷歌了一下Daily Mail数据集发现了新世界NLP-progress这个项目我早就star了，所以才说宝藏就埋在脚边(想起来ACL也是，明明之前在小町研">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-26T07:47:05.000Z">
+<meta property="article:modified_time" content="2020-06-26T07:47:05.000Z">
+<meta property="article:author" content="kobako">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary">
+    <meta name="google-site-verification" content="OZsvRA2rPRV_qX--Vm8FgrLOyJLbwa28Mbn7Ah1viOQ" />
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Read: Neural Summarization by Extracting sentences and words</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/06/25/June-25/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&text=Read: Neural Summarization by Extracting sentences and words"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&is_video=false&description=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Read: Neural Summarization by Extracting sentences and words&body=Check out this article: https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&name=Read: Neural Summarization by Extracting sentences and words&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&t=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Read: Neural Summarization by Extracting sentences and words
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">盒子在日本</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-06-26T07:47:05.000Z" itemprop="datePublished">2020-06-26</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Study/" rel="tag">Study</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>刚刚看完这篇论文，做一下总结</p>
+<p>首先这篇文章的架构摆到今天来看算是很好懂的了<br>然后就我来看，有不少地方可以改进<br>虽然只是想法，能否生效就是另一个问题了<br>觉得不少想法都可以放到研究计划书里<br>虽然只是目测，估计7月前就能搞定前置工作<br>然后7月1号出计划书</p>
+<p>随手谷歌了一下Daily Mail数据集发现了新世界<br>NLP-progress<br>这个项目我早就star了，所以才说宝藏就埋在脚边(想起来ACL也是，明明之前在小町研的首页早就看过了的)<br>在这里可以看到最新的NLP进度<br>然后这个是自动要约的:<br><a href="http://nlpprogress.com/english/summarization.html" target="_blank" rel="noopener">Summarization</a><br>让我觉得有点奇妙的是刚看的那篇文章没有包含在里面<br>4年过去了分数并没有显著提高<br>我能不能认为现在是入场的最好时机呢？</p>
+<p>总之多读论文，然后将它们的优点都集合起来<br>加油</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&text=Read: Neural Summarization by Extracting sentences and words"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&is_video=false&description=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Read: Neural Summarization by Extracting sentences and words&body=Check out this article: https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&title=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&name=Read: Neural Summarization by Extracting sentences and words&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://twitter.com/zhuobinggang/2020/06/26/Read-Neural-Summarization-by-Extracting-sentences-and-words/&t=Read: Neural Summarization by Extracting sentences and words" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 kobako
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="https://twitter.com/zhuobinggang">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="https://github.com/zhuobinggang/zhuobinggang.github.io" target="_blank" rel="noopener">项目</a></li>
+         
+          <li><a href="/tags/">tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
