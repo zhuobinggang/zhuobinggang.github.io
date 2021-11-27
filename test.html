@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Collector</title>
+<style>
+input[type=radio] {
+    width: 30px;
+    height: 30px;
+}
+</style>
+</head>
+ 
+<body>
+    <div id="app">
+            <div>🔪のある位置が段落分割点と判断する時1を押し、分割しないと0を押してください</div>
+            <hr/>
+            <div>
+                    <div>新聞の例:</div>
+                    <div>⬛新しい年の始まり１月１日は、私の誕生日です。</div>
+                    <div>⬛１９４５昭和２０年、疎開先の千葉県成田市で生まれ、産湯が間に合わなくて大慌てをしたと兄から聞きました。東京に戻り小学校に入学、１クラス５５人の児童と２０代の先生との活気あふれる教室でした。出席簿は男女別で４月生まれから出生順に並ぶのです。私は友達から「本当に１月１日に生まれたの？」「お正月と一緒でかわいそう」「お母さんも大変だったでしょう」と言われました。</div>
+                    <div>⬛小さな頃、誕生日には父母と３人の兄が全員そろって「おめでとう」と祝い膳を囲み、とてもうれしく満足でした。</div>
+                    <div>⬛お誕生日会を開いて仲のよいお友達を家に呼んだり呼ばれたりしたのも楽しい思い出です。その頃は両親と子どもたちが一般的な家族構成でしたが、クラスにはお父さんのいない子が３人いました。理由は戦死だと聞き、子ども心にショックでした。お父さんに誕生日を祝ってもらえないなんて悲しすぎると思いました。</div>
+                    <div>⬛毎年めぐってくる誕生日はいくつになっても心ときめきます。結婚後は夫と子どもたちが「お誕生日おめでとう」に続いて「新年おめでとう」と声を合わせてくれ、元日の朝におとそで乾杯するのです。</div>
+                    <div>⬛戦後何年という年がちょうど自分の年齢と重なります。これまでの七十余年、ずっと平和が続いていることがありがたく、何にも代えがたいことです。この先も穏やかに誕生日が祝えることを、切に願っています。 </div>
+            </div>
+            <hr/>
+            <div v-for="data in datas">
+                    <div>{{data.text}}</div>
+                    <div id="example-4">
+                        <input type="radio" value="0" v-model="data['picked']">
+                        <label>0</label>
+                        <br>
+                        <input type="radio" value="1" v-model="data['picked']">
+                        <label>1</label>
+                        <br>
+                        <!--span>Picked: {{ data['dd'] }}</span-->
+                    </div>
+            </div>
+            <hr/>
+            <button v-on:click="submit">提出</button>
+            <div>提出ボタンを押して、以下の結果をコーピーし、メールで提出してください</div>
+            <div>{{scores}}</div>
+            <hr/>
+            <div>
+                    {{pickeds}}
+            </div>
+    </div>
+</body>
+
+
+<script src="./datas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="./main.js"></script>
+</html>
