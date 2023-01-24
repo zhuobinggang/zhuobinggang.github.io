@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Collector</title>
+<style>
+input[type=radio] {
+    width: 30px;
+    height: 30px;
+}
+</style>
+</head>
+ 
+<body>
+    <div id="app">
+            <div>🔪のある位置が段落分割点と判断する時1を押し、分割しないと0を押してください</div>
+            <hr/>
+            <div>
+                    <div>小説の例(一部):</div>
+                    <div></div>
+                    <div>⬛二人の女性が二人だけで心の内に感じ合いながら、今までそれを外に現わすまいとのみ力つとめて来た微妙な軋轢あつれきが、必然の要求に逼せまられて、しだいしだいに晴れ渡る靄もやのように、津田の前に展開されなければならなくなったのはこの時であった。</div>
+                    <div>⬛津田は夫人に向って云った。「別段大事にするほどの女房でもありませんから、その辺の御心配は御無用です」「いいえそうでないようですよ。世間じゃみんなそう思ってますよ」</div>
+                    <div>⬛世間という仰山ぎょうさんな言葉が津田を驚ろかせた。夫人は仕方なしに説明した。「世間って、みんなの事よ」</div>
+                    <div>⬛津田にはそのみんなさえ明暸めいりょうに意識する事ができなかった。しかし世間だのみんなだのという誇張した言葉を強める夫人の意味は、けっして推察に困難なものではなかった。彼女はどうしてもその点を津田の頭に叩たたき込もうとするつもりらしかった。津田はわざと笑って見せた。</div>
+            </div>
+            <hr/>
+            <div v-for="data in datas">
+                    <div>{{data.text}}</div>
+                    <div id="example-4">
+                        <input type="radio" value="0" v-model="data['picked']">
+                        <label>0</label>
+                        <br>
+                        <input type="radio" value="1" v-model="data['picked']">
+                        <label>1</label>
+                        <br>
+                        <!--span>Picked: {{ data['dd'] }}</span-->
+                    </div>
+            </div>
+            <hr/>
+            <button v-on:click="submit">提出</button>
+            <div>提出ボタンを押して、以下の結果(得点だけではなく、0と1の結果も含めて)をコーピーし、【zhuobinggang@gmail.com】にメールしてください、よろしくお願いします。</div>
+            <div>{{scores}}</div>
+            <hr/>
+            <div>
+                    {{pickeds}}
+            </div>
+    </div>
+</body>
+
+
+<script src="./novel_mld.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="./main.js"></script>
+</html>
