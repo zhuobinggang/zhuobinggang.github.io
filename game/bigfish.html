@@ -9,9 +9,51 @@
 </head>
 <body>
 <tw-story><noscript><tw-noscript>JavaScript needs to be enabled to play 大鱼.</tw-noscript></noscript></tw-story>
-<tw-storydata name="大鱼" startnode="27" creator="Twine" creator-version="2.9.0" format="Harlowe" format-version="3.3.9" ifid="56C44925-96B4-483D-91C2-A615CEF8F669" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">tw-sidebar {
+<tw-storydata name="大鱼" startnode="58" creator="Twine" creator-version="2.9.0" format="Harlowe" format-version="3.3.9" ifid="56C44925-96B4-483D-91C2-A615CEF8F669" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">tw-sidebar {
     display: none;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="事件概述" tags="" position="1150,1675" size="100,100">1995年10月5日深夜，警局接到一通失踪电话，电话是死者（12岁）的父亲萨皮尔（43岁）打来的。
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="不想再活下去" tags="" position="1700,1025" size="100,100">弗勒早已失去了对生活的希望。
+在大鱼镇，他一度将希望寄托于宗教上，被教团利用他的知识来实行对生物禁忌的改造。
+
+从最初那封信也可以看出来，弗勒平静地接受了自己的死亡。
+他认为自己是为了挚爱的宗教而献身, 认为自己的牺牲是必要的。
+(text-colour:orange)[或许是有人利用他的虔诚骗了他，以便使所有的生物改造证据消泯于尘埃之中]。
+
+你将这些告诉警长，他不置可否地点点头。
+
+是的，这就是关于弗勒的所有真相。
+我想，我已经完成了他的遗愿，洗刷了他的清白。
+而事件另一半的真相——萨皮尔杀人的动机，1995年10月5日，那间房子里发生的事情，目前还处于迷雾之中。
+
+(if:$got_daily is false)[可是我们能有什么办法呢？又不能穿越时空，回到那一天去见证。而更重要的是，[[这个真的重要吗]]？](else:)[“比起这个，”警长说，“你之前在萨拉房间里拿了一本日记对吧？你打算拿它怎么办？”
+
+(link-reveal: &quot;“我要把这本重要的日记还给萨拉，没准能引发什么奇迹。”&quot;)[
+
+你发现，不知何时，警长的枪口已经对准了自己。
+“抱歉啊，”警长说，“唯独那个，我不能让你带走。而且，你已经知道得太多了。”
+
+(text-colour:orange)[一个地方的警长，镇的能够跟这个地方的宗教一刀两断么？]
+
+“这只是一本普通的日记吧。还是说，重要的根本不是日记，而是其他的东西？”
+
+“在你死之前再告诉你一个秘密吧，(text-colour:orange)[萨皮尔其实是教团的要员]。”警长说，“利用弗勒，就是他的主意。你别看那是一本日记，里边记了什么东西还说不定呢。”
+
+这时外边传来了阵阵的尖叫声。
+发生了什么？一瞬间，警长分了神。
+[[趴下以躲避子弹]]
+]]</tw-passagedata><tw-passagedata pid="2" name="书房" tags="" position="100,1550" size="100,100">=书房=
+
+书柜中堆满了基因生物学的杂志和书籍，弗勒以前在大学研究这个。
+大学毕业后弗勒在一家生物公司任职，但是三年前他的妻女在事故中丧生之后，他便辞职了，从此再也没有着手过专业相关的工作。
+
+除此之外，我们在书桌的抽屉中发现了干枯的大麻叶子。
+持有这个自然是非法的，但是比起杀人抛尸似乎不太值得追究。
+不过，这个究竟是从哪里得到的呢？
+
+你还在抽屉里发现了(text-colour:green)[望远镜]，并将其纳入口袋。
+
+[[回到大厅-&gt;弗勒的房子内部]]
+
+(set:$got_telescope to true)</tw-passagedata><tw-passagedata pid="3" name="事件概述" tags="" position="1150,1675" size="100,100">1995年10月5日深夜，警局接到一通失踪电话，电话是死者（12岁）的父亲萨皮尔（43岁）打来的。
 
 当时大鱼镇正下着暴雨。
 
@@ -27,7 +69,7 @@
 
 [[继续-&gt;档案室]]
 
-(set:$read_document to true)</tw-passagedata><tw-passagedata pid="2" name="从医院回来" tags="" position="1325,1700" size="100,100">1995年10月5日午后2点，萨皮尔的大女儿萨拉（16岁）从楼梯上滚落摔伤了脑袋，
+(set:$read_document to true)</tw-passagedata><tw-passagedata pid="4" name="从医院回来" tags="" position="1325,1700" size="100,100">1995年10月5日午后2点，萨皮尔的大女儿萨拉（16岁）从楼梯上滚落摔伤了脑袋，
 萨皮尔遂将其带往医院接受检查。
 检查结果非常糟糕，虽然没有摔死，但是萨拉却丧失了清醒的神志。简单来说就是疯了。
 目前正在精神科疗养院住院。
@@ -35,7 +77,41 @@
 萨皮尔在医院待了约一个小时便回家中照料小女儿。
 谁知祸不单行，居然发生了那样的事情。
 
-[[事件概述]]</tw-passagedata><tw-passagedata pid="3" name="卧室" tags="" position="850,525" size="100,100">=卧室=
+[[事件概述]]</tw-passagedata><tw-passagedata pid="5" name="仓库" tags="" position="250,1425" size="100,100">=仓库=
+
+一个破旧的用木板搭建的仓库。
+到处放着钓鱼或者捕鱼用的器具，反映出主人的兴趣。
+墙角摆着几双塑胶筒靴, 旁边靠中间一点的地面上突兀地嵌着一块方形木板，仔细一看会发现边上带有拉环，看来这就是[[地下室]]的入口。
+
+从这里我们可以返回[[弗勒的房子]]。</tw-passagedata><tw-passagedata pid="6" name="体液" tags="" position="450,1850" size="100,100">“你们当时没有在地下室和任何地方发现，体液，是这样吧？”
+
+“是的，没有体液的痕迹，”警长说，“可是，弗勒已经承认了他的动机，就是你所想象的那样。只不过在拉扯过程中杀死了对方，于是罪名变成了故意杀人，消灭证据以及性侵未遂。”
+
+(link-reveal: &quot;你思索了一会儿。&quot;)[
+(text-colour:orange)[弗勒承认了自己的动机]，如果不是屈打成招，那么一定是为了掩盖住(text-colour:orange)[别的东西]。
+原因只有他的亲属知道——在丧失妻女之后，他丧失了性的功能。
+虽然现在还不知道(text-colour:orange)[那个东西]是什么。
+即便弗勒是犯人，至少有其他的东西可以让人憎恨，这毕竟也是一种救赎。
+
+但是你并没有把自己的想法说出口。
+]
+
+[[继续-&gt;物证]]</tw-passagedata><tw-passagedata pid="7" name="保险箱" tags="" position="250,1675" size="100,100">里边放置着杂乱的[[草稿纸]]，最底下是一份保密协议书。
+这份材料可以证实弗勒曾在家中或者某个地方从事秘密研究。
+保密协议书上并没有写明委托方的信息，但是上面盖了个印章，印章上是被钉在十字架上的鳄鱼图案。这让你联想到(text-colour:green)[东岸的某个场所]。
+
+[[继续-&gt;弗勒的卧室]]
+
+(set:$got_safe_doc to true)</tw-passagedata><tw-passagedata pid="8" name="医院" tags="" position="1200,1275" size="100,100">=医院=
+
+(if:$gone_police_station is false)[作为陌生人，在到警察局说明来意之前，还是不要随便乱跑比较好。](else:)[在这里我们见到了死者的姐姐萨拉。但是她处于一种无法交流的状态。看到陌生人甚至会吓到尿裤子。我实在不忍心再打扰她。
+
+在档案室的时候我看过她一年前刚入院时候的照片, 那时她的头发还没有那么长. 
+(link-reveal: &quot;照片上还有一些令人在意的地方.&quot;)[
+她刚入院时候的手臂上似乎有被绳索勒过的痕迹.
+]]
+
+从这里我们可以返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="9" name="卧室" tags="" position="850,525" size="100,100">=卧室=
 
 洁白但是煞风景的卧室。
 
@@ -51,7 +127,7 @@
 (set: $cleanup to false)
 (set: $cleanup_living_room to false)
 (set: $got_mail to false)
-(set: $read_mail to false)</tw-passagedata><tw-passagedata pid="4" name="卫生间" tags="" position="850,400" size="100,100">=卫生间=
+(set: $read_mail to false)</tw-passagedata><tw-passagedata pid="10" name="卫生间" tags="" position="850,400" size="100,100">=卫生间=
 
 狭小的卫生间，和浴室之间只用一扇塑料门隔开。
 廉价至极的设计。
@@ -61,13 +137,24 @@
 你只是无数平凡人之中的一员。
 
 (if: $cleanup is false)[你看上去很邋遢，在做其他事情之前，最好先[[洗漱]]一番。]
-(else:)[你看上去已经足够干净了，现在我们可以返回[[卧室]]。]</tw-passagedata><tw-passagedata pid="5" name="可疑人士？" tags="" position="1275,1400" size="100,100">警长向我担保说，当时镇上没有任何外来人员逗留。
+(else:)[你看上去已经足够干净了，现在我们可以返回[[卧室]]。]</tw-passagedata><tw-passagedata pid="11" name="可疑人士？" tags="" position="1275,1400" size="100,100">警长向我担保说，当时镇上没有任何外来人员逗留。
 而且他们事后调查监控，当天没有任何人士进出大鱼镇，除了死者的父亲（送大女儿去医院）。
 也就是说，我们基本上不需要从外来人士的角度来考虑这个事情。
 
 [[继续-&gt;档案室]]
 
-(set:$read_suspicious_people to true)</tw-passagedata><tw-passagedata pid="6" name="大厅" tags="" position="900,650" size="100,100">=大厅=
+(set:$read_suspicious_people to true)</tw-passagedata><tw-passagedata pid="12" name="地下室" tags="" position="375,1550" size="100,100">=地下室=
+
+踏下寥寥几级楼梯，扑面而来是阴凉而浓郁的地下室空气。
+
+地下室的空间比地上的仓库要大上许多，这里以前似乎是房子过去的主人用来存放红酒的地窖。
+
+我们可以看见木工车床，没用完的木材，完成一半的钓鱼用小板凳。
+角落一个箱子里堆放着实验用的玻璃器皿，由堆放的方式看来这些东西已经得不到主人的关心。
+
+这里是[[物证]]被发现的地方。
+
+从这里我们可以返回[[仓库]]。</tw-passagedata><tw-passagedata pid="13" name="大厅" tags="" position="900,650" size="100,100">=大厅=
 
 煞风景的大厅。
 任何一个进来的人都会直觉地发现，这个房子的主人一定还没有结婚。
@@ -78,7 +165,7 @@
 (if:$got_mail is false)[(text-colour:green)[你听见自行车铃铛的声音从门外传来，大概是来送报纸或者信件的人吧。]](else:)[(text-colour:green)[你当前持有一封信件。][[阅读信件]]]
 (if:$read_mail is true)[读过舅舅的信，你决定收拾好东西就前往他生前的居住地，“大鱼”镇。在离开之前我们可以再检查一下房子的情况，看有什么必须携带的东西。(text-colour:green)[如果准备好了，可以出门前往马路。]]
 
-打开门我们可以前往[[门廊]]。</tw-passagedata><tw-passagedata pid="7" name="大鱼镇" tags="" position="1000,1150" size="100,100">=大鱼镇=
+打开门我们可以前往[[门廊]]。</tw-passagedata><tw-passagedata pid="14" name="大鱼镇" tags="" position="1000,1150" size="100,100">=大鱼镇=
 
 大鱼镇坐落于一个巨大湖泊——当地人都称之为“鳄鱼池”——的沿岸。
 这里确实繁衍了许多鳄鱼，不过它们大多集中在一个叫做“鳄鱼湾”的水域，位于湖泊的西岸，一个靠近悬崖的地方。
@@ -94,12 +181,31 @@
 你相信，在那里可以找到所有的答案。]
 (else-if:$gone_police_station is false)[虽然很想直接到案发现场去，但是现在最好先到[[警察局]]去报道。]
 (else-if:$gone_police_station is true and $chatper3_entered is false)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸-&gt;第三章]]]
-(else-if:$gone_police_station is true and $chatper3_entered is true)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸]]]
-</tw-passagedata><tw-passagedata pid="8" name="庭院角落" tags="" position="1100,775" size="100,100">=庭院角落=
+(else-if:$gone_police_station is true and $chatper3_entered is true)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸]]]</tw-passagedata><tw-passagedata pid="15" name="屈打成招" tags="" position="1675,725" size="100,100">根据现有的线索来看，为什么弗勒坦白了自己的罪行？
+唯一的可能性只有屈打成招。
+
+但是，我并没有向警长说出我的想法。
+弗勒已经不在人世了，而他们也只是做了自己认为正确的事情。
+
+那之后我便离开了大鱼镇。
+
+【Normal End】</tw-passagedata><tw-passagedata pid="16" name="床" tags="" position="725,1425" size="100,100">你在床底下找到了(text-colour:orange)[几本不该出现在这里的东西]。
+这让你联想到了一些卑劣的念头。
+
+[[继续-&gt;死者的房间]]</tw-passagedata><tw-passagedata pid="17" name="庭院角落" tags="" position="1100,775" size="100,100">=庭院角落=
 
 加杨投下树荫，一个凉爽的庭院角落。
 
-从这里我们可以前往[[门廊]]，或者[[邮箱]]。</tw-passagedata><tw-passagedata pid="9" name="弗勒的房子" tags="" position="300,1275" size="100,100">=弗勒的房子=
+从这里我们可以前往[[门廊]]，或者[[邮箱]]。</tw-passagedata><tw-passagedata pid="18" name="弗勒的卧室" tags="" position="250,1550" size="100,100">=卧室=
+
+没有什么生活感的卧室。
+廉价的红色印花地毯，铁架床，上面是乱糟糟的白色被褥，维持着一年前的样子。
+床头柜上有一个保险箱。
+(if:$got_safe_key is true)[(text-colour:green)[你发现手中的钥匙能够][[打开保险箱-&gt;保险箱]]。]
+(else:)[显然，你需要一把(text-colour:red)[钥匙]才能够打开这个保险箱。]
+据警长言，在弗勒遭逮捕之后，由于动机非常明确，因此房子里其他的物件基本上没有遭到搜查。
+
+从这里我们可以[[返回大厅-&gt;弗勒的房子内部]]。</tw-passagedata><tw-passagedata pid="19" name="弗勒的房子" tags="" position="300,1275" size="100,100">=弗勒的房子=
 
 一栋灰棕色调的木制两层房子。
 在警长的陪同下，我们可以进入[[弗勒的房子内部]]。
@@ -110,7 +216,19 @@
 
 弗勒的房子旁边是[[萨皮尔的房子]]。
 沿着门口的马路继续往西边开，马路的尽头是岩山的[[瞭望台]]，而往东边自然能够回到大鱼镇（东岸），不过在那之前首先要经过[[西岸]]的入口。
-穿过马路和马路对面视野开阔的针叶林就是湖，沿着湖往西边走五百米左右就是[[鳄鱼湾]]。</tw-passagedata><tw-passagedata pid="10" name="思索" tags="" position="750,750" size="100,100">我曾经与这个舅舅非常亲近。
+穿过马路和马路对面视野开阔的针叶林就是湖，沿着湖往西边走五百米左右就是[[鳄鱼湾]]。</tw-passagedata><tw-passagedata pid="20" name="弗勒的房子内部" tags="" position="125,1425" size="100,100">=弗勒的房子内部=
+
+屋内，没有什么特别的房子。
+家具十分简约，以白色调为主。从这个地方可以看出舅舅和我的相似之处。
+
+房子里比较有趣的地方是[[书房]]和[[卧室-&gt;弗勒的卧室]]。
+或者我们可以[[到房子外边去-&gt;弗勒的房子]]。</tw-passagedata><tw-passagedata pid="21" name="当天出入大鱼镇的只有萨皮尔的车" tags="" position="1725,850" size="100,100">档案室 -&gt; 可疑人士？
+
+(text-colour:grey)[警长向我担保说，当时镇上没有任何外来人员逗留。
+而且他们事后调查监控，当天没有任何人士进出大鱼镇，除了死者的父亲（送大女儿去医院）。
+也就是说，我们基本上不需要从外来人士的角度来考虑这个事情。]
+
+[[继续-&gt;犯人是萨皮尔]]</tw-passagedata><tw-passagedata pid="22" name="思索" tags="" position="750,750" size="100,100">我曾经与这个舅舅非常亲近。
 他在五年前的事故中失去了妻女，从此便委靡不振。
 
 虽然近来我已与他少了联系，
@@ -121,7 +239,14 @@
 我以凭吊亲人为由向出版公司请了假，
 依照他的嘱咐，我会尽力去帮他洗刷清白。
 
-[[继续-&gt;大厅]]</tw-passagedata><tw-passagedata pid="11" name="教堂" tags="" position="1200,1025" size="100,100">=教堂=
+[[继续-&gt;大厅]]</tw-passagedata><tw-passagedata pid="23" name="悬崖底下的物体" tags="" position="125,1300" size="100,100">透过望远镜可以看见悬崖底下的岩石上面立着一根绿色的圆柱状物体。
+上面的图案比较抽象，远远眺望实在看不出什么端倪来。
+
+警长看后解释说那是(text-colour:green)[鳄鱼的图腾]。
+
+[[继续-&gt;鳄鱼湾]]
+
+(set:$saw_totem to true)</tw-passagedata><tw-passagedata pid="24" name="教堂" tags="" position="1200,1025" size="100,100">=教堂=
 
 (if:$gone_police_station is false)[作为陌生人，在到警察局说明来意之前，还是不要随便乱跑比较好。](else:)[“那是什么？”，你指着十字架上面的东西问到。
 “如你所见，鳄鱼”，警长说。
@@ -131,7 +256,9 @@
 她年纪已高，头发已经花白。
 旁边是她坐在轮椅上的丈夫，他中风很多年了，基本上不省人事。
 
-(link-reveal:&quot;你请求简再向你讲述事件当天的事情&quot;)[，可是她拒绝提供更多信息。她说已经忘记了，这件事情已经结束了。(if:$saved_janes_boy is true)[这时一个(text-colour:green)[小男孩]从门口走了进来，仔细一看，那正是我们在西岸救下的男孩，原来他正是简的孙子。
+(link-reveal:&quot;你请求简再向你讲述事件当天的事情&quot;)[，可是她拒绝提供更多信息。她说已经忘记了，这件事情已经结束了。(if:$saved_janes_boy is true)[
+
+这时一个(text-colour:green)[小男孩]从门口走了进来，仔细一看，那正是我们在西岸救下的男孩，原来他正是简的孙子。
 男孩也认出了我们，他向简报告了在湖边遇险和那个鳄鱼怪物的事情，虽然他只是单纯到那边去玩耍罢了。
 
 “啊啊，新的秩序已经到来。”
@@ -141,12 +268,12 @@
 [[简的证言]]
 ](else:)[看来需要(text-colour:orange)[一些契机]才能从她口中得知更多信息。]]]
 
-从这里我们可以返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="12" name="查看日程安排" tags="" position="1025,400" size="100,100">你将视线投向墙上的月历，
+从这里我们可以返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="25" name="查看日程安排" tags="" position="1025,400" size="100,100">你将视线投向墙上的月历，
 虽然不多，上面用红色马克笔标出了重要的日子。
 
 显然今天并不是这样一个特殊的日子。
 
-[[继续-&gt;卧室]]</tw-passagedata><tw-passagedata pid="13" name="档案室" tags="" position="1125,1525" size="100,100">=档案室=
+[[继续-&gt;卧室]]</tw-passagedata><tw-passagedata pid="26" name="档案室" tags="" position="1125,1525" size="100,100">=档案室=
 
 档案室，陈旧的文件散发出来的味道挺好闻。
 
@@ -155,13 +282,23 @@
 (if:$read_mother is true)[[死者父亲的现状？]]
 (if:$read_father is true)[[目击证人？]]
 (if:$read_jane is true)[[可疑人士？]]
-(if:$read_suspicious_people is true)[警长向你担保，他能够为所说的话负全部责任。你思考了一下，认为当前要做的事情是亲眼到现场去看看。[[离开档案室-&gt;警察局内部]]]</tw-passagedata><tw-passagedata pid="14" name="死者父亲的现状？" tags="" position="1100,1400" size="100,100">浑身缠扰着悲剧氛围的一个人，脸长且忧郁。
+(if:$read_suspicious_people is true)[警长向你担保，他能够为所说的话负全部责任。你思考了一下，认为当前要做的事情是亲眼到现场去看看。[[离开档案室-&gt;警察局内部]]]</tw-passagedata><tw-passagedata pid="27" name="死者父亲的现状？" tags="" position="1100,1400" size="100,100">浑身缠扰着悲剧氛围的一个人，脸长且忧郁。
 在事件发生后辞去金融公司的职位，开始在木材厂从事体力劳动。
 似乎是以此来忘却生活中的不如意。
 
 [[继续-&gt;档案室]]
 
-(set:$read_father to true)</tw-passagedata><tw-passagedata pid="15" name="死者的母亲？" tags="" position="1000,1675" size="100,100">事件发生时，死者的母亲在另一个城镇的父母家探亲。
+(set:$read_father to true)</tw-passagedata><tw-passagedata pid="28" name="死者的房间" tags="" position="600,1300" size="100,100">=死者的房间=
+
+可爱的粉色房间，[[床]]，窗帘，桌子，全都是粉色的巴洛克风格。
+我们看见了她的照片，非常可爱的女孩。
+虽然脸蛋还十分稚嫩，但是可以看得到母亲的面影。
+
+墙上贴着自己画的画，上面是家庭成员大家手牵着手。
+只不过，根据某些情报来源，其母亲婚后存在出轨的迹象，事件发生当时和家庭的关系本身已经岌岌可危。
+
+
+[[回到大厅-&gt;萨皮尔的房子]]</tw-passagedata><tw-passagedata pid="29" name="死者的母亲？" tags="" position="1000,1675" size="100,100">事件发生时，死者的母亲在另一个城镇的父母家探亲。
 事件发生后，死者的母亲一度崩溃，之后便与这个家断绝了联系。
 
 目前她已经开始了新的生活，对于过去拥有的家庭只字不提。
@@ -169,7 +306,7 @@
 
 [[继续-&gt;档案室]]
 
-(set:$read_mother to true)</tw-passagedata><tw-passagedata pid="16" name="洗漱" tags="" position="675,350" size="100,100">你拿起牙刷开始刷牙。
+(set:$read_mother to true)</tw-passagedata><tw-passagedata pid="30" name="洗漱" tags="" position="675,350" size="100,100">你拿起牙刷开始刷牙。
 进进出出的重复动作不禁让你浮现出下流的想法。
 你摇摇头将这些早晨的妄想逐出脑袋。
 
@@ -179,180 +316,7 @@
 
 [[继续-&gt;卫生间]]
 
-(set: $cleanup to true)</tw-passagedata><tw-passagedata pid="17" name="目击证人？" tags="" position="1275,1550" size="100,100">在警方对西岸住户进行调查的时候，附近一个名为简的中老年妇女声称当时在树林中看到一个人影。
-人影手中抱着什么东西，前进的方向正是鳄鱼湾。
-
-“要去哪里才能找到简？”
-警长表示她经常待在教堂。
-
-[[继续-&gt;档案室]]
-
-(set:$read_jane to true)</tw-passagedata><tw-passagedata pid="18" name="确认日期" tags="" position="1000,525" size="100,100">你站起身来到墙边，揭下昨天的日历，揉成一团扔进废纸箩里。
-
-今天是1996年10月23日，周三。
-
-[[继续-&gt;卧室]]</tw-passagedata><tw-passagedata pid="19" name="第二章" tags="" position="1050,1025" size="100,100">进入第二章。
-
-[[继续-&gt;大鱼镇]]
-
-(set:$gone_police_station to false)
-(set:$read_document to false)
-(set:$read_mother to false)
-(set:$read_father to false)
-(set:$read_jane to false)
-(set:$read_suspicious_people to false)
-(set:$chatper3_entered to false)
-(set:$read_evidence to false)</tw-passagedata><tw-passagedata pid="20" name="西岸" tags="" position="450,1175" size="100,100">=西岸=
-
-通常被称为“富人区”的西岸.
-房屋间的距离相隔较远.
-沿着公路一直开可以抵达“岩山”的山顶[[瞭望台]], 在那里可以眺望整个大鱼镇.
-眺望台的悬崖底下就是[[鳄鱼湾]].
-
-鳄鱼湾旁有一片视野开阔的针叶林, 穿过针叶林就是[[弗勒的房子]](我舅舅), 几乎紧挨着的就是[[萨皮尔的房子]], 一道栅栏隔开两家的草地. 这样的房屋距离在西岸算是十分罕见的, 原因在于这是同个土地开发商建的房子, 本身就是两套姐妹住宅.
-
-(if:$read_evidence is false)[你决定完成(text-colour:green)[一定程度的探索]之后再回东岸去。](else:)[现在，我们可以回到[[东岸-&gt;大鱼镇]]去。不过请注意，(text-colour:orange)[从这里开始就没有回头路了]。]</tw-passagedata><tw-passagedata pid="21" name="要不稍微清理一下？" tags="" position="1075,650" size="100,100">你花了点时间把大厅收拾了一下。
-完成之后你长舒一口气，觉得清理工作毕竟还是值得的。
-
-[[继续-&gt;大厅]]
-
-(set:$cleanup_living_room to true)</tw-passagedata><tw-passagedata pid="22" name="警察局" tags="" position="1050,1275" size="100,100">=警察局=
-
-警察局的外墙已经有些老朽了，和这个镇上的所有地方一样，透露出一种年代感。
-(if:$gone_police_station is true)[(text-colour:green)[从现在开始警长会陪同我们行动，因此我们可以去往任何地方。]]
-
-从这里我们可以[[进入警察局-&gt;警察局内部]]，或者返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="23" name="警察局内部" tags="" position="950,1425" size="100,100">=警察局内部=
-
-警察局内，目力所及之处只有三个警员，他们正叼着卷烟在打牌。
-(if:$explained is true)[“赶紧起来干活！”警长朝他们吼道。]
-(else:)[(text-colour:green)[在被他们赶走之前，我们最好先][[说明来意]]。]
-
-(if:$explained is true)[现在我们可以前往[[档案室]]。]
-从这里我们可以[[离开警察局-&gt;警察局]]。
-
-(set:$gone_police_station to true)</tw-passagedata><tw-passagedata pid="24" name="说明来意" tags="" position="975,1550" size="100,100">你向警长说明你的来意。
-警长一副盛气凌人的样子，听说你想重新调查一年前的事件时哧笑了一声。
-你出示了记者证之后他才变得稍微谦逊了一点。
-
-再之后出示的证件让他变得毕恭毕敬起来。
-你已经预料到了会有这种事情发生，所以在来这里之前做了些准备。
-
-终于，他承诺会在调查上尽力帮忙。
-
-[[继续-&gt;警察局内部]]
-
-(set: $explained to true)</tw-passagedata><tw-passagedata pid="25" name="邮箱" tags="" position="1075,900" size="100,100">=邮箱=
-
-红漆剥落后能看见下面的涂鸦。
-
-(if:$got_mail is false)[邮箱里边有一封信，
-你伸手把它拿了出来。
-
-看了眼寄信人，你不禁吃了一惊。
-“舅舅？”，你呢喃道。
-你已经和他很久没有联络了，上一次见面是什么时候呢？已经好几年了吧。
-这封信究竟是什么呢？
-
-“回去房子里再读吧……”
-你决定先返回大厅。]
-(else:)[邮箱里面空空如也。]
-
-从这里可以返回[[门廊]]，或者前往[[庭院角落]]。
-
-(set:$got_mail to true)</tw-passagedata><tw-passagedata pid="26" name="酒馆" tags="" position="1200,1150" size="100,100">=酒馆=
-
-(if:$gone_police_station is false)[作为陌生人，在到警察局说明来意之前，还是不要随便乱跑比较好。](else:)[镇中心非常荒凉，可是酒馆暗处的眼睛提醒了你这个小镇还活着，但是是以一种特殊的方式。
-鳄鱼模样的装饰随处可见。]
-
-从这里我们可以返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="27" name="醒来" tags="" position="650,500" size="100,100">睁开眼睛，眼前是熟悉的天花板。
-阴郁的早晨，灰白的天光从敞开的窗口灌入。
-
-……
-“做了个噩梦啊。”你将右手覆在眼睛上，喃喃自语道。
-叹了口气。
-
-[[起床-&gt;卧室]]</tw-passagedata><tw-passagedata pid="28" name="门廊" tags="" position="900,775" size="100,100">=门廊=
-
-今天天气真的不怎么好。
-一大早就这样，真让人感到郁闷。
-
-门外是一个小草坪，没怎么打理，长了不少杂草。
-靠近[[马路]]的地方立着一个红色小[[邮箱]]。
-
-从门廊我们能够返回房子的[[大厅]]。
-
-拐向右手边我们可以前往[[庭院角落]]。</tw-passagedata><tw-passagedata pid="29" name="阅读信件" tags="" position="600,650" size="100,100">“保罗，我只给你一个人写了信。而当你读到这封信的时候，我已经不在人世了……”
-
-舅舅在信中向我坦白，他一年前被指控为一起刑事案件的犯人，寄出信的第二天将被处以极刑。
-当然，那个时间点已经过去。正如他所言，他已经不在人世。
-
-从信中的语气看来，他已经接受了自己的命运。
-他将会死去，但是恳求我能够找到真正的犯人，以此恢复他的名誉。
-“我以自己此生以及死后的一切向你担保，我绝不是犯人。”
-
-[[思索]]
-
-(set: $read_mail to true)</tw-passagedata><tw-passagedata pid="30" name="马路" tags="" position="925,900" size="100,100">=马路=
-
-一条宽广的大马路，两边种满了柏树。
-从这里出发可以抵达任何地方。
-
-我们可以返回[[门廊]]。
-(if:$read_mail is true)[现在我可以前往[[大鱼镇-&gt;第二章]]]</tw-passagedata><tw-passagedata pid="31" name="鳄鱼湾" tags="" position="225,1125" size="100,100">=鳄鱼湾=
-
-悬崖底下有一片灌木丛, 那里是鳄鱼们喜欢栖息的地方。
-为了防止游客误入, 这块地方用铁丝和木桩拉了条警戒线, 但是毕竟只是防止误入, 上面没有装倒刺之类的东西。
-如果谁想要进去那是他的自由, 当然了, 后果自负。
-在铁丝网上还挂着个三角形的警告图标, 上面画了条站起来的鳄鱼正在吞食人类, 人的两条腿吊在嘴巴外边。
-
-这里也是“事件”中死者的残骸最后被发现的地方。
-
-远远望去, 悬崖底下的大岩石上立着个圆柱形的东西，(if:$got_telescope is true)[(text-colour:green)[透过望远镜你可以看清][[它的正体-&gt;悬崖底下的物体]]。](else:)[ 想要看清楚恐怕需要用到(text-colour:red)[望远镜]。]
-
-从这里我们可以前往[[西岸]]。</tw-passagedata><tw-passagedata pid="32" name="仓库" tags="" position="250,1425" size="100,100">=仓库=
-
-一个破旧的用木板搭建的仓库。
-到处放着钓鱼或者捕鱼用的器具，反映出主人的兴趣。
-地面上突兀地嵌着一块方形木板，仔细一看会发现边上带有拉环，看来这就是[[地下室]]的入口。
-
-从这里我们可以返回[[弗勒的房子]]。</tw-passagedata><tw-passagedata pid="33" name="弗勒的房子内部" tags="" position="125,1425" size="100,100">=弗勒的房子内部=
-
-屋内，没有什么特别的房子。
-家具十分简约，以白色调为主。从这个地方可以看出舅舅和我的相似之处。
-
-房子里比较有趣的地方是[[书房]]和[[卧室-&gt;弗勒的卧室]]。
-或者我们可以[[到房子外边去-&gt;弗勒的房子]]。</tw-passagedata><tw-passagedata pid="34" name="萨皮尔的房子" tags="" position="425,1300" size="100,100">=萨皮尔的房子=
-
-警长帮我们开了门。
-
-一个普通的房子。
-可能是由于两个孩子都是女孩，所以家具的色调选择上偏好粉色。
-
-在楼梯口下面我们发现了一些血迹，那是一年前（1995年10月5日）死者的姐姐（萨拉，16岁）摔下来撞到脑袋造成的，那之后死者的父亲将萨拉送往医院治疗，回来后不久便向警局报告了小女儿的失踪。
-
-在楼梯底下发现了不起眼的麻绳。
-
-在房子里我们可以前往[[萨拉的房间]]，[[死者的房间]]，或者[[萨皮尔的房间]]。
-出门我们可以到[[西岸]]，[[弗勒的房子]]，或者[[鳄鱼湾]]去。</tw-passagedata><tw-passagedata pid="35" name="瞭望台" tags="" position="475,1025" size="100,100">=瞭望台=
-
-一个木制的小亭子，虽然已经老朽，至少还能够使用。
-从这里可以眺望整个半月形的大鱼镇。
-弗勒平时喜欢的钓鱼地点，优点是不用担心鳄鱼袭击。
-
-亭子里边有个[[腐朽的小木桌]]，感觉稍微一压就会烂掉。
-
-从这里我们可以返回[[西岸]]。</tw-passagedata><tw-passagedata pid="36" name="地下室" tags="" position="375,1550" size="100,100">=地下室=
-
-踏下寥寥几级楼梯，扑面而来是阴凉而浓郁的地下室空气。
-
-地下室的空间比地上的仓库要大上许多，这里以前似乎是房子过去的主人用来存放红酒的地窖。
-
-我们可以看见木工车床，没用完的木材，完成一半的钓鱼用小板凳。
-角落一个箱子里堆放着实验用的玻璃器皿，由堆放的方式看来这些东西已经得不到主人的关心。
-
-这里是[[物证]]被发现的地方。
-
-从这里我们可以返回[[仓库]]。</tw-passagedata><tw-passagedata pid="37" name="物证" tags="" position="400,1700" size="100,100">【连衣裙】
+(set: $cleanup to true)</tw-passagedata><tw-passagedata pid="31" name="物证" tags="" position="400,1700" size="100,100">【连衣裙】
 在地下室中发现的最有力的物证就是死者生前穿的连衣裙，该物证导向的结论直接宣判了弗勒的死刑。根据档案室中的照片，连衣裙被发现的位置距离地下室入口不远。
 
 【死者的毛发】
@@ -365,20 +329,77 @@
 [[询问关于鞋印的事情。-&gt;鞋印]]
 [[继续-&gt;地下室]]
 
-(set:$read_evidence to true)</tw-passagedata><tw-passagedata pid="38" name="体液" tags="" position="450,1850" size="100,100">“你们当时没有在地下室和任何地方发现，体液，是这样吧？”
+(set:$read_evidence to true)</tw-passagedata><tw-passagedata pid="32" name="犯人是弗勒" tags="" position="1500,850" size="100,100">到头来，所有的证据都表明，犯人只能是我的舅舅。
+我不知道他发给我的信是什么意思，是在临死之际突发奇想决定愚弄一下许久不联系的侄子吗？
 
-“是的，没有体液的痕迹，”警长说，“可是，弗勒已经承认了他的动机，就是你所想象的那样。只不过在拉扯过程中杀死了对方，于是罪名变成了故意杀人，消灭证据以及性侵未遂。”
+无论如何，我已经得出了结论。
 
-(link-reveal: &quot;你思索了一会儿。&quot;)[
-(text-colour:orange)[弗勒承认了自己的动机]，如果不是屈打成招，那么一定是为了掩盖住(text-colour:orange)[别的东西]。
-原因只有他的亲属知道——在丧失妻女之后，他丧失了性的功能。
-虽然现在还不知道(text-colour:orange)[那个东西]是什么。
-即便弗勒是犯人，至少有其他的东西可以让人憎恨，这毕竟也是一种救赎。
+我还有自己的人生要过，是时候离开这里了。
 
-但是你并没有把自己的想法说出口。
-]
+【Bad End】</tw-passagedata><tw-passagedata pid="33" name="犯人是我" tags="" position="1550,1150" size="100,100">“犯人是我，”你喃喃自语道。
 
-[[继续-&gt;物证]]</tw-passagedata><tw-passagedata pid="39" name="第三章" tags="" position="700,1175" size="100,100">天气愈发阴郁，看起来马上就要下雨了。
+沉默。
+
+警长和简大笑起来，欢乐的空气充满了小小的教堂。
+
+“待会我们一起到警局再好好聊聊。”警长说。
+
+【Happy End】</tw-passagedata><tw-passagedata pid="34" name="犯人是简" tags="" position="1425,1275" size="100,100">“犯人就是你，”你径直对简说道。
+
+沉默。
+
+警长和简大笑起来，欢乐的空气充满了小小的教堂。
+
+【Happy End】</tw-passagedata><tw-passagedata pid="35" name="犯人是萨皮尔" tags="" position="1500,1000" size="100,100">“犯人是萨皮尔，”你说。
+
+“哦？理由呢？”警长问。
+
+(link-reveal: &quot;“很简单，&quot;)[萨皮尔撒了一个谎，”你说，“根据他的说法，诱拐事件发生在他把大女儿送医院之后。(text-colour:orange)[那么，抛尸也必须发生在他离开大鱼镇之后]。可是根据简的证言，看见人影——也就是抛尸, 是在听见车的引擎声之前。
+而根据警长你的说法，[[当天出入大鱼镇的只有萨皮尔的车]]。”
+
+“那他为什么要撒谎？”警长问。
+
+“问题就在于他必须撒谎，以给自己提供不在场证明。”
+
+(link-reveal: &quot;“你怎么解释证物？”警长问。&quot;)[
+
+“非常简单，他只要偷偷打开弗勒家地下室的门，把证物扔进去就结束了。”你说，“这也解释了为什么连衣裙和毛发都落在入口附近的地方，以及为什么地板上没有留下鞋印。”
+
+“可是地下室的门把手上没有弗勒以外的指纹。”
+
+“这个需要我说明么？单纯只是因为他戴了手套。”你说，”而且你仔细想想看，(text-colour:orange)[如果弗勒能够往鳄鱼湾抛尸毁灭证据，为什么还会犯下这样的错误，留下明显的证物在自己家地下室？]”
+
+警长思索了一会儿，说，“就算你说的有道理好了，可是你不要忘记了，弗勒已经承认了自己的罪行。”
+
+(if:$got_safe_doc is false)[唯一的可能性就是[[屈打成招]]。](else:)[&quot;很简单，因为他已经[[不想再活下去]]了。&quot;]
+
+]]</tw-passagedata><tw-passagedata pid="36" name="犯人是警长" tags="" position="1325,1125" size="100,100">“犯人就是你，”你径直对警长说道。
+
+沉默。
+
+警长和简大笑起来，欢乐的空气充满了小小的教堂。
+
+【Happy End】</tw-passagedata><tw-passagedata pid="37" name="目击证人？" tags="" position="1275,1550" size="100,100">在警方对西岸住户进行调查的时候，附近一个名为简的中老年妇女声称当时在树林中看到一个人影。
+人影手中抱着什么东西，前进的方向正是鳄鱼湾。
+
+“要去哪里才能找到简？”
+警长表示她经常待在教堂。
+
+[[继续-&gt;档案室]]
+
+(set:$read_jane to true)</tw-passagedata><tw-passagedata pid="38" name="瞭望台" tags="" position="475,1025" size="100,100">=瞭望台=
+
+一个木制的小亭子，虽然已经老朽，至少还能够使用。
+从这里可以眺望整个半月形的大鱼镇。
+弗勒平时喜欢的钓鱼地点，优点是不用担心鳄鱼袭击。
+
+亭子里边有个[[腐朽的小木桌]]，感觉稍微一压就会烂掉。
+
+从这里我们可以返回[[西岸]]。</tw-passagedata><tw-passagedata pid="39" name="确认日期" tags="" position="1000,525" size="100,100">你站起身来到墙边，揭下昨天的日历，揉成一团扔进废纸箩里。
+
+今天是1996年10月23日，周三。
+
+[[继续-&gt;卧室]]</tw-passagedata><tw-passagedata pid="40" name="第三章" tags="" position="700,1175" size="100,100">天气愈发阴郁，看起来马上就要下雨了。
 “该死的天气，”警长说，“让人想起不好的事情来。”
 
 东岸和西岸离得并不远，从警局开车过来只需要十五分钟。
@@ -406,7 +427,7 @@
 ……
 仔细一看，它的四肢居然长的跟人类有几分相似，除了上面覆盖着鳞片。
 
-(link-reveal: &quot;孩子谢过我们就离开了，朝着东岸他的家跑去。&quot;)[
+(link-reveal: &quot;孩子谢过我们就离开了，朝着东岸跑去。&quot;)[
 看起来对于这场危机并没有太多的想法。
 
 这个城镇究竟是怎么回事？在一片神秘且邪恶的氛围里，我们重新回到一年前那件事情的案发现场。
@@ -423,35 +444,46 @@
 (set:$got_telescope to false)
 (set:$saw_totem to false)&lt;!--如果没有看见图腾，暂时好像没有什么影响。--&gt;
 (set:$saved_janes_boy to true)
-(set:$read_evidence to false)&lt;!--如果没有阅读物证，我们无法回到东岸--&gt;</tw-passagedata><tw-passagedata pid="40" name="书房" tags="" position="100,1550" size="100,100">=书房=
+(set:$read_evidence to false)&lt;!--如果没有阅读物证，我们无法回到东岸--&gt;</tw-passagedata><tw-passagedata pid="41" name="第二章" tags="" position="1050,1025" size="100,100">进入第二章。
 
-书柜中堆满了基因生物学的杂志和书籍，弗勒以前在大学研究这个。
-大学毕业后弗勒在一家生物公司任职，但是三年前他的妻女在事故中丧生之后，他便辞职了，从此再也没有着手过专业相关的工作。
+[[继续-&gt;大鱼镇]]
 
-除此之外，我们在书桌的抽屉中发现了干枯的大麻叶子。
-持有这个自然是非法的，但是比起杀人抛尸似乎不太值得追究。
-不过，这个究竟是从哪里得到的呢？
+(set:$gone_police_station to false)
+(set:$read_document to false)
+(set:$read_mother to false)
+(set:$read_father to false)
+(set:$read_jane to false)
+(set:$read_suspicious_people to false)
+(set:$chatper3_entered to false)
+(set:$read_evidence to false)</tw-passagedata><tw-passagedata pid="42" name="简的证言" tags="" position="1325,975" size="100,100">“那一天是死者的生日会，她的父亲给她办了一个小小的party，我也被邀请了。啊啊，多么可爱的女孩，她无疑就是命运之子。那一天正是被神谕预言的日子……”
+ 
+(link-reveal: &quot;请她具体说一下目击证言。&quot;)[
+“那一天从午后开始就下了很大的雨。我回来之后在二楼房间里休息，午后被巨大的雷声惊醒，往窗外一看，便看见树林里的人影。”
+这个证言我已经了解过了。那人影朝着鳄鱼湾那边过去，被认为是舅舅的背影。
 
-你还在抽屉里发现了(text-colour:green)[望远镜]，并将其纳入口袋。
+(link-reveal: &quot;询问她当天是否看见过可疑人物。&quot;)[
+得到了否定的回答。
 
-[[回到大厅-&gt;弗勒的房子内部]]
+(link-reveal: &quot;询问她关于死者姐姐的事情。&quot;)[
+据说死者的姐姐当时并没有任何疯狂的迹象，非常友好地和大家交互。
+撞到脑袋是在生日会发生以后的单纯事故。
 
-(set:$got_telescope to true)</tw-passagedata><tw-passagedata pid="41" name="弗勒的卧室" tags="" position="250,1550" size="100,100">=卧室=
+(link-reveal: &quot;询问她当时有没有听见车的引擎声。&quot;)[
+简给出了肯定的回答。
 
-没有什么生活感的卧室。
-廉价的红色印花地毯，铁架床，上面是乱糟糟的白色被褥，维持着一年前的样子。
-床头柜上有一个保险箱。
-(if:$got_safe_key is true)[(text-colour:green)[你发现手中的钥匙能够][[打开保险箱-&gt;保险箱]]。]
-(else:)[显然，你需要一把(text-colour:red)[钥匙]才能够打开这个保险箱。]
-据警长言，在弗勒遭逮捕之后，由于动机非常明确，因此房子里其他的物件基本上没有遭到搜查。
+(link-reveal: &quot;“那是在看见人影之前还是之后？”&quot;)[
+“(text-colour:orange)[之后]”，简说。
 
-从这里我们可以[[返回大厅-&gt;弗勒的房子内部]]。</tw-passagedata><tw-passagedata pid="42" name="保险箱" tags="" position="250,1675" size="100,100">里边放置着杂乱的[[草稿纸]]，最底下是一份保密协议书。
-这份材料可以证实弗勒曾在家中或者某个地方从事秘密研究。
-保密协议书上并没有写明委托方的信息，但是上面盖了个印章，印章上是被钉在十字架上的鳄鱼图案。这让你联想到(text-colour:green)[东岸的某个场所]。
+你点点头。
 
-[[继续-&gt;弗勒的卧室]]
+“看你的样子，似乎已经有所进展了？”警长问。
 
-(set:$got_safe_doc to true)</tw-passagedata><tw-passagedata pid="43" name="腐朽的小木桌" tags="" position="300,1025" size="100,100">你往木桌子的裂缝里窥探，感觉抽屉里边好像藏着些什么东西。
+[[犯人是警长]]
+[[犯人是弗勒]]
+[[犯人是简]]
+[[犯人是我]]
+[[犯人是萨皮尔]]
+]]]]]</tw-passagedata><tw-passagedata pid="43" name="腐朽的小木桌" tags="" position="300,1025" size="100,100">你往木桌子的裂缝里窥探，感觉抽屉里边好像藏着些什么东西。
 但是抽屉被锁上了。
 
 你蹲下来，从底下寻找抽屉的破洞。
@@ -466,28 +498,39 @@
 
 (set:$got_safe_key to true)</tw-passagedata><tw-passagedata pid="44" name="草稿纸" tags="" position="225,1825" size="100,100">大多数草稿纸上写满了算式，但是其中一张上面似乎写了点(link-reveal: &quot;特别的东西。&quot;)[
 
-(text-colour:grey)[约拿拒绝前往尼尼微城传授神的旨意，逃到海上，并被大鱼吞下。
+(text-colour:grey)[……约拿拒绝前往尼尼微城传授神的旨意，逃到海上，并被大鱼吞下。
 三天三夜之后，大鱼奉命将约拿吐出，可约拿早已被消化完了。
-大鱼左思右想，终于决定亲自到尼尼微去传授神的旨意。]]
+大鱼左思右想，终于决定亲自到尼尼微去传授神的旨意。]
 
-[[继续-&gt;保险箱]]</tw-passagedata><tw-passagedata pid="45" name="萨拉的房间" tags="" position="400,1425" size="100,100">=萨拉的房间=
+……将审判的权利交给它们.]
+
+[[继续-&gt;保险箱]]</tw-passagedata><tw-passagedata pid="45" name="萨拉的保险箱" tags="" position="575,1550" size="100,100">从萨拉的保险箱中，你发现了一本(text-colour:green)[精致的日记]。
+你若有所思，决定暂时先不要翻阅。
+你将日记本放入口袋。
+
+[[继续-&gt;萨拉的房间]]
+
+(set:$got_daily to true)</tw-passagedata><tw-passagedata pid="46" name="萨拉的房间" tags="" position="400,1425" size="100,100">=萨拉的房间=
 
 死者的姐姐的房间比较乏味，有一些瑜伽的书籍和时下流行的恋爱小说。
 在床头柜上有一个保险箱。
 (if:$got_safe_key is true)[(text-colour:green)[你发现手中的钥匙能够][[打开保险箱-&gt;萨拉的保险箱]]。]
 (else:)[显然，你需要一把(text-colour:red)[钥匙]才能够打开这个保险箱。]
 
-从这里我们可以返回[[大厅-&gt;萨皮尔的房子]]。</tw-passagedata><tw-passagedata pid="46" name="死者的房间" tags="" position="600,1300" size="100,100">=死者的房间=
+从这里我们可以返回[[大厅-&gt;萨皮尔的房子]]。</tw-passagedata><tw-passagedata pid="47" name="萨皮尔的房子" tags="" position="425,1300" size="100,100">=萨皮尔的房子=
 
-可爱的粉色房间，[[床]]，窗帘，桌子，全都是粉色的巴洛克风格。
-我们看见了她的照片，非常可爱的女孩。
-虽然脸蛋还十分稚嫩，但是可以看得到母亲的面影。
+警长帮我们开了门。
 
-墙上贴着自己画的画，上面是家庭成员大家手牵着手。
-只不过，根据某些情报来源，其母亲婚后存在出轨的迹象，事件发生当时和家庭的关系本身已经岌岌可危。
+一个普通的房子。
+可能是由于两个孩子都是女孩，所以家具的色调选择上偏好粉色。
 
+在楼梯口下面我们发现了一些血迹，那是一年前（1995年10月5日）死者的姐姐（萨拉，16岁）摔下来撞到脑袋造成的，那之后死者的父亲将萨拉送往医院治疗，回来后不久便向警局报告了小女儿的失踪。
 
-[[回到大厅-&gt;萨皮尔的房子]]</tw-passagedata><tw-passagedata pid="47" name="萨皮尔的房间" tags="" position="600,1425" size="100,100">=萨皮尔的房间=
+在楼梯底下发现了不起眼的麻绳。
+仔细观察楼梯的柱子, 可以看到有绳索摩擦留下的轻微痕迹.
+
+在房子里我们可以前往[[萨拉的房间]]，[[死者的房间]]，或者[[萨皮尔的房间]]。
+出门我们可以到[[西岸]]，[[弗勒的房子]]，或者[[鳄鱼湾]]去。</tw-passagedata><tw-passagedata pid="48" name="萨皮尔的房间" tags="" position="600,1425" size="100,100">=萨皮尔的房间=
 
 死者的父亲的房间。
 我们发现了一些正常的男士色情读物，但是看起来好像缺失了几本。
@@ -495,152 +538,46 @@
 
 事件发生之后，他从公司辞职并开始在一个木材公司从事体力工作。
 
-[[回到大厅-&gt;萨皮尔的房子]]</tw-passagedata><tw-passagedata pid="48" name="萨拉的保险箱" tags="" position="575,1550" size="100,100">从萨拉的保险箱中，你发现了一本(text-colour:green)[精致的日记]。
-你若有所思，决定暂时先不要翻阅。
-你将日记本放入口袋。
+[[回到大厅-&gt;萨皮尔的房子]]</tw-passagedata><tw-passagedata pid="49" name="西岸" tags="" position="450,1175" size="100,100">=西岸=
 
-[[继续-&gt;萨拉的房间]]
+通常被称为“富人区”的西岸.
+房屋间的距离相隔较远.
+沿着公路一直开可以抵达“岩山”的山顶[[瞭望台]], 在那里可以眺望整个大鱼镇.
+眺望台的悬崖底下就是[[鳄鱼湾]].
 
-(set:$got_daily to true)</tw-passagedata><tw-passagedata pid="49" name="鞋印" tags="" position="575,1700" size="100,100">【地下室外的鞋印】
-连接地下室和萨皮尔家的草坪上的鞋印。连接地下室和鳄鱼湾的鞋印。
-鞋印与弗勒拥有的塑胶长靴的鞋底纹样符合。
+鳄鱼湾旁有一片视野开阔的针叶林, 穿过针叶林就是[[弗勒的房子]](我舅舅), 几乎紧挨着的就是[[萨皮尔的房子]], 一道栅栏隔开两家的草地. 这样的房屋距离在西岸算是十分罕见的, 原因在于这是同个土地开发商建的房子, 本身就是两套姐妹住宅.
 
-“地下室内的鞋印呢？”
-“没有发现”，警官说，“我们认为弗勒将证据抹除了。”
+(if:$read_evidence is false)[你决定完成(text-colour:green)[一定程度的探索]之后再回东岸去。](else:)[现在，我们可以回到[[东岸-&gt;大鱼镇]]去。不过请注意，(text-colour:orange)[从这里开始就没有回头路了]。]</tw-passagedata><tw-passagedata pid="50" name="要不稍微清理一下？" tags="" position="1075,650" size="100,100">你花了点时间把大厅收拾了一下。
+完成之后你长舒一口气，觉得清理工作毕竟还是值得的。
 
-[[继续-&gt;物证]]</tw-passagedata><tw-passagedata pid="50" name="悬崖底下的物体" tags="" position="125,1300" size="100,100">透过望远镜可以看见悬崖底下的岩石上面立着一根绿色的圆柱状物体。
-上面的图案比较抽象，远远眺望实在看不出什么端倪来。
+[[继续-&gt;大厅]]
 
-警长看后解释说那是(text-colour:green)[鳄鱼的图腾]。
+(set:$cleanup_living_room to true)</tw-passagedata><tw-passagedata pid="51" name="警察局" tags="" position="1050,1275" size="100,100">=警察局=
 
-[[继续-&gt;鳄鱼湾]]
+警察局的外墙已经有些老朽了，和这个镇上的所有地方一样，透露出一种年代感。
+(if:$gone_police_station is true)[(text-colour:green)[从现在开始警长会陪同我们行动，因此我们可以去往任何地方。]]
 
-(set:$saw_totem to true)</tw-passagedata><tw-passagedata pid="51" name="医院" tags="" position="1200,1275" size="100,100">=医院=
+从这里我们可以[[进入警察局-&gt;警察局内部]]，或者返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="52" name="警察局内部" tags="" position="950,1425" size="100,100">=警察局内部=
 
-(if:$gone_police_station is false)[作为陌生人，在到警察局说明来意之前，还是不要随便乱跑比较好。](else:)[在这里我们见到了死者的姐姐萨拉。但是她处于一种无法交流的状态。看到陌生人甚至会吓到尿裤子。我实在不忍心再打扰她。]
+警察局内，目力所及之处只有三个警员，他们正叼着卷烟在打牌。
+(if:$explained is true)[“赶紧起来干活！”警长朝他们吼道。]
+(else:)[(text-colour:green)[在被他们赶走之前，我们最好先][[说明来意]]。]
 
-从这里我们可以返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="52" name="简的证言" tags="" position="1325,975" size="100,100"> “那一天是死者的生日会，她的父亲给她办了一个小小的party，我也被邀请了。啊啊，多么可爱的女孩，她无疑就是命运之子。那一天正是被神谕预言的日子……”
- 
-(link-reveal: &quot;请她具体说一下目击证言。&quot;)[
-“那一天从午后开始就下了很大的雨。我回来之后在二楼房间里休息，午后被巨大的雷声惊醒，往窗外一看，便看见树林里的人影。”
-这个证言我已经了解过了。那人影朝着鳄鱼湾那边过去，被认为是舅舅的背影。
+(if:$explained is true)[现在我们可以前往[[档案室]]。]
+从这里我们可以[[离开警察局-&gt;警察局]]。
 
-(link-reveal: &quot;询问她当天是否看见过可疑人物吗？&quot;)[
-得到了否定的回答。
+(set:$gone_police_station to true)</tw-passagedata><tw-passagedata pid="53" name="说明来意" tags="" position="975,1550" size="100,100">你向警长说明你的来意。
+警长一副盛气凌人的样子，听说你想重新调查一年前的事件时哧笑了一声。
+你出示了记者证之后他才变得稍微谦逊了一点。
 
-(link-reveal: &quot;询问她关于死者姐姐的事情。&quot;)[
-据说死者的姐姐当时并没有任何疯狂的迹象，非常友好地和大家交互。
-撞到脑袋是在生日会发生以后的单纯事故。
+再之后出示的证件让他变得毕恭毕敬起来。
+你已经预料到了会有这种事情发生，所以在来这里之前做了些准备。
 
-(link-reveal: &quot;询问她当时有没有听见车的引擎声。&quot;)[
-简给出了肯定的回答。
+终于，他承诺会在调查上尽力帮忙。
 
-(link-reveal: &quot;“在看见人影之前还是之后？”&quot;)[
-“(text-colour:orange)[之后]”，简说。
+[[继续-&gt;警察局内部]]
 
-你点点头。
-
-“看你的样子，似乎已经有所进展了？”警长问。
-
-[[犯人是警长]]
-[[犯人是弗勒]]
-[[犯人是简]]
-[[犯人是我]]
-[[犯人是萨皮尔]]
-]]]]]</tw-passagedata><tw-passagedata pid="53" name="犯人是警长" tags="" position="1325,1125" size="100,100">“犯人就是你，”你径直对警长说道。
-
-沉默。
-
-警长和简大笑起来，欢乐的空气充满了小小的教堂。
-
-【Happy End】</tw-passagedata><tw-passagedata pid="54" name="犯人是弗勒" tags="" position="1500,850" size="100,100">到头来，所有的证据都表明，犯人只能是我的舅舅。
-我不知道他发给我的信是什么意思，是在临死之际突发奇想决定愚弄一下许久不联系的侄子吗？
-
-无论如何，我已经得出了结论。
-
-我还有自己的人生要过，是时候离开这里了。
-
-【Bad End】</tw-passagedata><tw-passagedata pid="55" name="犯人是简" tags="" position="1387.5,1250" size="100,100">“犯人就是你，”你径直对简说道。
-
-沉默。
-
-警长和简大笑起来，欢乐的空气充满了小小的教堂。
-
-【Happy End】</tw-passagedata><tw-passagedata pid="56" name="犯人是我" tags="" position="1550,1150" size="100,100">“犯人是我，”你喃喃自语道。
-
-沉默。
-
-警长和简大笑起来，欢乐的空气充满了小小的教堂。
-
-“待会我们一起到警局再好好聊聊。”警长说。
-
-【Happy End】</tw-passagedata><tw-passagedata pid="57" name="犯人是萨皮尔" tags="" position="1500,1000" size="100,100">“犯人是萨皮尔，”你说。
-
-“哦？理由呢？”警长问。
-
-(link-reveal: &quot;“很简单，&quot;)[萨皮尔撒了一个谎，”你说，“根据他的说法，诱拐事件发生在他把大女儿送医院之后。(text-colour:orange)[那么，抛尸也必须发生在他离开大鱼镇之后]。可是根据简的证言，车的引擎声是在抛尸之后。
-而根据警长你的说法，[[当天出入大鱼镇的只有萨皮尔的车]]。”
-
-“那他为什么要撒谎？”警长问。
-
-“问题就在于他必须撒谎，以给自己提供不在场证明。”
-
-(link-reveal: &quot;“你怎么解释证物？”警长问。&quot;)[
-
-“非常简单，他只要偷偷打开弗勒家地下室的门，把证物扔进去就结束了。”你说，“这也解释了为什么连衣裙和毛发都落在入口附近的地方，以及为什么地板上没有留下鞋印。”
-
-“可是地下室的门把手上没有弗勒以外的指纹。”
-
-“这个需要我说明么？单纯只是因为他戴了手套。”你说，”而且你仔细想想看，(text-colour:orange)[如果弗勒能够往鳄鱼湾抛尸毁灭证据，为什么还会犯下这样的错误，留下明显的证物在自己家地下室？]”
-
-警长思索了一会儿，说，“就算你说的有道理好了，可是你不要忘记了，弗勒已经承认了自己的罪行。”
-
-(if:$got_safe_doc is false)[唯一的可能性就是[[屈打成招]]。](else:)[&quot;很简单，因为他已经[[不想再活下去]]了。&quot;]
-
-]]</tw-passagedata><tw-passagedata pid="58" name="当天出入大鱼镇的只有萨皮尔的车" tags="" position="1725,850" size="100,100">档案室 -&gt; 可疑人士？
-
-(text-colour:grey)[警长向我担保说，当时镇上没有任何外来人员逗留。
-而且他们事后调查监控，当天没有任何人士进出大鱼镇，除了死者的父亲（送大女儿去医院）。
-也就是说，我们基本上不需要从外来人士的角度来考虑这个事情。]
-
-[[继续-&gt;犯人是萨皮尔]]</tw-passagedata><tw-passagedata pid="59" name="屈打成招" tags="" position="1675,725" size="100,100">根据现有的线索来看，为什么弗勒坦白了自己的罪行？
-唯一的可能性只有屈打成招。
-
-但是，我并没有向警长说出我的想法。
-弗勒已经不在人世了，而他们也只是做了自己认为正确的事情。
-
-那之后我便离开了大鱼镇。
-
-【Normal End】</tw-passagedata><tw-passagedata pid="60" name="不想再活下去" tags="" position="1700,1025" size="100,100">弗勒早已失去了对生活的希望。
-在大鱼镇，他一度将希望寄托于宗教上，被教团利用他的知识来实行对生物禁忌的改造。
-从最初那封信也可以看出来，弗勒平静地接受了自己的死亡。
-或许他认为自己是为了挚爱的宗教而献身。
-总之，他认为自己的牺牲是必要的。
-(text-colour:orange)[或许是有人这样对他说明，以便使所有的证据都消泯于尘埃之中]。
-
-你将这些告诉警长，他不置可否地点点头。
-
-是的，这就是关于弗勒的所有真相。
-我想，我已经完成了他的遗愿，洗刷了他的清白。
-而事件另一半的真相——萨皮尔杀人的动机，1995年10月5日，那间房子里发生的事情，目前还处于迷雾之中。
-
-(if:$got_daily is false)[可是我们能有什么办法呢？又不能穿越时空，回到那一天去见证。而更重要的是，[[这个真的重要吗]]？](else:)[“比起这个，”警长说，“你之前在萨拉房间里拿了一本日记对吧？你打算拿它怎么办？”
-
-(link-reveal: &quot;“我要把这本重要的日记还给她，没准能引发什么奇迹。”&quot;)[
-
-你发现，不知何时，警长的枪口已经对准了自己。
-“抱歉啊，”警长说，“唯独那个，我不能让你带走。而且，你已经知道得太多了。”
-
-(text-colour:orange)[一个地方的警长，镇的能够跟这个地方的宗教一刀两断么？]
-
-“这只是一本普通的日记吧。还是说，重要的根本不是日记，而是其他的东西？”
-
-“在你死之前再告诉你一个秘密吧，(text-colour:orange)[萨皮尔其实是教团的要员]。”警长说，“利用弗勒，就是他的主意。你别看那是一本日记，里边记了什么东西还说不定呢。”
-
-这时外边传来了阵阵的尖叫声。
-发生了什么？一瞬间，警长分了神。
-[[趴下以躲避子弹]]
-]]</tw-passagedata><tw-passagedata pid="61" name="趴下以躲避子弹" tags="" position="1700,1150" size="100,100">你趁着骚乱，瞬间趴下以躲避子弹，警长迅速做出判断开了一枪，子弹惊险地擦过你的肩膀。
+(set: $explained to true)</tw-passagedata><tw-passagedata pid="54" name="趴下以躲避子弹" tags="" position="1700,1150" size="100,100">你趁着骚乱，瞬间趴下以躲避子弹，警长迅速做出判断开了一枪，子弹惊险地擦过你的肩膀。
 传来了大门破裂的声音。
 你看到了(text-colour:orange)[那个东西]。
 
@@ -658,16 +595,156 @@
 在大街上，你看见无数的长着人手人腿的大鱼们席卷而来。
 从湖边，一直到这个世界的尽头。
 
-【True End】</tw-passagedata><tw-passagedata pid="62" name="这个真的重要吗" tags="" position="1825,1150" size="100,100">在大鱼镇，我能做的事情都已经做了。
+【True End】
+
+[[后日谈]]</tw-passagedata><tw-passagedata pid="55" name="这个真的重要吗" tags="" position="1825,1150" size="100,100">在大鱼镇，我能做的事情都已经做了。
 我已经完成了最初的目标——完成舅舅的遗愿。
 
 我决定当天动身离开这个小镇。
 我会将这一切写下来，以小说的形式——那才是我的本职。
 
-【Normal End】</tw-passagedata><tw-passagedata pid="63" name="床" tags="" position="725,1425" size="100,100">你在床底下找到了(text-colour:orange)[几本不该出现在这里的东西]。
-这让你联想到了一些卑劣的念头。
+【Normal End】</tw-passagedata><tw-passagedata pid="56" name="邮箱" tags="" position="1075,900" size="100,100">=邮箱=
 
-[[继续-&gt;死者的房间]]</tw-passagedata></tw-storydata>
+红漆剥落后能看见下面的涂鸦。
+
+(if:$got_mail is false)[邮箱里边有一封信，
+你伸手把它拿了出来。
+
+看了眼寄信人，你不禁吃了一惊。
+“舅舅？”，你呢喃道。
+你已经和他很久没有联络了，上一次见面是什么时候呢？已经好几年了吧。
+这封信究竟是什么呢？
+
+“回去房子里再读吧……”
+你决定先返回大厅。]
+(else:)[邮箱里面空空如也。]
+
+从这里可以返回[[门廊]]，或者前往[[庭院角落]]。
+
+(set:$got_mail to true)</tw-passagedata><tw-passagedata pid="57" name="酒馆" tags="" position="1200,1150" size="100,100">=酒馆=
+
+(if:$gone_police_station is false)[作为陌生人，在到警察局说明来意之前，还是不要随便乱跑比较好。](else:)[镇中心非常荒凉，可是酒馆暗处的眼睛提醒了你这个小镇还活着，但是是以一种特殊的方式。
+鳄鱼模样的装饰随处可见。]
+
+从这里我们可以返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="58" name="醒来" tags="" position="650,500" size="100,100">睁开眼睛，眼前是熟悉的天花板。
+阴郁的早晨，灰白的天光从敞开的窗口灌入。
+
+……
+“做了个噩梦啊。”你将右手覆在眼睛上，喃喃自语道。
+叹了口气。
+
+[[起床-&gt;卧室]]</tw-passagedata><tw-passagedata pid="59" name="门廊" tags="" position="900,775" size="100,100">=门廊=
+
+今天天气真的不怎么好。
+一大早就这样，真让人感到郁闷。
+
+门外是一个小草坪，没怎么打理，长了不少杂草。
+靠近[[马路]]的地方立着一个红色小[[邮箱]]。
+
+从门廊我们能够返回房子的[[大厅]]。
+
+拐向右手边我们可以前往[[庭院角落]]。</tw-passagedata><tw-passagedata pid="60" name="阅读信件" tags="" position="600,650" size="100,100">“保罗，我只给你一个人写了信。而当你读到这封信的时候，我已经不在人世了……”
+
+舅舅在信中向我坦白，他一年前被指控为一起刑事案件的犯人，寄出信的第二天将被处以极刑。
+当然，那个时间点已经过去。正如他所言，他已经不在人世。
+
+从信中的语气看来，他已经接受了自己的命运——他将要遵循神的旨意死去.
+可是, 唯有一件事令他感到不安, 那就是自己的侄子会把他当成性侵犯加以唾弃.
+
+“我以自己此生以及死后的一切向你担保，我绝不是犯人。”
+“如果你想知道答案, 就到大鱼镇去吧. ”
+“但是我请求你, 宽恕那里的人们. ”
+
+“因为只有神能够进行最后的审判.”
+
+[[思索]]
+
+(set: $read_mail to true)</tw-passagedata><tw-passagedata pid="61" name="鞋印" tags="" position="575,1700" size="100,100">【地下室外的鞋印】
+连接地下室和萨皮尔家的草坪上的鞋印。连接地下室和鳄鱼湾的鞋印。
+鞋印与弗勒拥有的塑胶长靴的鞋底纹样符合。
+
+“地下室内的鞋印呢？”
+“没有发现”，警官说，“我们认为弗勒将证据抹除了。”
+
+[[继续-&gt;物证]]</tw-passagedata><tw-passagedata pid="62" name="马路" tags="" position="925,900" size="100,100">=马路=
+
+一条宽广的大马路，两边种满了柏树。
+从这里出发可以抵达任何地方。
+
+我们可以返回[[门廊]]。
+(if:$read_mail is true)[现在我可以前往[[大鱼镇-&gt;第二章]]]</tw-passagedata><tw-passagedata pid="63" name="鳄鱼湾" tags="" position="225,1125" size="100,100">=鳄鱼湾=
+
+悬崖底下有一片灌木丛, 那里是鳄鱼们喜欢栖息的地方。
+为了防止游客误入, 这块地方用铁丝和木桩拉了条警戒线, 但是毕竟只是防止误入, 上面没有装倒刺之类的东西。
+如果谁想要进去那是他的自由, 当然了, 后果自负。
+在铁丝网上还挂着个三角形的警告图标, 上面画了条站起来的鳄鱼正在吞食人类, 人的两条腿吊在嘴巴外边。
+
+这里也是“事件”中死者的残骸最后被发现的地方。
+
+远远望去, 悬崖底下的大岩石上立着个圆柱形的东西，(if:$got_telescope is true)[(text-colour:green)[透过望远镜你可以看清][[它的正体-&gt;悬崖底下的物体]]。](else:)[ 想要看清楚恐怕需要用到(text-colour:red)[望远镜]。]
+
+从这里我们可以前往[[西岸]]。</tw-passagedata><tw-passagedata pid="64" name="后日谈" tags="" position="1700,1275" size="100,100">这是弗勒舅舅给我的信——的(link-reveal:&quot;后半段.&quot;)[
+
+“其实我知道犯人是谁. 当时我在山顶上, 用望远镜看见了一切.
+虽然我不知道他为什么要对自己的亲生骨肉犯下这样的罪行,
+但是我会成全他, 让他活下去.
+
+我们是朋友.  四年前, 是他和他的家人, 从深渊中拯救了我.
+
+我们一起完成过伟大的事业.
+如今他要求我的牺牲, 那我就将自己卑微的生命献给他.
+反正这生命的烛火, 早在四年前已经熄灭.
+
+我帮他拭去了地下室门把手上的指纹.
+
+活下去吧, 我的朋友.
+将最后的审判, 留给神.”
+
+[[后日谈2]]]</tw-passagedata><tw-passagedata pid="65" name="后日谈2" tags="" position="1700,1400" size="100,100">在大鱼镇的“生物疫情”被控制住以后, 我在外部的医院找到了萨拉(死者的姐姐).
+即便没有我的帮助, 她已经恢复了神智.
+
+据闻, 萨皮尔(死者的父亲)在“疫情”当天牺牲自己, 从大鱼镇的医院将萨拉救出.
+萨拉就是在那个时候恢复了神智.
+
+我把口袋中的日记本还给她, 作为回报, 她告诉了我[[那一天的真相]].</tw-passagedata><tw-passagedata pid="66" name="那一天的真相" tags="" position="1700,1525" size="100,100">那一天午后, 萨拉的父亲与母亲通过电话之后便精神恍惚.
+
+萨拉在房子里目睹了父亲对妹妹做出的暴行.
+其实萨拉早就知道, 妹妹不是自己的亲妹妹, 而是母亲和另一个男人所生.
+
+为了阻止父亲, 萨拉跑到外边寻求邻里的帮助, 但是情急之中从楼梯上摔下, 不省人事.
+恍惚之间她知道自己被父亲绑了起来(那是为了在处理尸体的时候令萨拉安分, 这是我们可以推断的内容).
+
+那之后醒来就是在医院了.
+脑袋受到的物理损伤, 再加上得知妹妹死亡之后受到的冲击, 导致萨拉身上出现了严重的精神疾患.
+
+[[后日谈3]]</tw-passagedata><tw-passagedata pid="67" name="后日谈3" tags="" position="1700,1650" size="100,100">“那你以后怎么办?”我问萨拉.
+
+她神色暗淡地说, “母亲之前问过我要不要和她一起生活”.
+
+“你怎么回答?”
+
+“我说再考虑一下. ”萨拉说, “你知道吗, 她在跟不知道第几任男朋友一起生活.”
+
+“……是吗.”
+
+沉默.
+
+(link-reveal:&quot;下定决心.&quot;)[
+
+“如果你愿意的话”我说, “可以和我一起生活.”
+
+萨拉望着我, 半晌, 笑了.
+
+“是的我愿意,” 萨拉说, “我知道你是一个好人.”
+
+”……?“
+
+”弗勒经常和我提起你…… 你知道吗, 他是我最好的朋友.“
+
+End
+]
+
+</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">(function(){"use strict";
 var require,define;!function(){var e={},r={};require=function(i){var n=e[i];return n&&(r[i]=n[1].apply(void 0,n[0].map(require)),e[i]=void 0),r[i]},(define=function(r,i,n){if("function"==typeof r)return r();e[r]=[i,n]}).amd=!0}();/*!
  * https://github.com/paulmillr/es6-shim
