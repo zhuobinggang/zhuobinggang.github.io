@@ -612,10 +612,10 @@ End
 从这里我们可以[[进入警察局-&gt;警察局内部]]，或者返回[[大鱼镇]]。</tw-passagedata><tw-passagedata pid="55" name="警察局内部" tags="" position="1025,1400" size="100,100">=警察局内部=
 
 警察局内，目力所及之处只有三个警员，他们正叼着卷烟在打牌。
-(if:$explained is true)[“赶紧起来干活！”警长朝他们吼道。]
-(else:)[(text-colour:green)[在被他们赶走之前，我们最好先][[说明来意]]。]
+(if:$explained is true)[“赶紧起来干活！”警长朝他们吼道。](else:)[(text-colour:green)[在被他们赶走之前，我们最好先][[说明来意]]。]
 
-(if:$explained is true)[现在我们可以前往[[档案室]]。]
+(if:$explained is true)[(text-colour:green)[现在我们可以前往][[档案室]]。]
+
 从这里我们可以[[离开警察局-&gt;警察局]]。
 
 (set:$gone_police_station to true)</tw-passagedata><tw-passagedata pid="56" name="说明来意" tags="" position="975,1550" size="100,100">你向警长说明你的来意。
