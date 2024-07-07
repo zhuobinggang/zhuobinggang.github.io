@@ -123,11 +123,7 @@
 卧室的角落是[[卫生间]]。
 
 (if: $cleanup is true)[(text-colour:green)[现在我们可以前往][[大厅]]。]
-
-(set: $cleanup to false)
-(set: $cleanup_living_room to false)
-(set: $got_mail to false)
-(set: $read_mail to false)</tw-passagedata><tw-passagedata pid="10" name="卫生间" tags="" position="850,400" size="100,100">=卫生间=
+</tw-passagedata><tw-passagedata pid="10" name="卫生间" tags="" position="850,400" size="100,100">=卫生间=
 
 狭小的卫生间，和浴室之间只用一扇塑料门隔开。
 廉价至极的设计。
@@ -225,11 +221,8 @@ End
 
 (if:$read_evidence is true)[我们终于再一次回到了东岸。
 “接下来怎么办？”，警长问你。
-“(text-colour:green)[先去教堂看看]吧。”你回答道。
-你相信，在那里可以找到所有的答案。]
-(else-if:$gone_police_station is false)[虽然很想直接到案发现场去，但是现在最好先到[[警察局]]去报道。]
-(else-if:$gone_police_station is true and $chatper3_entered is false)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸-&gt;第三章]]]
-(else-if:$gone_police_station is true and $chatper3_entered is true)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸]]]</tw-passagedata><tw-passagedata pid="18" name="屈打成招" tags="" position="1675,725" size="100,100">根据现有的线索来看，为什么弗勒坦白了自己的罪行？
+“(text-colour:green)[教堂是最后一站]。”你回答道。
+你相信，在那里可以找到所有的答案。](else-if:$gone_police_station is false)[虽然很想直接到案发现场去，但是现在最好先到[[警察局]]去报道。](else-if:$chatper3_entered is false)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸-&gt;第三章]]](else-if:$chatper3_entered is true)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸]]]</tw-passagedata><tw-passagedata pid="18" name="屈打成招" tags="" position="1675,725" size="100,100">根据现有的线索来看，为什么弗勒坦白了自己的罪行？
 唯一的可能性只有屈打成招。
 
 但是，我并没有向警长说出我的想法。
@@ -701,7 +694,12 @@ End
 “做了个噩梦啊。”你将右手覆在眼睛上，喃喃自语道。
 叹了口气。
 
-[[起床-&gt;卧室]]</tw-passagedata><tw-passagedata pid="63" name="门廊" tags="" position="900,775" size="100,100">=门廊=
+[[起床-&gt;卧室]]
+
+(set: $cleanup to false)
+(set: $cleanup_living_room to false)
+(set: $got_mail to false)
+(set: $read_mail to false)</tw-passagedata><tw-passagedata pid="63" name="门廊" tags="" position="900,775" size="100,100">=门廊=
 
 今天天气真的不怎么好。
 一大早就这样，真让人感到郁闷。
