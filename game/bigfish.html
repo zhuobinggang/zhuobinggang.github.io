@@ -9,7 +9,7 @@
 </head>
 <body>
 <tw-story><noscript><tw-noscript>JavaScript needs to be enabled to play 大鱼.</tw-noscript></noscript></tw-story>
-<tw-storydata name="大鱼" startnode="64" creator="Twine" creator-version="2.9.0" format="Harlowe" format-version="3.3.9" ifid="56C44925-96B4-483D-91C2-A615CEF8F669" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">tw-sidebar {
+<tw-storydata name="大鱼" startnode="64" creator="Twine" creator-version="2.9.2" format="Harlowe" format-version="3.3.9" ifid="56C44925-96B4-483D-91C2-A615CEF8F669" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">tw-sidebar {
     display: none;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="不想再活下去" tags="" position="1700,1025" size="100,100">弗勒早已失去了对生活的希望。
 在大鱼镇，他一度将希望寄托于宗教上，被教团利用他的知识来实行对生物禁忌的改造。
@@ -240,7 +240,9 @@ End
 (if:$got_mail is false)[(text-colour:green)[你听见自行车铃铛的声音从门外传来，大概是来送报纸或者信件的人吧。]](else:)[(text-colour:green)[你当前持有一封信件。][[阅读信件]]]
 (if:$read_mail is true)[读过舅舅的信，你决定收拾好东西就前往他生前的居住地，“大鱼”镇。在离开之前我们可以再检查一下房子的情况，看有什么必须携带的东西。(text-colour:green)[如果准备好了，可以出门前往马路。]]
 
-打开门我们可以前往[[门廊]]。</tw-passagedata><tw-passagedata pid="19" name="大鱼镇" tags="" position="1000,1150" size="100,100">=大鱼镇=
+打开门我们可以前往[[门廊]]。
+
+(link:&quot;保存游戏？&quot;)[(save-game:&quot;game&quot;)(if: (saved-games:) contains &quot;game&quot;)[游戏已经保存！](else: )[保存失败！]]</tw-passagedata><tw-passagedata pid="19" name="大鱼镇" tags="" position="1000,1150" size="100,100">=大鱼镇=
 
 大鱼镇坐落于一个巨大湖泊——当地人都称之为“鳄鱼池”——的沿岸。
 这里确实繁衍了许多鳄鱼，不过它们大多集中在一个叫做“鳄鱼湾”的水域，位于湖泊的西岸，一个靠近悬崖的地方。
@@ -253,7 +255,9 @@ End
 (if:$read_evidence is true)[我们终于再一次回到了东岸。
 “接下来怎么办？”，警长问你。
 “(text-colour:green)[教堂是最后一站]。”你回答道。
-你相信，在那里可以找到所有的答案。](else-if:$gone_police_station is false)[虽然很想直接到案发现场去，但是现在最好先到[[警察局]]去报道。](else-if:$chatper3_entered is false)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸-&gt;第三章]]](else-if:$chatper3_entered is true)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸]]]</tw-passagedata><tw-passagedata pid="20" name="屈打成招" tags="" position="1675,725" size="100,100">根据现有的线索来看，为什么弗勒坦白了自己的罪行？
+你相信，在那里可以找到所有的答案。](else-if:$gone_police_station is false)[虽然很想直接到案发现场去，但是现在最好先到[[警察局]]去报道。](else-if:$chatper3_entered is false)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸-&gt;第三章]]](else-if:$chatper3_entered is true)[(text-colour:green)[在警长的陪同下，现在我们可以前往][[西岸]]]
+
+(link:&quot;保存游戏？&quot;)[(save-game:&quot;game&quot;)(if: (saved-games:) contains &quot;game&quot;)[游戏已经保存！](else: )[保存失败！]]</tw-passagedata><tw-passagedata pid="20" name="屈打成招" tags="" position="1675,725" size="100,100">根据现有的线索来看，为什么弗勒坦白了自己的罪行？
 唯一的可能性只有屈打成招。
 
 但是，我并没有向警长说出我的想法。
@@ -634,7 +638,9 @@ End
 
 鳄鱼湾旁有一片视野开阔的针叶林, 穿过针叶林就是[[弗勒的房子]](我舅舅), 几乎紧挨着的就是[[萨皮尔的房子]], 一道栅栏隔开两家的草地. 这样的房屋距离在西岸算是十分罕见的, 原因在于这是同个土地开发商建的房子, 本身就是两套姐妹住宅.
 
-(if:$read_evidence is false)[你决定完成(text-colour:red)[一定程度的探索]之后再回东岸去。](else:)[现在，我们可以回到[[东岸-&gt;大鱼镇]]去。不过请注意，(text-colour:orange)[从这里开始就没有回头路了]。]</tw-passagedata><tw-passagedata pid="55" name="要不稍微清理一下？" tags="" position="1075,650" size="100,100">你花了点时间把大厅收拾了一下。
+(if:$read_evidence is false)[你决定完成(text-colour:red)[一定程度的探索]之后再回东岸去。](else:)[现在，我们可以回到[[东岸-&gt;大鱼镇]]去。不过请注意，(text-colour:orange)[从这里开始就没有回头路了]。]
+
+(link:&quot;保存游戏？&quot;)[(save-game:&quot;game&quot;)(if: (saved-games:) contains &quot;game&quot;)[游戏已经保存！](else: )[保存失败！]]</tw-passagedata><tw-passagedata pid="55" name="要不稍微清理一下？" tags="" position="1075,650" size="100,100">你花了点时间把大厅收拾了一下。
 完成之后你长舒一口气，觉得清理工作毕竟还是值得的。
 
 [[继续-&gt;大厅]]
@@ -736,7 +742,8 @@ End
 “做了个噩梦啊。”你将右手覆在眼睛上，喃喃自语道。
 叹了口气。
 
-[[回忆噩梦内容]]
+(if: (saved-games:) contains &quot;game&quot;)[(link: &quot;回忆噩梦(读取游戏)&quot;)[(load-game:&quot;game&quot;)]]
+[[测试者名单]]
 [[起床-&gt;卧室]]
 
 (set: $cleanup to false)
@@ -792,17 +799,7 @@ End
 
 远远望去, 悬崖底下的大岩石上立着个圆柱形的东西，(if:$got_telescope is true)[(text-colour:green)[透过望远镜你可以看清][[它的正体-&gt;悬崖底下的物体]]。](else:)[ 想要看清楚恐怕需要用到(text-colour:red)[望远镜]。]
 
-从这里我们可以前往[[西岸]]。</tw-passagedata><tw-passagedata pid="70" name="回忆噩梦内容" tags="" position="500,400" size="100,100">在梦中你开发了一款名为《大鱼》的文字冒险游戏，并兴致勃勃地邀请了以下人员进行测试：
-
-(text-colour:yellow)[Nightmare
-Mashiro
-Cecilia
-U-gorgeous]
-
-他们尖锐地指出了你作品中存在的问题，让你为修改游戏内容忙得焦头烂额。
-然后在IFComp（交互游戏大赛）截稿日期的最后一天，你醒了过来。
-
-[[继续-&gt;醒来]]</tw-passagedata><tw-passagedata pid="71" name="人体实验的可能性？" tags="" position="600,1850" size="100,100">这个镇子并不普通，先不说其他古怪的地方，最直接的证据就是我们在路上遇到的那条鳄鱼。
+从这里我们可以前往[[西岸]]。</tw-passagedata><tw-passagedata pid="70" name="人体实验的可能性？" tags="" position="600,1850" size="100,100">这个镇子并不普通，先不说其他古怪的地方，最直接的证据就是我们在路上遇到的那条鳄鱼。
 从警长的应对看来，他们似乎知道些什么。
 
 弗勒是基因生物领域的专家，
@@ -818,7 +815,14 @@ U-gorgeous]
 弗勒绝不会做出这样的事情。
 
 [[继续-&gt;物证]]
-]</tw-passagedata></tw-storydata>
+]</tw-passagedata><tw-passagedata pid="71" name="测试者名单" tags="" position="475,500" size="100,100">感谢：
+
+(text-colour:yellow)[Nightmare
+Mashiro
+Cecilia
+U-gorgeous]
+
+[[继续游戏-&gt;醒来]]</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">(function(){"use strict";
 var require,define;!function(){var e={},r={};require=function(i){var n=e[i];return n&&(r[i]=n[1].apply(void 0,n[0].map(require)),e[i]=void 0),r[i]},(define=function(r,i,n){if("function"==typeof r)return r();e[r]=[i,n]}).amd=!0}();/*!
  * https://github.com/paulmillr/es6-shim
