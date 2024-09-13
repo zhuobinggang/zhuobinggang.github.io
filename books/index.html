@@ -20,6 +20,9 @@
             padding: 0;
         }
         .book-item {
+            display: flex;
+            justify-content: space-between; /* 使内容两端对齐 */
+            align-items: center; /* 垂直居中对齐 */
             background: #fff;
             margin: 10px 0;
             padding: 15px;
@@ -33,16 +36,31 @@
         .book-item a:hover {
             text-decoration: underline;
         }
+        .creation-date {
+            margin-left: auto; /* 将创作时间推到最右边 */
+            font-size: 0.9em;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <h1>taku的作品一览</h1>
+    <h2>书籍</h2>
     <ul class="book-list">
         <li class="book-item">
             <a href="/books/linghesuibi1.pdf">令和随笔集1</a>
+            <span class="creation-date">创作时间：2024年6月</span> <!-- 请在此处修改具体内容 -->
         </li>
         <li class="book-item">
             <a href="/books/linghesuibi2.pdf">令和随笔集2</a>
+            <span class="creation-date">创作时间：2024年9月</span> <!-- 请在此处修改具体内容 -->
+        </li>
+    </ul>
+    <h2>纯文字游戏</h2>
+    <ul class="book-list">
+        <li class="book-item">
+            <a href="/game/bigfish.html">大鱼</a>
+            <span class="creation-date">创作时间：2024年6月</span> <!-- 请在此处修改具体内容 -->
         </li>
     </ul>
 </body>
