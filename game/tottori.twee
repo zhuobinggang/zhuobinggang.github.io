@@ -368,3 +368,10 @@ $name_of_boy和我一样是中国留学生，现在在地域学部读二年生�
 往北经过[[鸟取大学前站]]继续走十五分钟可以抵达[[会馆]]。
 
 [[思考我现在需要做的事情]]
+
+
+:: StoryScript [script]
+var audio = document.createElement('audio');
+audio.src = '/game/audio/empty_waiting.mp3' ;
+audio.loop = true;
+audio.play();
