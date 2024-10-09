@@ -1,0 +1,106 @@
+:: StoryTitle
+托托里之壶
+
+
+:: StoryData
+{
+  "ifid": "B63987C6-5F7D-42D8-8B03-55A6711E7224",
+  "format": "SugarCube",
+  "format-version": "2.37.3",
+  "start": "原神启动",
+  "zoom": 1
+}
+
+
+:: 会馆 {"position":"700,750","size":"100,100"}
+
+
+
+:: 原神启动 {"position":"700,250","size":"100,100"}
+我的名字叫作：
+<<textbox "$myname" "后宫王">>
+
+[[进入游戏->飞机上]]
+
+<<set $myname to '后宫王'>>
+<<set $registered to false>>
+<<set $said_hello_to_kagei to false>>
+<<set $date to 1001>>
+<<set $name_of_boy to '打工战士'>>
+<<set $said_goodbye_to_boy to false>>
+
+<<set $hp to 100>>
+<<set $max_hp to 100>>
+<<set $weapon to {name: '空手', power: 3}>>
+<<set $armor to {name: '运动服', resistance: 3}>>
+
+
+:: 显示状态 {"position":"900,250","size":"100,100"}
+血量: $hp / $max_hp
+武器: $weapon['name']
+防具: $armor.name
+攻击力: $weapon['power']
+防御: $armor['resistance']
+
+
+:: 留学前夕 {"position":"700,500","size":"100,100"}
+我叫<span class='special-name'>$myname</span>，是一名普通的中国大学生毕业生。
+从明天开始，我将前往日本鸟取大学就读研究生。
+
+虽说是国立，鸟取大学在日本学生之间风评不好。
+他们都说考上这所大学这辈子有了。
+不得不就读这个学校，让我的心情有些复杂。
+
+但是，转念一想，这样的学校难道不正是实现<span class='meaningful'>人生逆转</span>的好地方吗？
+正所谓身处谷底，往哪边走都是上坡。
+真是令人心情激动。
+
+[[最开始的地方->鸟取大学前站]]
+
+
+:: 跟车站旁的平头小青年搭话 {"position":"825,750","size":"100,100"}
+
+
+
+:: 飞机上 {"position":"700,375","size":"100,100"}
+飞机在高空飞行。
+窗外的云团反射阳光，有些刺眼。
+机舱内安静，偶尔传来乘客的呼噜声。
+一个适合沉思的时刻。
+
+[[关于此行的目的地->留学前夕]]
+
+
+:: 鸟取大学前站 {"position":"700,625","size":"100,100"}
+=鸟取大学前站=
+
+这里是距离鸟取大学最近的电车站“鸟取大学前”。
+非常简单明了的命名。
+
+这是一座1995年建成的车站，售票厅很小但是相当精致。
+屋顶是玻璃倒三角，黄昏的时候，夕阳透过屋顶洒进来，整个售票厅都浸入余晖。
+售票厅坐落在高处，需要下楼梯才能抵达候车站台。
+售票厅外环岛中间种了一棵巨大的水杉。
+
+从这里往南走三分钟跨过铁道桥就是[[鸟大前T字路口]]。
+往北走十五分钟就是留学生宿舍，通称[[会馆]]。
+
+<<if $date is 1001>>
+	[[跟车站旁的平头小青年搭话]]
+<</if>>
+
+<<include "显示状态">>
+
+
+:: 鸟大前T字路口 {"position":"575,750","size":"100,100"}
+
+
+
+:: StoryStylesheet [stylesheet]
+.special-name{
+  color: lime;
+}
+
+.meaningful{
+  color: orange;
+}
