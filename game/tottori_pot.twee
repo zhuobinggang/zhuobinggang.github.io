@@ -1,0 +1,157 @@
+:: StoryTitle
+托托里之壶
+
+
+:: StoryData
+{
+  "ifid": "BA16F8EA-42F7-407F-A5EC-1FF4DA8BFD8D",
+  "format": "SugarCube",
+  "format-version": "2.37.3",
+  "start": "初始之地",
+  "zoom": 1
+}
+
+
+:: StoryCaption {"position":"825,250","size":"100,100"}
+血量: $me.hp / $me.max_hp
+武器: $me.weapon.name
+防具: $me.armor.name
+攻击力: $me.weapon.power
+防御: $me.armor.resistance
+
+
+:: 初始之地 {"position":"700,100","size":"100,100"}
+我的名字叫作：
+<<textbox "$myname" "后宫王">>
+
+[[进入游戏->起居室]]
+
+<<set $myname to '后宫王'>>
+<<set $registered to false>>
+<<set $said_hello_to_kagei to false>>
+<<set $date to 1001>>
+<<set $name_of_boy to '打工战士'>>
+<<set $said_goodbye_to_boy to false>>
+
+<<set $default_weapon to {name: '空手', power: 1}>>
+<<set $default_armor to {name: '运动服', resistance: 1}>>
+<<set $me to {name: $myname, hp: 100, max_hp: 100, weapon: $default_weapon, armor: $default_armor}>>
+
+<<set $beginnerWeaponGot to false>>
+<<set $beginnerWeapon to {name: '木剑', power: 3}>>
+<<set $beginnerArmor to {name: '鹿皮夹克', resistance: 3}>>
+<<set $oldMan to {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 5}>>
+
+
+:: 向老头搭话 {"position":"575,500","size":"100,100"}
+
+
+
+:: 大厅 {"position":"700,375","size":"100,100"}
+=大厅=
+
+老旧木头房子的客厅。
+从这里可以前往[[屋子外头]]，[[起居室]]和[[老头的房间]]。
+
+<<if $oldMan.hp > 0>>
+客厅中央站着一个$oldMan.name。
+我可以<<button "攻击他" "战斗画面">><<set $enemy to $oldMan>><</button>>，或者[[向老头搭话]]。
+<<else>>
+客厅中央躺着$oldMan.name的尸体。
+<</if>>
+
+
+:: 屋子外头 {"position":"700,500","size":"100,100"}
+
+
+
+:: 战斗画面 {"position":"1000,225","size":"100,100"}
+=战斗=
+
+<<set $me.power to $me.weapon.power>>\
+<<set $me.resistance to $me.armor.resistance>>\
+
+敌人: $enemy.name
+初始hp: $enemy.max_hp
+
+<<script>>
+	/*
+		When accessing managed variables in JavaScript, it's often a good idea
+		to cache references to whichever variable store you happen to be using.
+    */
+    let result = window.fight(State.variables.me, State.variables.enemy)
+    window.me = result.obj1
+    window.enemy = result.obj2
+    State.variables.me = me
+    State.variables.enemy = enemy
+<</script>>
+
+<<if $me.hp < 1>>
+你被$enemy.name杀死了！
+<<else>>
+$enemy.name被你杀死了！
+<</if>>
+
+
+:: 老头的房间 {"position":"825,500","size":"100,100"}
+
+
+
+:: 起居室 {"position":"700,250","size":"100,100"}
+=起居室=
+
+一个小小的房间，整洁，
+也可以说是没有什么生活气息。 
+一张床，一张椅子，桌子。
+桌子上面放着一本翻开的书，还有蜡烛燃尽留下的烛泪。
+
+<<if not $beginnerWeaponGot>>
+墙上挂着一个$beginnerWeapon['name']。\
+<<button "装备" "起居室">>
+<<set $me.weapon to $beginnerWeapon>>
+<<set $beginnerWeaponGot to true>>
+<</button>>
+<</if>>
+
+<<if not $beginnerArmorGot>>
+墙上挂着一个$beginnerArmor['name']。\
+<<button "装备" "起居室">>
+<<set $me.armor to $beginnerArmor>>
+<<set $beginnerArmorGot to true>>
+<</button>>
+<</if>>
+
+到[[大厅]]去。
+
+
+:: StoryScript [script]
+window.dd = function dd(){
+  console.log('dd')
+}
+window.fight = function fight(obj1, obj2) {
+    // 定义计算伤害的函数
+    function calculateDamage(attacker, defender) {
+        const damage = attacker.power - defender.resistance;
+        return damage > 0 ? damage : 0; // 确保伤害不会是负数
+    }
+
+    // 回合制战斗
+    while (obj1.hp > 0 && obj2.hp > 0) {
+        // obj1 先攻击 obj2
+        obj2.hp -= calculateDamage(obj1, obj2);
+        if (obj2.hp <= 0) {
+            obj2.hp = 0;
+            break; // obj2 倒下，战斗结束
+        }
+
+        // obj2 反击 obj1
+        obj1.hp -= calculateDamage(obj2, obj1);
+        if (obj1.hp <= 0) {
+            obj1.hp = 0;
+            break; // obj1 倒下，战斗结束
+        }
+    }
+
+    // 返回战斗结束后的状态
+    return { obj1, obj2 };
+}
