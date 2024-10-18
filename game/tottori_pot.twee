@@ -19,6 +19,31 @@
 攻击力: $me.weapon.power
 防御: $me.armor.resistance
 
+[[物品栏]]
+
+
+:: 休息 {"position":"550,250","size":"100,100"}
+经过一阵剧烈的休息，体力恢复了！
+<<set $me.hp to $me.max_hp>>\
+
+<<return "返回">>
+
+
+
+:: 低矮林地 {"position":"700,500","size":"100,100"}
+=低矮林地=
+<<set $slime.hp to $slime.max_hp>>\
+
+屋子旁边的小树林。
+这里生活着很多弱小的魔物。
+目力所及的地方就有很多史莱姆。
+<<button "攻击史莱姆" "战斗画面">>
+	<<set $lastPassage to '低矮林地'>>\
+    <<set $enemyVarName to 'slime'>>
+<</button>>
+
+[[回家->大厅]]
+
 
 :: 初始之地 {"position":"700,100","size":"100,100"}
 我的名字叫作：
@@ -40,57 +65,142 @@
 <<set $beginnerWeaponGot to false>>
 <<set $beginnerWeapon to {name: '木剑', power: 3}>>
 <<set $beginnerArmor to {name: '鹿皮夹克', resistance: 3}>>
-<<set $oldMan to {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 5}>>
+<<set $inventory to {desc: '物品栏'}>>
+
+
+/* NPC & Monsters */
+<<script>>
+State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
+State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 2, resistance: 2};
+State.variables.slime = {
+	name: '史莱姆', 
+    max_hp: 10,
+    hp: 10, 
+    power: 1, 
+    resistance: 1, 
+    drops: [{
+    	item: State.variables.slimeDrop, 
+        chance: 0.6
+    }]
+}
+<</script>>
+
+<<script>>
+    window.dd = State.variables
+<</script>>
 
 
 :: 向老头搭话 {"position":"575,500","size":"100,100"}
+老头：今天是你的十六岁生日。从今天开始，$me.name，你将要开始独自的冒险生活。
 
+老头：现在，我有一个任务交给你，去<span class='important'>杀死5只史莱姆，带回它们掉落的粘液</span>，向我证明你的能力。
+
+老头：史莱姆经常在屋外的<span class='important'>低矮林地</span>出没。
+
+<<script>>
+State.variables.hasSlimeDrop = 'slimeDrop' in State.variables.inventory;
+<</script>>
+
+<<if $hasSlimeDrop>>
+老头： 你现在拥有$inventory.slimeDrop.quantity个史莱姆黏液。
+<<else>>
+老头： 你还没有拿到史莱姆粘液。
+<</if>>
+
+[[返回->大厅]]
 
 
 :: 大厅 {"position":"700,375","size":"100,100"}
 =大厅=
 
 老旧木头房子的客厅。
-从这里可以前往[[屋子外头]]，[[起居室]]和[[老头的房间]]。
+从这里可以前往[[低矮林地]]，[[起居室]]和[[老头的房间]]。
 
 <<if $oldMan.hp > 0>>
 客厅中央站着一个$oldMan.name。
-我可以<<button "攻击他" "战斗画面">><<set $enemy to $oldMan>><</button>>，或者[[向老头搭话]]。
+<<button "攻击他" "战斗画面">>
+	<<set $lastPassage to '大厅'>>\
+    <<set $enemyVarName to 'oldMan'>>
+<</button>>
+[[向老头搭话]]
 <<else>>
 客厅中央躺着$oldMan.name的尸体。
 <</if>>
 
 
-:: 屋子外头 {"position":"700,500","size":"100,100"}
-
-
-
 :: 战斗画面 {"position":"1000,225","size":"100,100"}
 =战斗=
-
-<<set $me.power to $me.weapon.power>>\
-<<set $me.resistance to $me.armor.resistance>>\
-
-敌人: $enemy.name
-初始hp: $enemy.max_hp
-
+<<silently>>\
 <<script>>
-	/*
-		When accessing managed variables in JavaScript, it's often a good idea
-		to cache references to whichever variable store you happen to be using.
-    */
-    let result = window.fight(State.variables.me, State.variables.enemy)
-    window.me = result.obj1
-    window.enemy = result.obj2
-    State.variables.me = me
-    State.variables.enemy = enemy
+if (State.variables[State.variables.enemyVarName].hp < 1){
+	console.log('Should not fight against dead body');
+    State.variables.error = true;
+}else{
+State.variables.error = 0;
+State.variables.me.power = State.variables.me.weapon.power;
+State.variables.me.resistance = State.variables.me.armor.resistance;
+console.log(State.variables.enemyVarName);
+console.log(State.variables[State.variables.enemyVarName]);
+console.log(State.variables.me);
+let {obj1, obj2} = fight(State.variables.me, State.variables[State.variables.enemyVarName]);
+console.log(obj1)
+console.log(obj2)
+State.variables.me = obj1;
+State.variables[State.variables.enemyVarName] = obj2;
+State.variables.enemy = obj2; 
+}
 <</script>>
+<</silently>>
 
-<<if $me.hp < 1>>
-你被$enemy.name杀死了！
-<<else>>
-$enemy.name被你杀死了！
-<</if>>
+<<if $error>>\
+	$enemy.name已经死了，请不要反复鞭尸！
+<<else>>\
+向$enemy.name发起了攻击！
+<<if $me.hp < 1>>\
+<<goto "死亡">>\
+<<else>>\
+<span class='good'>$enemy.name被你杀死了！</span>
+<<include '物品掉落'>>
+<</if>>\
+<</if>>\
+
+<<link "返回" $lastPassage>><</link>>
+
+
+:: 死亡 {"position":"1125,250","size":"100,100"}
+=死亡=
+
+<span class='danger'>你被$enemy.name杀死了！</span>
+$enemy.name的HP剩余$enemy.hp点，下次再努力吧。
+
+点击侧边栏的"RESTART"重新开始游戏。
+
+
+:: 物品掉落 {"position":"1100,425","size":"100,100"}
+<<silently>>\
+<<script>>
+State.variables.temp = '莫名奇妙的字符串';
+State.variables.temp2 = [];
+let enemy = State.variables.enemy;
+if ('drops' in enemy){
+	let items = dropItems(enemy.drops)
+    console.log(items)
+    let text = dropString(items)
+    State.variables.temp = text
+    State.variables.temp2 = items
+}else {
+    console.log('no drops')
+    State.variables.temp = []
+}
+<</script>>
+<</silently>>
+<<if $temp2.length > 0>>\
+	<span class='good'>$enemy.name掉落了$temp。</span>
+<</if>>\
+
+
+:: 物品栏 {"position":"875,100","size":"100,100"}
+<<return "返回">>
 
 
 :: 老头的房间 {"position":"825,500","size":"100,100"}
@@ -100,27 +210,27 @@ $enemy.name被你杀死了！
 :: 起居室 {"position":"700,250","size":"100,100"}
 =起居室=
 
-一个小小的房间，整洁，
-也可以说是没有什么生活气息。 
+一个小小的房间，整洁，也可以说是没有什么生活气息。 
 一张床，一张椅子，桌子。
 桌子上面放着一本翻开的书，还有蜡烛燃尽留下的烛泪。
 
 <<if not $beginnerWeaponGot>>
 墙上挂着一个$beginnerWeapon['name']。\
-<<button "装备" "起居室">>
-<<set $me.weapon to $beginnerWeapon>>
-<<set $beginnerWeaponGot to true>>
-<</button>>
-<</if>>
+<<button "装备" "起居室">>\
+<<set $me.weapon to $beginnerWeapon>>\
+<<set $beginnerWeaponGot to true>>\
+<</button>>\
+<</if>>\
 
-<<if not $beginnerArmorGot>>
+<<if not $beginnerArmorGot>>\
 墙上挂着一个$beginnerArmor['name']。\
-<<button "装备" "起居室">>
-<<set $me.armor to $beginnerArmor>>
-<<set $beginnerArmorGot to true>>
-<</button>>
-<</if>>
+<<button "装备" "起居室">>\
+<<set $me.armor to $beginnerArmor>>\
+<<set $beginnerArmorGot to true>>\
+<</button>>\
+<</if>>\
 
+[[休息]]
 到[[大厅]]去。
 
 
@@ -128,30 +238,74 @@ $enemy.name被你杀死了！
 window.dd = function dd(){
   console.log('dd')
 }
+
 window.fight = function fight(obj1, obj2) {
     // 定义计算伤害的函数
     function calculateDamage(attacker, defender) {
         const damage = attacker.power - defender.resistance;
-        return damage > 0 ? damage : 0; // 确保伤害不会是负数
+        return damage > 0 ? damage : 1; // 确保伤害不会是负数
     }
 
     // 回合制战斗
     while (obj1.hp > 0 && obj2.hp > 0) {
         // obj1 先攻击 obj2
-        obj2.hp -= calculateDamage(obj1, obj2);
+      	let damage = calculateDamage(obj1, obj2);
+        obj2.hp -= damage;
+      	console.log(obj2.name + '收到了' + damage + '点伤害！');
         if (obj2.hp <= 0) {
             obj2.hp = 0;
             break; // obj2 倒下，战斗结束
         }
 
         // obj2 反击 obj1
-        obj1.hp -= calculateDamage(obj2, obj1);
+      	damage = calculateDamage(obj2, obj1);
+      	console.log(obj1.name + '收到了' + damage + '点伤害！');
+      	obj1.hp -= damage;
         if (obj1.hp <= 0) {
             obj1.hp = 0;
             break; // obj1 倒下，战斗结束
         }
     }
+    return {obj1, obj2};
+}
 
-    // 返回战斗结束后的状态
-    return { obj1, obj2 };
+window.dropItems = function dropItems(drops) {
+    let itemList = [];
+
+    // 遍历drops数组
+    drops.forEach(drop => {
+        // 生成一个随机数 (0-1)
+        let randomChance = Math.random();
+      	console.log(randomChance)
+      	console.log(drop.chance)
+        
+        // 如果随机数小于等于掉落几率，则掉落物品
+        if (randomChance <= drop.chance) {
+            itemList.push(drop.item);
+        }
+    });
+
+    return itemList; // 返回掉落的物品列表
+}
+
+window.dropString = function dropString(droppedItems) {
+    // 如果droppedItems为空，返回提示信息
+    if (droppedItems.length === 0) {
+        return "没有物品掉落";
+    }
+    
+    // 提取每个物品的名字，并用逗号连接成字符串
+    let itemNames = droppedItems.map(item => item.name);
+    return itemNames.join(', ');
+}
+
+:: StoryStylesheet [stylesheet]
+.danger{
+	color: red;
+}
+.good{
+	color: green;
+}
+.important{
+  	color: orange;
 }
