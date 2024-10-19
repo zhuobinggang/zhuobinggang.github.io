@@ -20,27 +20,70 @@
 防御: $me.armor.resistance
 
 [[物品栏]]
+[[称号栏]]
 
 
-:: 休息 {"position":"550,250","size":"100,100"}
-经过一阵剧烈的休息，体力恢复了！
+:: 一本翻开的书 {"position":"525,250","size":"100,100"}
+仔细一看，这不是一本书，而是自己写下的笔记。
+
+最上面的一页写着：
+
+明天就是我的十六岁生日了。
+从明天开始，我就要离开这个家，踏上独自一人的旅程。
+我没有过去的记忆。
+老头也不向我透露任何东西。
+也许这是一个阴谋，但是现在的我不得而知。
+希望新的旅程能够给我答案……
+
+[[返回->起居室]]
+
+
+:: 下一页 {"position":"850,575","size":"100,100"}
+🖕
+
+我还想你来告诉我我的身世呢，你这个BYD不孝玩意。
+
+[[老头的房间]]
+
+<<script>>
+State.variables.oldManLetterRead = true
+<</script>>
+
+
+:: 交出5个史莱姆粘液 {"position":"425,375","size":"100,100"}
+<<script>>
+let itemName =  '史莱姆粘液'
+reduceItemCount(State.variables.inventory.items, itemName, 5)
+State.variables.temp = getItem(State.variables.inventory.items, itemName)
+addItem(State.variables.inventory.items, State.variables.clownMask, 1)
+<</script>>
+把5个史莱姆粘液给了老头，现在只剩下$temp.count个了。
+不过也没什么好可惜的。
+
+作为回报，老头给了你一个小丑面具。
+
+[[返回->向老头搭话]]
+
+
+:: 休息 {"position":"525,125","size":"100,100"}
+经过剧烈的休息，体力恢复了！
 <<set $me.hp to $me.max_hp>>\
 
 <<return "返回">>
 
 
-
-:: 低矮林地 {"position":"700,500","size":"100,100"}
+:: 低矮林地 {"position":"575,525","size":"100,100"}
 =低矮林地=
 <<set $slime.hp to $slime.max_hp>>\
 
 屋子旁边的小树林。
 这里生活着很多弱小的魔物。
-目力所及的地方就有很多史莱姆。
+目力所及的地方就有很多史莱姆。\
 <<button "攻击史莱姆" "战斗画面">>
 	<<set $lastPassage to '低矮林地'>>\
-    <<set $enemyVarName to 'slime'>>
-<</button>>
+    <<set $enemyVarName to 'slime'>>\
+<</button>>\
+
 
 [[回家->大厅]]
 
@@ -63,15 +106,16 @@
 <<set $me to {name: $myname, hp: 100, max_hp: 100, weapon: $default_weapon, armor: $default_armor}>>
 
 <<set $beginnerWeaponGot to false>>
-<<set $beginnerWeapon to {name: '木剑', power: 3}>>
+<<set $beginnerWeapon to {name: '木剑', power: 4}>>
 <<set $beginnerArmor to {name: '鹿皮夹克', resistance: 3}>>
-<<set $inventory to {desc: '物品栏'}>>
+<<set $inventory to {desc: '物品栏', items: []}>>
+<<set $titles to {desc: '称号', items: []}>>
 
 
 /* NPC & Monsters */
 <<script>>
 State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
-State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 2, resistance: 2};
+State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 2};
 State.variables.slime = {
 	name: '史莱姆', 
     max_hp: 10,
@@ -83,6 +127,15 @@ State.variables.slime = {
         chance: 0.6
     }]
 }
+State.variables.clownMask = {
+	name: '小丑面具',  desc: '看起来有些诡异的面具，能够吓哭小孩。'
+}
+State.variables.oldManSlayer = {
+	name: '弑亲者',  desc: '只是杀死了个老头而已，有什么好大惊小怪的。'
+}
+State.variables.slimeSlayer = {
+	name: '史莱姆杀手',  desc: '最好不要让动物保护协会知道。'
+}
 <</script>>
 
 <<script>>
@@ -90,7 +143,7 @@ State.variables.slime = {
 <</script>>
 
 
-:: 向老头搭话 {"position":"575,500","size":"100,100"}
+:: 向老头搭话 {"position":"550,375","size":"100,100"}
 老头：今天是你的十六岁生日。从今天开始，$me.name，你将要开始独自的冒险生活。
 
 老头：现在，我有一个任务交给你，去<span class='important'>杀死5只史莱姆，带回它们掉落的粘液</span>，向我证明你的能力。
@@ -98,11 +151,18 @@ State.variables.slime = {
 老头：史莱姆经常在屋外的<span class='important'>低矮林地</span>出没。
 
 <<script>>
-State.variables.hasSlimeDrop = 'slimeDrop' in State.variables.inventory;
+let hasSlimeDrop = checkHavingItem(State.variables.inventory.items, '史莱姆粘液')
+State.variables.hasSlimeDrop = hasSlimeDrop
+if(hasSlimeDrop){
+	State.variables.temp = getItem(State.variables.inventory.items, '史莱姆粘液')
+}
 <</script>>
 
 <<if $hasSlimeDrop>>
-老头： 你现在拥有$inventory.slimeDrop.quantity个史莱姆黏液。
+老头： 你现在拥有$temp.count个史莱姆粘液。
+	<<if $temp.count >= 5>>
+    	[[交出5个史莱姆粘液]]
+	<</if>>
 <<else>>
 老头： 你还没有拿到史莱姆粘液。
 <</if>>
@@ -114,17 +174,33 @@ State.variables.hasSlimeDrop = 'slimeDrop' in State.variables.inventory;
 =大厅=
 
 老旧木头房子的客厅。
-从这里可以前往[[低矮林地]]，[[起居室]]和[[老头的房间]]。
+从这里可以前往[[小屋前十字路口]]，[[起居室]]和[[老头的房间]]。
 
 <<if $oldMan.hp > 0>>
-客厅中央站着一个$oldMan.name。
-<<button "攻击他" "战斗画面">>
+客厅中央站着一个$oldMan.name。\
+<<button "攻击" "战斗画面">>
 	<<set $lastPassage to '大厅'>>\
     <<set $enemyVarName to 'oldMan'>>
 <</button>>
 [[向老头搭话]]
 <<else>>
 客厅中央躺着$oldMan.name的尸体。
+<</if>>
+
+
+:: 小屋前十字路口 {"position":"725,525","size":"100,100"}
+=小屋前十字路口=
+
+从这里可以看见破烂的[[小屋->大厅]]，和小屋背后的[[低矮林地]]。
+
+大马路如此笔直，让人不禁想象它一定可以通往我意愿前往的任何地方。
+
+<<if $oldMan.hp > 0>>
+可是，就这样离开这里真的好吗？
+<span class='red'>总感觉有些东西令人难以释怀</span>。
+<<else>>
+是时候离开这里了。
+从这里可以前往[[王都]]。
 <</if>>
 
 
@@ -161,10 +237,27 @@ State.variables.enemy = obj2;
 <<else>>\
 <span class='good'>$enemy.name被你杀死了！</span>
 <<include '物品掉落'>>
+<<include '杀死怪物回调'>>
 <</if>>\
 <</if>>\
 
 <<link "返回" $lastPassage>><</link>>
+
+
+:: 杀死怪物回调 {"position":"1250,425","size":"100,100"}
+<<silently>>\
+<<script>>
+if (State.variables.enemy.name == '史莱姆'){
+	console.log('杀死史莱姆')
+	addItem(State.variables.titles.items, State.variables.slimeSlayer, 1)
+}else if (State.variables.enemy.name == '老头'){
+	console.log('杀死老头')
+	if (!checkHavingItem(State.variables.titles.items, '弑亲者')){
+    	addItem(State.variables.titles.items, State.variables.oldManSlayer)
+    }
+}
+<</script>>
+<</silently>>\
 
 
 :: 死亡 {"position":"1125,250","size":"100,100"}
@@ -176,7 +269,7 @@ $enemy.name的HP剩余$enemy.hp点，下次再努力吧。
 点击侧边栏的"RESTART"重新开始游戏。
 
 
-:: 物品掉落 {"position":"1100,425","size":"100,100"}
+:: 物品掉落 {"position":"1125,375","size":"100,100"}
 <<silently>>\
 <<script>>
 State.variables.temp = '莫名奇妙的字符串';
@@ -188,6 +281,9 @@ if ('drops' in enemy){
     let text = dropString(items)
     State.variables.temp = text
     State.variables.temp2 = items
+    if (items.length > 0){
+    	addToInventory(State.variables.inventory.items, items)
+    }
 }else {
     console.log('no drops')
     State.variables.temp = []
@@ -200,11 +296,71 @@ if ('drops' in enemy){
 
 
 :: 物品栏 {"position":"875,100","size":"100,100"}
+<<for $i, $item range  $inventory.items>>
+	<<if $item.count > 0>>
+    	名称: $item.name x $item.count
+        $item.desc
+    <</if>>
+<</for>>
+
 <<return "返回">>
 
 
-:: 老头的房间 {"position":"825,500","size":"100,100"}
+:: 王国旅行指南 {"position":"1000,400","size":"100,100"}
+翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面用潦草的字体写着：
 
+<blockquote>
+在大洪水来临之前，离开这里
+<small>PS: 我把书全都撕了，因为你是自由的</small>
+</blockquote>
+
+[[老头的房间]]
+
+
+:: 王都 {"position":"725,650","size":"100,100"}
+第二章……
+施工中……
+
+
+:: 称号栏 {"position":"1000,100","size":"100,100"}
+<<for $i, $item range  $titles.items>>
+	<<if $item.count > 0>>
+    	《$item.name》<<if $item.count > 1>>x $item.count<</if>>
+        $item.desc
+    <</if>>
+<</for>>
+
+<<return "返回">>
+
+
+:: 老头的信 {"position":"1000,550","size":"100,100"}
+你看到这封信的时候，我大概已经死了吧。
+你肯定以为这老头房间里藏着不得了的东西，
+结果只发现了这封信。
+
+一定很失望吧。
+如果是我的话一定会很失望。
+
+不过你肯定会想：“这封信一定藏着关于我的身世的不得了的秘密”。
+
+是的，我会告诉你一切真相。
+
+[[下一页]]
+
+
+:: 老头的房间 {"position":"850,425","size":"100,100"}
+=老头的房间=
+
+<<if $oldMan.hp > 0>>
+老头： 站住。谁允许你随便进我的房间了？
+<<else>>
+煞风景的房间。
+家具和我自己的起居室差不多，一张床，一张桌子而已。
+桌子上摆着[[一封信->老头的信]]，和一本《[[王国旅行指南]]》。
+
+<</if>>
+
+[[大厅]]
 
 
 :: 起居室 {"position":"700,250","size":"100,100"}
@@ -212,32 +368,34 @@ if ('drops' in enemy){
 
 一个小小的房间，整洁，也可以说是没有什么生活气息。 
 一张床，一张椅子，桌子。
-桌子上面放着一本翻开的书，还有蜡烛燃尽留下的烛泪。
+桌子上面放着[[一本翻开的书]]，还有蜡烛燃尽留下的烛泪。
 
 <<if not $beginnerWeaponGot>>
-墙上挂着一个$beginnerWeapon['name']。\
+墙上挂着一柄$beginnerWeapon['name']。\
 <<button "装备" "起居室">>\
 <<set $me.weapon to $beginnerWeapon>>\
 <<set $beginnerWeaponGot to true>>\
 <</button>>\
+<<else>>\
+墙上放武器的地方空空如也。\
 <</if>>\
 
-<<if not $beginnerArmorGot>>\
-墙上挂着一个$beginnerArmor['name']。\
+<<if not $beginnerArmorGot>>
+墙上挂着一套$beginnerArmor['name']。\
 <<button "装备" "起居室">>\
 <<set $me.armor to $beginnerArmor>>\
 <<set $beginnerArmorGot to true>>\
 <</button>>\
+<<else>>\
+墙上放防具的地方空空如也。\
 <</if>>\
+
 
 [[休息]]
 到[[大厅]]去。
 
 
 :: StoryScript [script]
-window.dd = function dd(){
-  console.log('dd')
-}
 
 window.fight = function fight(obj1, obj2) {
     // 定义计算伤害的函数
@@ -299,6 +457,73 @@ window.dropString = function dropString(droppedItems) {
     return itemNames.join(', ');
 }
 
+window.addToInventory = function(inventory, itemList) {
+    itemList.forEach(item => {
+        // 检查 inventory 中是否已有该物品
+        let existingItem = inventory.find(inventoryItem => inventoryItem.name === item.name);
+        
+        if (existingItem) {
+            // 如果已有该物品，增加 count
+            existingItem.count++;
+        } else {
+            // 如果没有，新增物品并设置 count 为 1
+            inventory.push({ ...item, count: 1 });
+        }
+    });
+}
+
+window.checkHavingItem = function(inventory, itemName) {
+    // 查找 inventory 中的物品
+    let item = inventory.find(inventoryItem => inventoryItem.name === itemName);
+    
+    // 如果物品不存在，或者 count 为 0，返回 false（不持有）
+    if (!item || item.count === 0) {
+        return false;
+    }
+    
+    // 否则返回 true（持有）
+    return true;
+}
+
+window.getItem = function getItem(inventory, itemName) {
+    // 查找 inventory 中的物品
+    let item = inventory.find(inventoryItem => inventoryItem.name === itemName);
+    
+    // 如果物品存在，返回该物品，否则返回 null
+    return item || null;
+}
+
+window.reduceItemCount = function reduceItemCount(inventory, itemName, count) {
+    // 查找 inventory 中的物品
+    let item = inventory.find(inventoryItem => inventoryItem.name === itemName);
+    
+    if (item) {
+        // 减少物品数量
+        item.count -= count;
+        
+        // 如果物品数量小于等于 0，将 count 设为 0
+        if (item.count <= 0) {
+            item.count = 0;
+        }
+    } else {
+        console.log(`物品 ${itemName} 不存在于 inventory 中。`);
+    }
+}
+
+window.addItem = function addItem(inventory, item, count = 1) {
+    // 查找是否已有该物品
+    let existingItem = inventory.find(inventoryItem => inventoryItem.name === item.name);
+    
+    if (existingItem) {
+        // 如果持有，更新物品的数量和描述
+        existingItem.count += count;
+        existingItem.desc = item.desc;  // 更新物品的描述
+    } else {
+        // 如果不持有，新增物品并设置 count
+        inventory.push({ ...item, count: count });
+    }
+}
+
 :: StoryStylesheet [stylesheet]
 .danger{
 	color: red;
@@ -308,4 +533,7 @@ window.dropString = function dropString(droppedItems) {
 }
 .important{
   	color: orange;
+}
+.red{
+	color: red;
 }
