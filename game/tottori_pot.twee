@@ -12,8 +12,28 @@
 }
 
 
+:: PassageFooter {"position":"1200,100","size":"100,100"}
+
+
+
+<<if $me and $footerOn>>\
+<hr/>\
+$me.name LV$me.level <<if $titles.items.length > 0>>【<<print $titles.items.last().name>>】<</if>>
+HP :<meter @value="$me.hp" min="0" @max="$me.max_hp"></meter>
+[[物品栏]], [[称号栏]]
+<</if>>
+
+
+
+:: Start {"position":"1350,100","size":"100,100"}
+Start
+<<script>>
+console.log('Start?')
+<</script>>
+
+
 :: StoryCaption {"position":"825,250","size":"100,100"}
-等级: $me.level
+$me.name LV$me.level
 <<set $expNeed to $nextLevelExp()>>
 经验值: $me.exp / $expNeed
 固有攻击力: $me.intrinsicPower
@@ -21,10 +41,6 @@
 血量: $me.hp / $me.max_hp
 武器: $me.weapon.name (攻击力: $me.weapon.power)
 防具: $me.armor.name (防御力:  $me.armor.resistance)
-
-
-[[物品栏]]
-[[称号栏]]
 
 
 :: 一本翻开的书 {"position":"525,250","size":"100,100"}
@@ -93,9 +109,11 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 
 
 :: 初始之地 {"position":"700,100","size":"100,100"}
-<<set $myname to '后宫王'>>\
+<<set $default_weapon to {name: '空手', power: 1}>>\
+<<set $default_armor to {name: '运动服', resistance: 1}>>\
+<<set $me to {name: '你爹', hp: 100, max_hp: 100, weapon: $default_weapon, armor: $default_armor, intrinsicPower: 0, intrinsicResistance: 0, level: 1, exp: 0}>>\
 我的名字叫作：
-<<textbox "$myname" "父亲">>
+<<textbox "$me.name" "父亲">>
 
 [[进入游戏->起居室]]
 
@@ -106,9 +124,6 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 <<set $name_of_boy to '打工战士'>>
 <<set $said_goodbye_to_boy to false>>
 
-<<set $default_weapon to {name: '空手', power: 1}>>
-<<set $default_armor to {name: '运动服', resistance: 1}>>
-<<set $me to {name: $myname, hp: 100, max_hp: 100, weapon: $default_weapon, armor: $default_armor, intrinsicPower: 0, intrinsicResistance: 0, level: 1, exp: 0}>>
 
 <<set $beginnerWeaponGot to false>>
 <<set $beginnerWeapon to {name: '木剑', power: 4}>>
@@ -116,9 +131,12 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 <<set $inventory to {desc: '物品栏', items: []}>>
 <<set $titles to {desc: '称号', items: []}>>
 
+<<set $footerOn to true>>\
+
 
 /* NPC & Monsters */
 <<script>>
+console.log('HELLO?')
 State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
 State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 2, exp: 100};
 State.variables.slime = {
@@ -243,8 +261,8 @@ if(hasSlimeDrop){
 <</link>>
 [[向老头搭话]]
 <<else>>
-🟢客厅中央躺着$oldMan.name的尸体。
-现在，我可以从小屋前面的十字路口离开。
+客厅中央躺着$oldMan.name的尸体。
+🟢现在，我可以从小屋前面的十字路口离开。
 <</if>>
 
 
