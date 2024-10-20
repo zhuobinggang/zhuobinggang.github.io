@@ -13,11 +13,15 @@
 
 
 :: StoryCaption {"position":"825,250","size":"100,100"}
+等级: $me.level
+<<set $expNeed to $nextLevelExp()>>
+经验值: $me.exp / $expNeed
+固有攻击力: $me.intrinsicPower
+固有防御力: $me.intrinsicResistance
 血量: $me.hp / $me.max_hp
-武器: $me.weapon.name
-防具: $me.armor.name
-攻击力: $me.weapon.power
-防御: $me.armor.resistance
+武器: $me.weapon.name (攻击力: $me.weapon.power)
+防具: $me.armor.name (防御力:  $me.armor.resistance)
+
 
 [[物品栏]]
 [[称号栏]]
@@ -79,22 +83,23 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 屋子旁边的小树林。
 这里生活着很多弱小的魔物。
 目力所及的地方就有很多史莱姆。\
-<<button "攻击史莱姆" "战斗画面">>
+<<link "攻击史莱姆" "战斗画面">>
 	<<set $lastPassage to '低矮林地'>>\
     <<set $enemyVarName to 'slime'>>\
-<</button>>\
+<</link>>\
 
 
 [[回家->大厅]]
 
 
 :: 初始之地 {"position":"700,100","size":"100,100"}
+<<set $myname to '后宫王'>>\
 我的名字叫作：
-<<textbox "$myname" "后宫王">>
+<<textbox "$myname" "父亲">>
 
 [[进入游戏->起居室]]
 
-<<set $myname to '后宫王'>>
+
 <<set $registered to false>>
 <<set $said_hello_to_kagei to false>>
 <<set $date to 1001>>
@@ -103,7 +108,7 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 
 <<set $default_weapon to {name: '空手', power: 1}>>
 <<set $default_armor to {name: '运动服', resistance: 1}>>
-<<set $me to {name: $myname, hp: 100, max_hp: 100, weapon: $default_weapon, armor: $default_armor}>>
+<<set $me to {name: $myname, hp: 100, max_hp: 100, weapon: $default_weapon, armor: $default_armor, intrinsicPower: 0, intrinsicResistance: 0, level: 1, exp: 0}>>
 
 <<set $beginnerWeaponGot to false>>
 <<set $beginnerWeapon to {name: '木剑', power: 4}>>
@@ -115,9 +120,10 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 /* NPC & Monsters */
 <<script>>
 State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
-State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 2};
+State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 2, exp: 100};
 State.variables.slime = {
 	name: '史莱姆', 
+    exp: 3,
     max_hp: 10,
     hp: 10, 
     power: 1, 
@@ -136,6 +142,30 @@ State.variables.oldManSlayer = {
 State.variables.slimeSlayer = {
 	name: '史莱姆杀手',  desc: '最好不要让动物保护协会知道。'
 }
+State.variables.healMySelf = function healMySelf(percentage){
+	healing(State.variables.me, percentage);
+}
+function useSmallHealingPotion(){
+	healing(State.variables.me, 0.2);
+    reduceItemCount(State.variables.inventory.items, '小回复瓶');
+}
+State.variables.smallHealingPotion = {
+	name: '小回复瓶',  desc: '回复20%HP。', callbackFunc: useSmallHealingPotion
+}
+// 增加经验
+State.variables.levelUpMe = function levelUpMe(){
+	window.levelUp(State.variables.me)
+}
+State.variables.addExp = function  addExp(exp){
+	console.log('获取了' + exp + '点经验')
+	let {newExp, newLevel, levelsGained} = expGot(State.variables.me.exp, exp, State.variables.me.level, State.variables.levelUpMe);
+    console.log('newExp ' + exp + '点经验')
+    State.variables.me.exp = newExp;
+}
+State.variables.nextLevelExp = function(){
+	return expCurve(State.variables.me.level);
+}
+console.log('I am done')
 <</script>>
 
 <<script>>
@@ -144,12 +174,13 @@ State.variables.slimeSlayer = {
 
 
 :: 向老头搭话 {"position":"550,375","size":"100,100"}
-老头：今天是你的十六岁生日。从今天开始，$me.name，你将要开始独自的冒险生活。
+老头：今天是你的十六岁生日。从今天开始，<span class='good'>$me.name</span>，你将要开始独自的冒险生活。
 
 老头：现在，我有一个任务交给你，去<span class='important'>杀死5只史莱姆，带回它们掉落的粘液</span>，向我证明你的能力。
 
-老头：史莱姆经常在屋外的<span class='important'>低矮林地</span>出没。
-
+老头：史莱姆经常在屋外的<span class='important'>低矮林地</span>出没。你需要先出去屋外，才能前往低矮林地。
+\
+<<silently>>\
 <<script>>
 let hasSlimeDrop = checkHavingItem(State.variables.inventory.items, '史莱姆粘液')
 State.variables.hasSlimeDrop = hasSlimeDrop
@@ -157,11 +188,12 @@ if(hasSlimeDrop){
 	State.variables.temp = getItem(State.variables.inventory.items, '史莱姆粘液')
 }
 <</script>>
-
+<</silently>>\
+\
 <<if $hasSlimeDrop>>
 老头： 你现在拥有$temp.count个史莱姆粘液。
 	<<if $temp.count >= 5>>
-    	[[交出5个史莱姆粘液]]
+    	🟢[[交出5个史莱姆粘液]]
 	<</if>>
 <<else>>
 老头： 你还没有拿到史莱姆粘液。
@@ -170,21 +202,49 @@ if(hasSlimeDrop){
 [[返回->大厅]]
 
 
+:: 哥布林前哨站 {"position":"725,900","size":"100,100"}
+=哥布林前哨站=
+
+从暗处望去。
+洞穴内部稍微开阔一点的地方，几只拿着火把的哥布林在巡逻。
+
+地上躺着死去的同伴们的尸体。
+
+仔细看的话能够发现，[[梅利的尸体在发光]]。
+
+[[攻击哥布林]]
+
+
+:: 哥布林巢穴裂缝 {"position":"600,775","size":"100,100"}
+=狭窄的岩石裂缝=
+
+昏暗的洞穴，空气中漂浮着腐肉和粪便的味道。
+
+<<if not $consideredInCave>>
+[[思考我现在应该做的事情]]
+<<else>>
+🟢前往[[哥布林前哨站]]。
+<</if>>
+
+
 :: 大厅 {"position":"700,375","size":"100,100"}
 =大厅=
 
 老旧木头房子的客厅。
 从这里可以前往[[小屋前十字路口]]，[[起居室]]和[[老头的房间]]。
 
+如果想要休息的话，我需要先返回起居室。
+
 <<if $oldMan.hp > 0>>
 客厅中央站着一个$oldMan.name。\
-<<button "攻击" "战斗画面">>
+<<link "攻击" "战斗画面">>
 	<<set $lastPassage to '大厅'>>\
     <<set $enemyVarName to 'oldMan'>>
-<</button>>
+<</link>>
 [[向老头搭话]]
 <<else>>
-客厅中央躺着$oldMan.name的尸体。
+🟢客厅中央躺着$oldMan.name的尸体。
+现在，我可以从小屋前面的十字路口离开。
 <</if>>
 
 
@@ -193,15 +253,23 @@ if(hasSlimeDrop){
 
 从这里可以看见破烂的[[小屋->大厅]]，和小屋背后的[[低矮林地]]。
 
-大马路如此笔直，让人不禁想象它一定可以通往我意愿前往的任何地方。
+大马路如此笔直，它一定可以带我去往任何地方。
 
-<<if $oldMan.hp > 0>>
-可是，就这样离开这里真的好吗？
-<span class='red'>总感觉有些东西令人难以释怀</span>。
-<<else>>
-是时候离开这里了。
-从这里可以前往[[王都]]。
+<<if $oldMan.hp < 1>>
+🟢是时候[[离开这里]]了。
 <</if>>
+
+
+:: 思考我现在应该做的事情 {"position":"600,900","size":"100,100"}
+选择永远只有两种，前进，或者是后退。
+
+如今付出了惨重的代价，我已经失去了后退的选项。
+我必须取下哥布林王的头颅，以此凭吊死去的队友们。
+
+[[返回->哥布林巢穴裂缝]]
+<<script>>
+State.variables.consideredInCave = true;
+<</script>>
 
 
 :: 战斗画面 {"position":"1000,225","size":"100,100"}
@@ -213,8 +281,8 @@ if (State.variables[State.variables.enemyVarName].hp < 1){
     State.variables.error = true;
 }else{
 State.variables.error = 0;
-State.variables.me.power = State.variables.me.weapon.power;
-State.variables.me.resistance = State.variables.me.armor.resistance;
+State.variables.me.power = State.variables.me.intrinsicPower + State.variables.me.weapon.power;
+State.variables.me.resistance = State.variables.me.intrinsicResistance + State.variables.me.armor.resistance;
 console.log(State.variables.enemyVarName);
 console.log(State.variables[State.variables.enemyVarName]);
 console.log(State.variables.me);
@@ -244,9 +312,14 @@ State.variables.enemy = obj2;
 <<link "返回" $lastPassage>><</link>>
 
 
+:: 攻击哥布林 {"position":"850,1025","size":"100,100"}
+（游戏进度暂时只到这里）
+
+
 :: 杀死怪物回调 {"position":"1250,425","size":"100,100"}
 <<silently>>\
 <<script>>
+State.variables.addExp(State.variables.enemy.exp);
 if (State.variables.enemy.name == '史莱姆'){
 	console.log('杀死史莱姆')
 	addItem(State.variables.titles.items, State.variables.slimeSlayer, 1)
@@ -258,6 +331,15 @@ if (State.variables.enemy.name == '史莱姆'){
 }
 <</script>>
 <</silently>>\
+
+
+:: 梅利的尸体在发光 {"position":"725,1025","size":"100,100"}
+梅利是我们队伍中的牧师。
+她给自己施加了诅咒，一旦死亡就会近乎永久地为四周施加治疗光环。
+如果稍微靠近就能够回复健康。
+
+<<link "使用梅利进行治疗" "梅利的尸体在发光">><<set $temp to $healMySelf(0.05)>><</link>>
+[[返回->哥布林前哨站]]
 
 
 :: 死亡 {"position":"1125,250","size":"100,100"}
@@ -298,7 +380,7 @@ if ('drops' in enemy){
 :: 物品栏 {"position":"875,100","size":"100,100"}
 <<for $i, $item range  $inventory.items>>
 	<<if $item.count > 0>>
-    	名称: $item.name x $item.count
+    	名称: $item.name x $item.count <<if $item.callbackFunc>><<link "使用" "物品栏">><<set $temp to $item.callbackFunc()>><</link>><</if>>
         $item.desc
     <</if>>
 <</for>>
@@ -307,7 +389,7 @@ if ('drops' in enemy){
 
 
 :: 王国旅行指南 {"position":"1000,400","size":"100,100"}
-翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面用潦草的字体写着：
+翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面潦草地写着：
 
 <blockquote>
 在大洪水来临之前，离开这里
@@ -317,9 +399,22 @@ if ('drops' in enemy){
 [[老头的房间]]
 
 
-:: 王都 {"position":"725,650","size":"100,100"}
+:: 王都 {"position":"450,650","size":"100,100"}
 第二章……
 施工中……
+
+
+:: 离开这里 {"position":"600,650","size":"100,100"}
+= 第二章 =
+
+[[继续->哥布林巢穴裂缝]]
+
+<<script>>
+State.variables.consideredInCave = false;
+healing(State.variables.me, 1.0); // 回复满hp
+healing(State.variables.me, -0.4); // 回复满hp
+addItem(State.variables.inventory.items, State.variables.smallHealingPotion);
+<</script>>
 
 
 :: 称号栏 {"position":"1000,100","size":"100,100"}
@@ -353,12 +448,14 @@ if ('drops' in enemy){
 
 <<if $oldMan.hp > 0>>
 老头： 站住。谁允许你随便进我的房间了？
+
+看来<span class='red'>要想进去还得想想办法</span>。
 <<else>>
 煞风景的房间。
 家具和我自己的起居室差不多，一张床，一张桌子而已。
 桌子上摆着[[一封信->老头的信]]，和一本《[[王国旅行指南]]》。
-
 <</if>>
+
 
 [[大厅]]
 
@@ -372,22 +469,22 @@ if ('drops' in enemy){
 
 <<if not $beginnerWeaponGot>>
 墙上挂着一柄$beginnerWeapon['name']。\
-<<button "装备" "起居室">>\
+<<link "装备" "起居室">>\
 <<set $me.weapon to $beginnerWeapon>>\
 <<set $beginnerWeaponGot to true>>\
-<</button>>\
+<</link>>\
 <<else>>\
-墙上放武器的地方空空如也。\
+🟢墙上放武器的地方空空如也。\
 <</if>>\
 
 <<if not $beginnerArmorGot>>
 墙上挂着一套$beginnerArmor['name']。\
-<<button "装备" "起居室">>\
+<<link "装备" "起居室">>\
 <<set $me.armor to $beginnerArmor>>\
 <<set $beginnerArmorGot to true>>\
-<</button>>\
+<</link>>\
 <<else>>\
-墙上放防具的地方空空如也。\
+🟢墙上放防具的地方空空如也。\
 <</if>>\
 
 
@@ -396,7 +493,6 @@ if ('drops' in enemy){
 
 
 :: StoryScript [script]
-
 window.fight = function fight(obj1, obj2) {
     // 定义计算伤害的函数
     function calculateDamage(attacker, defender) {
@@ -524,12 +620,52 @@ window.addItem = function addItem(inventory, item, count = 1) {
     }
 }
 
+window.healing = function healing(target, percentage) {
+    // 计算恢复的生命值
+    const healAmount = target.max_hp * percentage;
+    
+    // 增加生命值，但不能超过max_hp
+    target.hp = Math.min(target.hp + healAmount, target.max_hp);
+    
+    return target.hp; // 返回更新后的生命值
+  
+}
+
+// 升级
+window.levelUp = function(target){
+  	target.level += 1
+  	target.intrinsicPower += 1
+  	target.intrinsicResistance += 1
+  	target.max_hp += 10
+  	console.log(target.name + ' Level Up!')
+}
+
+window.expCurve = function expCurve(level) {
+    return Math.floor(5 * Math.pow(level, 2)); // 经验值需求递增曲线
+}
+
+window.expGot = function expGot(expBefore, expGot, level, levelUp) {
+    let expNew = expBefore + expGot; // 计算新经验值
+    let levelsGained = 0; // 用于追踪升了多少级
+
+    // 循环检查是否可以升级
+    while (expNew >= expCurve(level)) {
+        expNew -= expCurve(level); // 减去当前级别的经验需求
+        level += 1; // 升一级
+        levelsGained += 1; // 记录升一级
+        levelUp(); // 调用levelUp函数
+    }
+
+    return { newExp: expNew, newLevel: level, levelsGained: levelsGained };
+}
+
+
 :: StoryStylesheet [stylesheet]
 .danger{
 	color: red;
 }
 .good{
-	color: green;
+	color: #90EE90;
 }
 .important{
   	color: orange;
