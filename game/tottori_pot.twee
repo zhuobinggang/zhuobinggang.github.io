@@ -13,16 +13,17 @@
 
 
 :: PassageFooter {"position":"1200,100","size":"100,100"}
-
-
-
-<<if $me and $footerOn>>\
+<<if ['初始之地', '物品栏', '称号栏'].includes(passage())>>\
+	<<set $footerOn to false>>\
+<<else>>\
+	<<set $footerOn to true>>\
+<</if>>\
+<<if $footerOn and $me>>\
 <hr/>\
 $me.name LV$me.level <<if $titles.items.length > 0>>【<<print $titles.items.last().name>>】<</if>>
 HP :<meter @value="$me.hp" min="0" @max="$me.max_hp"></meter>
 [[物品栏]], [[称号栏]]
 <</if>>
-
 
 
 :: Start {"position":"1350,100","size":"100,100"}
@@ -39,8 +40,9 @@ $me.name LV$me.level
 固有攻击力: $me.intrinsicPower
 固有防御力: $me.intrinsicResistance
 血量: $me.hp / $me.max_hp
-武器: $me.weapon.name (攻击力: $me.weapon.power)
-防具: $me.armor.name (防御力:  $me.armor.resistance)
+武器: <<link $me.weapon.name>><<set $temp to $showWeapon()>><</link>>(攻击力: $me.weapon.power)
+防具: <<link $me.armor.name>><<set $temp to $showArmor()>><</link>> (防御力:  $me.armor.resistance)
+<<if $me.ring>>指环：$me.ring.name<</if>>
 
 
 :: 一本翻开的书 {"position":"525,250","size":"100,100"}
@@ -108,9 +110,32 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 [[回家->大厅]]
 
 
+:: 你能不能先从那里出来 {"position":"475,1025","size":"100,100"}
+“我也想出来，可这东西不支持太细微的调节，而且我人其实不在这里，想着至少用眼睛看一下都好，偏偏卡在这种地方……唉和你解释那么多也没有用，你能不能告诉我这里是哪里？”
+
+“方位上应该是<span class='important'>底里斯王国的东南</span>。”
+
+“哦！居然来到这种地方了吗。”
+
+“你这种情况究竟是怎么回事？”
+
+“唉我一时半会给你解释不清楚，时间也快要结束了，你有机会的话到布里斯坦王国来找我，就说是找<span class='important'>天才科学家卢恩</span>别人就懂了。到时候我再向你解释。”
+眼看着那人的腿上出现了一些亮绿色的噪点，这过分诡异的光景让$me.name感到毛骨悚然。
+
+"遇见可以交流的人真是不可思议，还好底里斯和布里斯坦是用同样语言的国家，如果是更远或者是某些古怪的地方就难说了。“
+
+这还不算是古怪的地方吗。
+
+”你说你在哥布林巢穴，那你应该是冒险者对吧。我待会给你<span class='important'>传送个东西过来</span>，希望能对你的冒险有帮助。真心祝愿我们有缘再见。没时间了，就"
+
+话音戛然而止，随之消失的是男人的半身，只留下了和往常一样的岩面。
+
+[[片刻之后]]
+
+
 :: 初始之地 {"position":"700,100","size":"100,100"}
-<<set $default_weapon to {name: '空手', power: 1}>>\
-<<set $default_armor to {name: '运动服', resistance: 1}>>\
+<<set $default_weapon to {name: '空手', power: 1, desc: '拳头就是最好的武器。'}>>\
+<<set $default_armor to {name: '运动服', resistance: 1, desc: '居家用。'}>>\
 <<set $me to {name: '你爹', hp: 100, max_hp: 100, weapon: $default_weapon, armor: $default_armor, intrinsicPower: 0, intrinsicResistance: 0, level: 1, exp: 0}>>\
 我的名字叫作：
 <<textbox "$me.name" "父亲">>
@@ -118,21 +143,16 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 [[进入游戏->起居室]]
 
 
-<<set $registered to false>>
-<<set $said_hello_to_kagei to false>>
-<<set $date to 1001>>
-<<set $name_of_boy to '打工战士'>>
-<<set $said_goodbye_to_boy to false>>
-
-
-<<set $beginnerWeaponGot to false>>
-<<set $beginnerWeapon to {name: '木剑', power: 4}>>
-<<set $beginnerArmor to {name: '鹿皮夹克', resistance: 3}>>
 <<set $inventory to {desc: '物品栏', items: []}>>
 <<set $titles to {desc: '称号', items: []}>>
 
-<<set $footerOn to true>>\
+<<set $beginnerWeaponGot to false>>
+<<set $beginnerWeapon to {name: '木剑', power: 2, desc: '平凡的木剑。'}>>
+<<set $beginnerArmor to {name: '鹿皮夹克', resistance: 2, desc: '随处可见的鹿皮夹克。'}>>
+<<set $bloodedIronSword to {name: '染血的铁剑', power: 5, desc: '由于血污变钝了一些。'}>>
+<<set $bloodedDeerskinArmor to {name: '染血的鹿皮夹克', resistance: 4, desc: '散发着令人恶心的腥臭。'}>>
 
+<<set $footerOn to true>>
 
 /* NPC & Monsters */
 <<script>>
@@ -163,12 +183,12 @@ State.variables.slimeSlayer = {
 State.variables.healMySelf = function healMySelf(percentage){
 	healing(State.variables.me, percentage);
 }
-function useSmallHealingPotion(){
+State.variables.useSmallHealingPotion = function useSmallHealingPotion(){
 	healing(State.variables.me, 0.2);
     reduceItemCount(State.variables.inventory.items, '小回复瓶');
 }
 State.variables.smallHealingPotion = {
-	name: '小回复瓶',  desc: '回复20%HP。', callbackFunc: useSmallHealingPotion
+	name: '小回复瓶',  desc: '回复20%HP。', useCallback: State.variables.useSmallHealingPotion
 }
 // 增加经验
 State.variables.levelUpMe = function levelUpMe(){
@@ -183,12 +203,72 @@ State.variables.addExp = function  addExp(exp){
 State.variables.nextLevelExp = function(){
 	return expCurve(State.variables.me.level);
 }
+State.variables.showDialog = function(title, text){
+    Dialog.setup(title);
+    Dialog.wiki(text);
+    Dialog.open();
+}
+State.variables.showWeapon = function(){
+	let title = State.variables.me.weapon.name
+    let desc = State.variables.me.weapon.desc
+	State.variables.showDialog(title, desc)
+}
+State.variables.showArmor = function(){
+	let title = State.variables.me.armor.name
+    let desc = State.variables.me.armor.desc
+	State.variables.showDialog(title, desc)
+}
+State.variables.armorPiercingRingFightCb = function (hp1, power1, res1, hp2, power2, res2){
+	console.log('破甲指环更改敌人防御值')
+    let dic = {hp1, power1, res1, hp2, power2, res2: 0}
+    return dic
+}
+State.variables.armorPiercingRingUseCb = function(){
+	State.variables.me.ring = State.variables.armorPiercingRing;
+    State.variables.showDialog('装备指环', '成功装备了破甲指环!');
+}
+State.variables.armorPiercingRing = {name: '破甲指环', desc: '指环的水晶里封存着一小片骨头。', fightCallback: State.variables.armorPiercingRingFightCb, fightMessage: '破甲指环将敌人的防御降为0点。', useCallback: State.variables.armorPiercingRingUseCb}
+// State.variables.me.ring = State.variables.armorPiercingRing;
+State.variables.globalUseCallback = function(idx){
+	console.log('globalUseCallback ' + idx);
+    console.log('I am going to call ' + State.variables.inventory.items[idx].name + ' callback');
+    State.variables.inventory.items[idx].useCallback()
+}
 console.log('I am done')
 <</script>>
 
 <<script>>
     window.dd = State.variables
 <</script>>
+
+
+:: 向穿墙者搭话 {"position":"475,900","size":"100,100"}
+那是十分诡异的光景，那人直直站着，上半身完全没入了岩层之中。
+或者说，像是从岩石中长出来两条腿一样。
+
+这可不是视差什么的把戏。
+岩石裂缝十分狭窄，本来是不可能容下两个人的。
+
+发出声音，试图吸引那个东西的注意。
+
+“你，你好……”<span class='good'>$me.name</span>说。
+
+“有人在那里？”那个东西用一个男人的声音回话了。
+
+“对。”
+
+“你能告诉我这里是什么地方吗？”
+
+“应该是哥布林的巢穴。”
+
+沉默了一会儿。
+“哪个国家的哪个方位？”男人问道。
+
+“[[你能不能先从那里出来]]？”
+
+
+
+
 
 
 :: 向老头搭话 {"position":"550,375","size":"100,100"}
@@ -231,6 +311,7 @@ if(hasSlimeDrop){
 仔细看的话能够发现，[[梅利的尸体在发光]]。
 
 [[攻击哥布林]]
+[[躲进岩石裂缝->哥布林巢穴裂缝]]
 
 
 :: 哥布林巢穴裂缝 {"position":"600,775","size":"100,100"}
@@ -242,6 +323,10 @@ if(hasSlimeDrop){
 [[思考我现在应该做的事情]]
 <<else>>
 🟢前往[[哥布林前哨站]]。
+<<if $meetWallPenetrater is false and random(100) < 100>>
+🟠【随机事件】
+如果我没看错的话，岩石里面长出来一个人。[[向他搭话->向穿墙者搭话]]
+<</if>>
 <</if>>
 
 
@@ -299,17 +384,35 @@ if (State.variables[State.variables.enemyVarName].hp < 1){
     State.variables.error = true;
 }else{
 State.variables.error = 0;
-State.variables.me.power = State.variables.me.intrinsicPower + State.variables.me.weapon.power;
-State.variables.me.resistance = State.variables.me.intrinsicResistance + State.variables.me.armor.resistance;
+let hp1 = State.variables.me.hp;
+let power1 = State.variables.me.intrinsicPower + State.variables.me.weapon.power;
+let res1 = State.variables.me.intrinsicResistance + State.variables.me.armor.resistance;
 console.log(State.variables.enemyVarName);
 console.log(State.variables[State.variables.enemyVarName]);
 console.log(State.variables.me);
-let {obj1, obj2} = fight(State.variables.me, State.variables[State.variables.enemyVarName]);
-console.log(obj1)
-console.log(obj2)
-State.variables.me = obj1;
-State.variables[State.variables.enemyVarName] = obj2;
-State.variables.enemy = obj2; 
+let hp2 = State.variables[State.variables.enemyVarName].hp;
+let power2 = State.variables[State.variables.enemyVarName].power;
+let res2 = State.variables[State.variables.enemyVarName].resistance;
+// 2024.10.21 增加指环效果
+if (State.variables.me.ring && State.variables.me.ring.fightCallback){
+	console.log('I am here')
+	console.log(hp1)
+	let resultDic = State.variables.me.ring.fightCallback(hp1, power1, res1, hp2, power2, res2);
+    hp1 = resultDic.hp1
+    hp2 = resultDic.hp2
+    power1 = resultDic.power1
+    power2 = resultDic.power2
+    res1 = resultDic.res1
+    res2 = resultDic.res2
+    console.log('res2: ' + res2)
+}
+console.log('222222');
+console.log('res2: ' + res2)
+let fightResult = fight(hp1, power1, res1, hp2, power2, res2);
+console.log(fightResult);
+State.variables.me.hp = fightResult.hp1;
+State.variables[State.variables.enemyVarName].hp = fightResult.hp2;
+State.variables.enemy = State.variables[State.variables.enemyVarName]; 
 }
 <</script>>
 <</silently>>
@@ -369,6 +472,22 @@ $enemy.name的HP剩余$enemy.hp点，下次再努力吧。
 点击侧边栏的"RESTART"重新开始游戏。
 
 
+:: 片刻之后 {"position":"475,1150","size":"100,100"}
+稍过片刻，传来了小小的当啷声，好像有什么东西掉在了地上。
+
+难道说是刚刚那人说的东西吗？
+
+在地上摸索了一下，<span class='good'>找到了一枚指环</span>。
+
+[[返回->哥布林巢穴裂缝]]
+<<silently>>\
+<<script>>
+	addItem(State.variables.inventory.items, State.variables.armorPiercingRing);
+    State.variables.meetWallPenetrater = true;
+<</script>>
+<</silently>>\
+
+
 :: 物品掉落 {"position":"1125,375","size":"100,100"}
 <<silently>>\
 <<script>>
@@ -396,10 +515,10 @@ if ('drops' in enemy){
 
 
 :: 物品栏 {"position":"875,100","size":"100,100"}
-<<for $i, $item range  $inventory.items>>
-	<<if $item.count > 0>>
-    	名称: $item.name x $item.count <<if $item.callbackFunc>><<link "使用" "物品栏">><<set $temp to $item.callbackFunc()>><</link>><</if>>
-        $item.desc
+<<for _i, _item range  $inventory.items>>
+	<<if _item.count > 0>>
+    	名称: _item.name x _item.count <<if _item.useCallback>><<print '<<link "使用" "物品栏">><<set _temp to $globalUseCallback(' + _i + ')>><</link>>'>><</if>>
+        _item.desc
     <</if>>
 <</for>>
 
@@ -428,10 +547,14 @@ if ('drops' in enemy){
 [[继续->哥布林巢穴裂缝]]
 
 <<script>>
-State.variables.consideredInCave = false;
-healing(State.variables.me, 1.0); // 回复满hp
-healing(State.variables.me, -0.4); // 回复满hp
-addItem(State.variables.inventory.items, State.variables.smallHealingPotion);
+let G = State.variables
+G.consideredInCave = false;
+healing(G.me, 1.0); // 回复满hp
+healing(G.me, -0.4); // 设置为60%HP
+addItem(G.inventory.items, G.smallHealingPotion);
+G.me.weapon = G.bloodedIronSword;
+G.me.armor = G.bloodedDeerskinArmor;
+G.meetWallPenetrater = false //是否遇见穿墙者
 <</script>>
 
 
@@ -485,7 +608,7 @@ addItem(State.variables.inventory.items, State.variables.smallHealingPotion);
 一张床，一张椅子，桌子。
 桌子上面放着[[一本翻开的书]]，还有蜡烛燃尽留下的烛泪。
 
-<<if not $beginnerWeaponGot>>
+<<if not $beginnerWeaponGot>>\
 墙上挂着一柄$beginnerWeapon['name']。\
 <<link "装备" "起居室">>\
 <<set $me.weapon to $beginnerWeapon>>\
@@ -495,7 +618,7 @@ addItem(State.variables.inventory.items, State.variables.smallHealingPotion);
 🟢墙上放武器的地方空空如也。\
 <</if>>\
 
-<<if not $beginnerArmorGot>>
+<<if not $beginnerArmorGot>>\
 墙上挂着一套$beginnerArmor['name']。\
 <<link "装备" "起居室">>\
 <<set $me.armor to $beginnerArmor>>\
@@ -511,34 +634,37 @@ addItem(State.variables.inventory.items, State.variables.smallHealingPotion);
 
 
 :: StoryScript [script]
-window.fight = function fight(obj1, obj2) {
+window.fight = function fight(hp1, power1, res1, hp2, power2, res2) {
+  	console.log(hp1);console.log(hp2);console.log(power1);console.log(power2);console.log(res1);console.log(res2);
     // 定义计算伤害的函数
-    function calculateDamage(attacker, defender) {
-        const damage = attacker.power - defender.resistance;
+    function calculateDamage(attackerPower, defenderResistance) {
+        const damage = attackerPower - defenderResistance;
         return damage > 0 ? damage : 1; // 确保伤害不会是负数
     }
 
     // 回合制战斗
-    while (obj1.hp > 0 && obj2.hp > 0) {
+    while (hp1 > 0 && hp2 > 0) {
         // obj1 先攻击 obj2
-      	let damage = calculateDamage(obj1, obj2);
-        obj2.hp -= damage;
-      	console.log(obj2.name + '收到了' + damage + '点伤害！');
-        if (obj2.hp <= 0) {
-            obj2.hp = 0;
+      	let damage = calculateDamage(power1, res2);
+        hp2 -= damage;
+      	console.log('obj2收到了' + damage + '点伤害！');
+        if (hp2 <= 0) {
+            hp2 = 0;
             break; // obj2 倒下，战斗结束
         }
 
         // obj2 反击 obj1
-      	damage = calculateDamage(obj2, obj1);
-      	console.log(obj1.name + '收到了' + damage + '点伤害！');
-      	obj1.hp -= damage;
-        if (obj1.hp <= 0) {
-            obj1.hp = 0;
+      	damage = calculateDamage(power2, res1);
+      	console.log('obj1收到了' + damage + '点伤害！');
+      	hp1 -= damage;
+        if (hp1 <= 0) {
+            hp1 = 0;
             break; // obj1 倒下，战斗结束
         }
     }
-    return {obj1, obj2};
+  	console.log(hp1)
+  	console.log(hp2)
+    return {hp1, hp2};
 }
 
 window.dropItems = function dropItems(drops) {
@@ -676,7 +802,6 @@ window.expGot = function expGot(expBefore, expGot, level, levelUp) {
 
     return { newExp: expNew, newLevel: level, levelsGained: levelsGained };
 }
-
 
 :: StoryStylesheet [stylesheet]
 .danger{
