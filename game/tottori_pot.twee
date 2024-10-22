@@ -113,22 +113,15 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 
 :: 你能不能先从那里出来 {"position":"475,1025","size":"100,100"}
 “我也想出来，可这东西不支持太细微的调节，而且我人其实不在这里，想着至少用眼睛看一下都好，偏偏卡在这种地方……唉和你解释那么多也没有用，你能不能告诉我这里是哪里？”
-
 “方位上应该是<span class='important'>底里斯王国的东南</span>。”
-
 “哦！居然来到这种地方了吗。”
-
 “你这种情况究竟是怎么回事？”
-
-“唉我一时半会给你解释不清楚，时间也快要结束了，你有机会的话到布里斯坦王国来找我，就说是找<span class='important'>天才科学家卢恩</span>别人就懂了。到时候我再向你解释。”
+“唉我一时半会给你解释不清楚，快到时间了，你有机会的话到布里斯坦王国来找我，就说是找<span class='important'>天才科学家卢恩</span>别人就懂了。到时候我再向你解释。”
 眼看着那人的腿上出现了一些亮绿色的噪点，这过分诡异的光景让$me.name感到毛骨悚然。
 
 "遇见可以交流的人真是不可思议，还好底里斯和布里斯坦是用同样语言的国家，如果是更远或者是某些古怪的地方就难说了。“
-
 这还不算是古怪的地方吗。
-
 ”你说你在哥布林巢穴，那你应该是冒险者对吧。我待会给你<span class='important'>传送个东西过来</span>，希望能对你的冒险有帮助。真心祝愿我们有缘再见。没时间了，就"
-
 话音戛然而止，随之消失的是男人的半身，只留下了和往常一样的岩面。
 
 [[片刻之后]]
@@ -160,6 +153,7 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 console.log('HELLO?')
 State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
 State.variables.mountainGoblinSoul =  {name: '山岭哥布林的灵魂', desc: '山岭哥布林的坚韧灵魂。'};
+State.variables.normalGoblinSoul =  {name: '成年哥布林的灵魂', desc: '成年哥布林的卑微灵魂。'};
 State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 2, exp: 100};
 State.variables.slime = {
 	name: '史莱姆', 
@@ -175,17 +169,29 @@ State.variables.slime = {
 }
 State.variables.mountainGoblin = {
 	name: '山岭哥布林', 
-    exp: 100,
-    max_hp: 60,
-    hp: 60, 
-    power: 4, 
-    resistance: 12, 
+    exp: 150,
+    max_hp: 120,
+    hp: 120, 
+    power: 10, 
+    resistance: 16, 
     drops: [{
     	item: State.variables.mountainGoblinSoul, 
         chance: 1.0
     }]
 }
 State.variables.theOutpostMountainGoblin = structuredClone(State.variables.mountainGoblin);
+State.variables.normalGoblin = {
+	name: '成年哥布林', 
+    exp: 60,
+    max_hp: 60,
+    hp: 60, 
+    power: 9, 
+    resistance: 6, 
+    drops: [{
+    	item: State.variables.normalGoblinSoul, 
+        chance: 0.4
+    }]
+}
 State.variables.clownMask = {
 	name: '小丑面具',  desc: '看起来有些诡异的面具，能够吓哭小孩。'
 }
@@ -245,6 +251,7 @@ State.variables.showArmor = function(){
 State.variables.armorPiercingRingFightCb = function (obj1, obj2){
 	console.log('破甲指环更改' + obj2.name + '的防御值,将其修改为0')
 	obj2.resistance = 0;
+	return '破甲指环生效了，将无视敌人防御进行攻击！'
 }
 State.variables.armorPiercingRingUseCb = function(){
 	State.variables.me.ring = State.variables.armorPiercingRing;
@@ -272,21 +279,13 @@ console.log('I am done')
 那是十分诡异的光景，那人直直站着，上半身完全没入了岩层之中。
 或者说，像是从岩石中长出来两条腿一样。
 
-这可不是视差什么的把戏。
-岩石裂缝十分狭窄，本来是不可能容下两个人的。
-
 发出声音，试图吸引那个东西的注意。
-
 “你，你好……”<span class='good'>$me.name</span>说。
 
 “有人在那里？”那个东西用一个男人的声音回话了。
-
 “对。”
-
 “你能告诉我这里是什么地方吗？”
-
 “应该是哥布林的巢穴。”
-
 沉默了一会儿。
 “哪个国家的哪个方位？”男人问道。
 
@@ -395,8 +394,18 @@ if(hasSlimeDrop){
 
 
 :: 巢穴深处 {"position":"900,900","size":"100,100"}
-（游戏进度暂时只到这里）
-[[哥布林前哨站]]
+<<set $normalGoblin.hp to $normalGoblin.max_hp>>\
+=<<print passage()>>=
+
+哥布林巢穴深处，莫名的腐臭更加严重了。
+
+在黑暗的掩盖下，我们可以<<link "攻击哥布林" "战斗画面">>
+	<<set $lastPassage to '巢穴深处'>>\
+    <<set $enemyVarName to 'normalGoblin'>>\
+<</link>>攻击哥布林而不会引起骚乱。
+
+从这里可以前往[[祭坛]]，[[王之间]]。
+或者返回[[哥布林前哨站]]。
 
 
 :: 思考我现在应该做的事情 {"position":"600,900","size":"100,100"}
@@ -433,13 +442,11 @@ if (State.variables[State.variables.enemyVarName].hp < 1){
 	const enemy = State.variables[State.variables.enemyVarName];
 	const enemyCopy = fightObjectCopy(enemy);
 	// 2024.10.21 增加指环效果
+	const beforeFightCallbacks = []
 	if (State.variables.me.ring && State.variables.me.ring.fightCallback){
-		console.log('I am here')
-		console.log(meCopy.hp);
-		State.variables.me.ring.fightCallback(meCopy, enemyCopy);
-		console.log(enemyCopy);
+		beforeFightCallbacks.push(State.variables.me.ring.fightCallback);
 	}
-	let fightHistory = fight(meCopy, enemyCopy);
+	let fightHistory = fight(meCopy, enemyCopy, beforeFightCallbacks);
 	State.variables.fightHistory = fightHistory; // 用于后续展示记录
 	window.temp = fightHistory;
 	// console.log(fightHistory);
@@ -465,10 +472,6 @@ if (State.variables[State.variables.enemyVarName].hp < 1){
 <</if>>\
 
 <<link "返回" $lastPassage>><</link>>
-
-
-:: 攻击哥布林 {"position":"900,1025","size":"100,100"}
-（游戏进度暂时只到这里）
 
 
 :: 杀死怪物回调 {"position":"1250,425","size":"100,100"}
@@ -513,12 +516,13 @@ if (State.variables.enemy.name == '史莱姆'){
 <span class='danger'>你被$enemy.name杀死了！</span>
 $enemy.name的HP剩余$enemy.hp点，下次再努力吧。
 
+<<button "查看战斗记录">><<set _temp to $showDialogFightHistory()>><</button>>
+
 点击侧边栏的"RESTART"重新开始游戏。
 
 
 :: 片刻之后 {"position":"475,1150","size":"100,100"}
 稍过片刻，传来了小小的当啷声，好像有什么东西掉在了地上。
-
 难道说是刚刚那人说的东西吗？
 
 在地上摸索了一下，<span class='good'>找到了一枚指环</span>。
@@ -569,6 +573,12 @@ if ('drops' in enemy){
 <<return "返回">>
 
 
+:: 王之间 {"position":"900,1025","size":"100,100"}
+(游戏进度暂时只到这里)
+
+[[巢穴深处]]
+
+
 :: 王国旅行指南 {"position":"1000,400","size":"100,100"}
 翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面潦草地写着：
 
@@ -583,6 +593,12 @@ if ('drops' in enemy){
 :: 王都 {"position":"450,650","size":"100,100"}
 第二章……
 施工中……
+
+
+:: 祭坛 {"position":"1025,1025","size":"100,100"}
+(游戏进度暂时只到这里)
+
+[[巢穴深处]]
 
 
 :: 离开这里 {"position":"600,650","size":"100,100"}
@@ -689,14 +705,23 @@ window.fightObjectCopy = function(obj){
 	return resultObj;
 }
 
-window.fight = function fight(obj1, obj2) {
+window.fight = function fight(obj1, obj2, beforeFightCallbacks) {
     const calculateDamage = (attackerPower, defenderResistance) => Math.max(attackerPower - defenderResistance, 1);
     console.log('FIGHT!', obj1, obj2);
-
+    
+    let fightHistory = [];
+	//循环调用beforeFightCallbacks，每个callback接受obj1和obj2作为参数，最后返回一个字符串作为记录，将这个字符串存入fightHistory。
+    beforeFightCallbacks.forEach(callback => {
+        // Each callback is called with obj1 and obj2 as arguments
+        let result = callback(obj1, obj2);
+        // Push the result into the fightHistory array
+        fightHistory.push(result);
+    });
+	
     let { hp: hp1, power: power1, resistance: res1, name: name1 } = obj1;
     let { hp: hp2, power: power2, resistance: res2, name: name2 } = obj2;
 
-    let fightHistory = [];
+    
     let round = 1;
 
     while (hp1 > 0 && hp2 > 0) {
