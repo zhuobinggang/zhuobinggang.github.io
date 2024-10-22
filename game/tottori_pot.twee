@@ -35,14 +35,15 @@ console.log('Start?')
 
 :: StoryCaption {"position":"825,250","size":"100,100"}
 $me.name LV$me.level
-<<set $expNeed to $nextLevelExp()>>
+<<set $expNeed to $nextLevelExp()>>\
+<<set _nowPassage to passage()>>\
 经验值: $me.exp / $expNeed
 固有攻击力: $me.intrinsicPower
 固有防御力: $me.intrinsicResistance
 血量: $me.hp / $me.max_hp
 武器: <<link $me.weapon.name>><<set $temp to $showWeapon()>><</link>>(攻击力: $me.weapon.power)
 防具: <<link $me.armor.name>><<set $temp to $showArmor()>><</link>> (防御力:  $me.armor.resistance)
-<<if $me.ring>>指环：$me.ring.name<</if>>
+<<if $me.ring>>指环：$me.ring.name <<link "卸下" _nowPassage>><<set $me.ring to null>><</link>><</if>>
 
 
 :: 一本翻开的书 {"position":"525,250","size":"100,100"}
@@ -158,6 +159,7 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 <<script>>
 console.log('HELLO?')
 State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
+State.variables.mountainGoblinSoul =  {name: '山岭哥布林的灵魂', desc: '山岭哥布林的坚韧灵魂。'};
 State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 2, exp: 100};
 State.variables.slime = {
 	name: '史莱姆', 
@@ -171,6 +173,19 @@ State.variables.slime = {
         chance: 0.6
     }]
 }
+State.variables.mountainGoblin = {
+	name: '山岭哥布林', 
+    exp: 100,
+    max_hp: 60,
+    hp: 60, 
+    power: 4, 
+    resistance: 12, 
+    drops: [{
+    	item: State.variables.mountainGoblinSoul, 
+        chance: 1.0
+    }]
+}
+State.variables.theOutpostMountainGoblin = structuredClone(State.variables.mountainGoblin);
 State.variables.clownMask = {
 	name: '小丑面具',  desc: '看起来有些诡异的面具，能够吓哭小孩。'
 }
@@ -179,6 +194,9 @@ State.variables.oldManSlayer = {
 }
 State.variables.slimeSlayer = {
 	name: '史莱姆杀手',  desc: '最好不要让动物保护协会知道。'
+}
+State.variables.goblinSlayer = {
+	name: '护甲击破者',  desc: '第一次击败山岭哥布林。'
 }
 State.variables.healMySelf = function healMySelf(percentage){
 	healing(State.variables.me, percentage);
@@ -204,7 +222,13 @@ State.variables.nextLevelExp = function(){
 	return expCurve(State.variables.me.level);
 }
 State.variables.showDialog = function(title, text){
-    Dialog.setup(title);
+    Dialog.create(title);
+    Dialog.wiki(text);
+    Dialog.open();
+}
+State.variables.showDialogWithTextList = function(title, textList){
+    Dialog.create(title);
+	let text = textList.join('\n');; // 请帮我补充这一行，使用换行符来换行即可
     Dialog.wiki(text);
     Dialog.open();
 }
@@ -218,10 +242,9 @@ State.variables.showArmor = function(){
     let desc = State.variables.me.armor.desc
 	State.variables.showDialog(title, desc)
 }
-State.variables.armorPiercingRingFightCb = function (hp1, power1, res1, hp2, power2, res2){
-	console.log('破甲指环更改敌人防御值')
-    let dic = {hp1, power1, res1, hp2, power2, res2: 0}
-    return dic
+State.variables.armorPiercingRingFightCb = function (obj1, obj2){
+	console.log('破甲指环更改' + obj2.name + '的防御值,将其修改为0')
+	obj2.resistance = 0;
 }
 State.variables.armorPiercingRingUseCb = function(){
 	State.variables.me.ring = State.variables.armorPiercingRing;
@@ -233,6 +256,9 @@ State.variables.globalUseCallback = function(idx){
 	console.log('globalUseCallback ' + idx);
     console.log('I am going to call ' + State.variables.inventory.items[idx].name + ' callback');
     State.variables.inventory.items[idx].useCallback()
+}
+State.variables.showDialogFightHistory = function(){
+	State.variables.showDialogWithTextList('战斗记录', State.variables.fightHistory)
 }
 console.log('I am done')
 <</script>>
@@ -267,10 +293,6 @@ console.log('I am done')
 “[[你能不能先从那里出来]]？”
 
 
-
-
-
-
 :: 向老头搭话 {"position":"550,375","size":"100,100"}
 老头：今天是你的十六岁生日。从今天开始，<span class='good'>$me.name</span>，你将要开始独自的冒险生活。
 
@@ -303,14 +325,23 @@ if(hasSlimeDrop){
 :: 哥布林前哨站 {"position":"725,900","size":"100,100"}
 =哥布林前哨站=
 
-从暗处望去。
-洞穴内部稍微开阔一点的地方，几只拿着火把的哥布林在巡逻。
+一个黑乎乎的洞口通往巢穴深处。
+
+洞口外边稍微开阔一点的地方，\
+<<if $theOutpostMountainGoblin.hp > 0>>\
+一只拿着火把的大块头哥布林在巡逻。<<link "攻击大个子哥布林" "战斗画面">>
+	<<set $lastPassage to '哥布林前哨站'>>\
+    <<set $enemyVarName to 'theOutpostMountainGoblin'>>\
+<</link>>\
+<<else>>\
+躺着大块头哥布林的尸体。
+🟢现在我可以前往[[巢穴深处]]。
+<</if>>\
+
 
 地上躺着死去的同伴们的尸体。
-
 仔细看的话能够发现，[[梅利的尸体在发光]]。
 
-[[攻击哥布林]]
 [[躲进岩石裂缝->哥布林巢穴裂缝]]
 
 
@@ -363,6 +394,11 @@ if(hasSlimeDrop){
 <</if>>
 
 
+:: 巢穴深处 {"position":"900,900","size":"100,100"}
+（游戏进度暂时只到这里）
+[[哥布林前哨站]]
+
+
 :: 思考我现在应该做的事情 {"position":"600,900","size":"100,100"}
 选择永远只有两种，前进，或者是后退。
 
@@ -383,39 +419,36 @@ if (State.variables[State.variables.enemyVarName].hp < 1){
 	console.log('Should not fight against dead body');
     State.variables.error = true;
 }else{
-State.variables.error = 0;
-let hp1 = State.variables.me.hp;
-let power1 = State.variables.me.intrinsicPower + State.variables.me.weapon.power;
-let res1 = State.variables.me.intrinsicResistance + State.variables.me.armor.resistance;
-console.log(State.variables.enemyVarName);
-console.log(State.variables[State.variables.enemyVarName]);
-console.log(State.variables.me);
-let hp2 = State.variables[State.variables.enemyVarName].hp;
-let power2 = State.variables[State.variables.enemyVarName].power;
-let res2 = State.variables[State.variables.enemyVarName].resistance;
-// 2024.10.21 增加指环效果
-if (State.variables.me.ring && State.variables.me.ring.fightCallback){
-	console.log('I am here')
-	console.log(hp1)
-	let resultDic = State.variables.me.ring.fightCallback(hp1, power1, res1, hp2, power2, res2);
-    hp1 = resultDic.hp1
-    hp2 = resultDic.hp2
-    power1 = resultDic.power1
-    power2 = resultDic.power2
-    res1 = resultDic.res1
-    res2 = resultDic.res2
-    console.log('res2: ' + res2)
-}
-console.log('222222');
-console.log('res2: ' + res2)
-let fightResult = fight(hp1, power1, res1, hp2, power2, res2);
-console.log(fightResult);
-State.variables.me.hp = fightResult.hp1;
-State.variables[State.variables.enemyVarName].hp = fightResult.hp2;
-State.variables.enemy = State.variables[State.variables.enemyVarName]; 
+	State.variables.error = 0;
+	// 处理主角的power和resistance
+	const me = State.variables.me;
+	me.power = me.intrinsicPower + me.weapon.power;
+	me.resistance = me.intrinsicResistance + me.armor.resistance;
+	const meCopy = fightObjectCopy(me);
+	// 测试用代码
+	console.log(State.variables.enemyVarName);
+	console.log(State.variables[State.variables.enemyVarName]);
+	console.log(State.variables.me);
+	// 处理敌人的objCopy
+	const enemy = State.variables[State.variables.enemyVarName];
+	const enemyCopy = fightObjectCopy(enemy);
+	// 2024.10.21 增加指环效果
+	if (State.variables.me.ring && State.variables.me.ring.fightCallback){
+		console.log('I am here')
+		console.log(meCopy.hp);
+		State.variables.me.ring.fightCallback(meCopy, enemyCopy);
+		console.log(enemyCopy);
+	}
+	let fightHistory = fight(meCopy, enemyCopy);
+	State.variables.fightHistory = fightHistory; // 用于后续展示记录
+	window.temp = fightHistory;
+	// console.log(fightHistory);
+	State.variables.me.hp = meCopy.hp;
+	State.variables[State.variables.enemyVarName].hp = enemyCopy.hp;
+	State.variables.enemy = State.variables[State.variables.enemyVarName]; 
 }
 <</script>>
-<</silently>>
+<</silently>>\
 
 <<if $error>>\
 	$enemy.name已经死了，请不要反复鞭尸！
@@ -427,13 +460,14 @@ State.variables.enemy = State.variables[State.variables.enemyVarName];
 <span class='good'>$enemy.name被你杀死了！</span>
 <<include '物品掉落'>>
 <<include '杀死怪物回调'>>
+<<button "查看战斗记录">><<set _temp to $showDialogFightHistory()>><</button>>
 <</if>>\
 <</if>>\
 
 <<link "返回" $lastPassage>><</link>>
 
 
-:: 攻击哥布林 {"position":"850,1025","size":"100,100"}
+:: 攻击哥布林 {"position":"900,1025","size":"100,100"}
 （游戏进度暂时只到这里）
 
 
@@ -449,6 +483,16 @@ if (State.variables.enemy.name == '史莱姆'){
 	if (!checkHavingItem(State.variables.titles.items, '弑亲者')){
     	addItem(State.variables.titles.items, State.variables.oldManSlayer)
     }
+}else if (State.variables.enemyVarName == 'theOutpostMountainGoblin'){
+	if (!State.variables.me.ring || State.variables.me.ring.name != '破甲指环'){
+    	console.log('不使用破甲戒指击破山岭哥布林');
+        const title = {name: '手撕重坦者', desc: '不使用破甲戒指击破前哨站的山岭哥布林。'}
+        addItem(State.variables.titles.items, title)
+    }else{
+    	const title = {name: '封弊者', desc: '使用破甲戒指击破前哨站的山岭哥布林。'}
+        addItem(State.variables.titles.items, title);
+    }
+	console.log('杀死前哨站的山岭哥布林');
 }
 <</script>>
 <</silently>>\
@@ -555,6 +599,7 @@ addItem(G.inventory.items, G.smallHealingPotion);
 G.me.weapon = G.bloodedIronSword;
 G.me.armor = G.bloodedDeerskinArmor;
 G.meetWallPenetrater = false //是否遇见穿墙者
+
 <</script>>
 
 
@@ -634,37 +679,50 @@ G.meetWallPenetrater = false //是否遇见穿墙者
 
 
 :: StoryScript [script]
-window.fight = function fight(hp1, power1, res1, hp2, power2, res2) {
-  	console.log(hp1);console.log(hp2);console.log(power1);console.log(power2);console.log(res1);console.log(res2);
-    // 定义计算伤害的函数
-    function calculateDamage(attackerPower, defenderResistance) {
-        const damage = attackerPower - defenderResistance;
-        return damage > 0 ? damage : 1; // 确保伤害不会是负数
-    }
+window.fightObjectCopy = function(obj){
+	let resultObj = {};
+	resultObj.name = obj.name;
+	resultObj.hp = obj.hp;
+	resultObj.max_hp = obj.max_hp;
+	resultObj.resistance = obj.resistance;
+	resultObj.power = obj.power;
+	return resultObj;
+}
 
-    // 回合制战斗
+window.fight = function fight(obj1, obj2) {
+    const calculateDamage = (attackerPower, defenderResistance) => Math.max(attackerPower - defenderResistance, 1);
+    console.log('FIGHT!', obj1, obj2);
+
+    let { hp: hp1, power: power1, resistance: res1, name: name1 } = obj1;
+    let { hp: hp2, power: power2, resistance: res2, name: name2 } = obj2;
+
+    let fightHistory = [];
+    let round = 1;
+
     while (hp1 > 0 && hp2 > 0) {
-        // obj1 先攻击 obj2
-      	let damage = calculateDamage(power1, res2);
-        hp2 -= damage;
-      	console.log('obj2收到了' + damage + '点伤害！');
-        if (hp2 <= 0) {
-            hp2 = 0;
-            break; // obj2 倒下，战斗结束
+        fightHistory.push(`回合${round}`);
+        let damage = calculateDamage(power1, res2);
+        hp2 = Math.max(hp2 - damage, 0);
+        fightHistory.push(`${name1}对${name2}造成了${damage}点伤害！`);
+        if (hp2 === 0) {
+            fightHistory.push(`${name2}倒下了，战斗结束！`);
+            break;
         }
 
-        // obj2 反击 obj1
-      	damage = calculateDamage(power2, res1);
-      	console.log('obj1收到了' + damage + '点伤害！');
-      	hp1 -= damage;
-        if (hp1 <= 0) {
-            hp1 = 0;
-            break; // obj1 倒下，战斗结束
+        damage = calculateDamage(power2, res1);
+        hp1 = Math.max(hp1 - damage, 0);
+        fightHistory.push(`${name2}对${name1}造成了${damage}点伤害！`);
+        if (hp1 === 0) {
+            fightHistory.push(`${name1}倒下了，战斗结束！`);
+            break;
         }
+
+        round++;
     }
-  	console.log(hp1)
-  	console.log(hp2)
-    return {hp1, hp2};
+
+    obj1.hp = hp1;
+    obj2.hp = hp2;
+    return fightHistory;
 }
 
 window.dropItems = function dropItems(drops) {
