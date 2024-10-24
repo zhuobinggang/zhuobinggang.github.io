@@ -12,6 +12,11 @@
 }
 
 
+:: "我会杀了你，然后把东西带走" {"position":"1025,1275","size":"100,100"}
+（未完成）
+[[王之间]]
+
+
 :: PassageFooter {"position":"1200,100","size":"100,100"}
 <<if ['初始之地', '物品栏', '称号栏'].includes(passage())>>\
 	<<set $footerOn to false>>\
@@ -43,7 +48,25 @@ $me.name LV$me.level
 血量: $me.hp / $me.max_hp
 武器: <<link $me.weapon.name>><<set $temp to $showWeapon()>><</link>>(攻击力: $me.weapon.power)
 防具: <<link $me.armor.name>><<set $temp to $showArmor()>><</link>> (防御力:  $me.armor.resistance)
-<<if $me.ring>>指环：$me.ring.name <<link "卸下" _nowPassage>><<set $me.ring to null>><</link>><</if>>
+<<if $me.ring>>遗物：<<link $me.ring.name>><<set _temp to $showRelics()>><</link>> <<link "卸下" _nowPassage>><<set $me.ring to null>><</link>><</if>>
+
+
+:: “我明白了，我会离开，把东西给我” {"position":"900,1275","size":"100,100"}
+<<silently>>
+<<script>>
+const usegoblinSummonRod = () => {
+	State.variables.me.ring = State.variables.goblinSummonRod;
+    State.variables.showDialog('装备遗物', '成功装备了' + State.variables.goblinSummonRod.name + '!');
+}
+State.variables.goblinSummonRod = {name: '哥布林王的权杖', desc: '召唤一只哥布林协同战斗。', fightCallback: null, useCallback: usegoblinSummonRod}
+
+window.addItem(State.variables.inventory.items, State.variables.goblinSummonRod)
+State.variables.showDialog('获得物品', '获得了' + State.variables.goblinSummonRod.name + '!');
+State.variables.goblinKingTalked = true;
+<</script>>
+<</silently>>
+现在我可以返回哥布林前哨站并离开。
+[[王之间]]
 
 
 :: 一本翻开的书 {"position":"525,250","size":"100,100"}
@@ -112,16 +135,16 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 
 
 :: 你能不能先从那里出来 {"position":"475,1025","size":"100,100"}
-“我也想出来，可这东西不支持太细微的调节，而且我人其实不在这里，想着至少用眼睛看一下都好，偏偏卡在这种地方……唉和你解释那么多也没有用，你能不能告诉我这里是哪里？”
+“我也想出来，可这东西不支持细微的调节。而且我人其实不在这里。至少用眼睛看一下都好，偏偏卡在这种地方……唉和你解释那么多也没有用，你能不能告诉我这里是哪里？”
 “方位上应该是<span class='important'>底里斯王国的东南</span>。”
 “哦！居然来到这种地方了吗。”
-“你这种情况究竟是怎么回事？”
-“唉我一时半会给你解释不清楚，快到时间了，你有机会的话到布里斯坦王国来找我，就说是找<span class='important'>天才科学家卢恩</span>别人就懂了。到时候我再向你解释。”
+“你究竟是怎么回事？”
+“一时半会给你解释不清楚，时间快到了，你有机会的话到<span class='important'>布里斯坦王国</span>来找我，就说是找<span class='important'>天才科学家卢恩</span>别人就懂了。到时候我再向你解释。”
 眼看着那人的腿上出现了一些亮绿色的噪点，这过分诡异的光景让$me.name感到毛骨悚然。
 
-"遇见可以交流的人真是不可思议，还好底里斯和布里斯坦是用同样语言的国家，如果是更远或者是某些古怪的地方就难说了。“
+"遇见能够交流的人真是不可思议。多亏底里斯和布里斯坦是邻近国家，使用同样的语言。如果是更远或者是某些古怪的地方就难说了。“
 这还不算是古怪的地方吗。
-”你说你在哥布林巢穴，那你应该是冒险者对吧。我待会给你<span class='important'>传送个东西过来</span>，希望能对你的冒险有帮助。真心祝愿我们有缘再见。没时间了，就"
+”你说你在哥布林巢穴，那你应该是冒险者对吧。我待会给你<span class='important'>传送个东西过来</span>，希望能对你的冒险有帮助。希望我们有缘再见。没时间了，就"
 话音戛然而止，随之消失的是男人的半身，只留下了和往常一样的岩面。
 
 [[片刻之后]]
@@ -248,6 +271,11 @@ State.variables.showArmor = function(){
     let desc = State.variables.me.armor.desc
 	State.variables.showDialog(title, desc)
 }
+State.variables.showRelics = function(){
+	let title = State.variables.me.ring.name
+    let desc = State.variables.me.ring.desc
+	State.variables.showDialog(title, desc)
+}
 State.variables.armorPiercingRingFightCb = function (obj1, obj2){
 	console.log('破甲指环更改' + obj2.name + '的防御值,将其修改为0')
 	obj2.resistance = 0;
@@ -321,6 +349,26 @@ if(hasSlimeDrop){
 [[返回->大厅]]
 
 
+:: 听哥布林王说话 {"position":"900,1150","size":"100,100"}
+哥布林王用嘶哑，走调的<span class='important'>王国公用语</span>开口说话了：
+
+“你想要胜利的证明——我把这柄权杖给你，拿上它离开，别再回来。”
+哥布林会王国公用语已经足够令人吃惊了，可是更加令我惊讶的是，它好像要放我离开。
+“为什么？”
+“因为你令我感到恐惧。”哥布林王这样说了。
+
+身处这样的境遇，感到恐惧的是我才对吧。
+“活着的东西都有弱点，不愿意放弃的东西，就是它们最大的弱点。可是你却没有这样的东西，你杀戮时的眼睛，没有任何感情的眼睛，当我用这个水晶球看见的时候就明白了。”
+这个哥布林的词汇量还挺丰富的，“明白什么？”我问。
+“<span class='important'>你现在还不属于这个世界</span>。”
+
+到做选择的时候了:
+[[“我明白了，我会离开，把东西给我”]]。
+[["我会杀了你，然后把东西带走"]]。
+
+
+
+
 :: 哥布林前哨站 {"position":"725,900","size":"100,100"}
 =哥布林前哨站=
 
@@ -353,11 +401,10 @@ if(hasSlimeDrop){
 [[思考我现在应该做的事情]]
 <<else>>
 🟢前往[[哥布林前哨站]]。
-<<if $meetWallPenetrater is false and random(100) < 100>>
-🟠【随机事件】
-如果我没看错的话，岩石里面长出来一个人。[[向他搭话->向穿墙者搭话]]
-<</if>>
-<</if>>
+<<if $meetWallPenetrater is false and random(100) < 100>>\
+🟠如果我没看错的话，岩石里面长出来一个人。[[向他搭话->向穿墙者搭话]]
+<</if>>\
+<</if>>\
 
 
 :: 大厅 {"position":"700,375","size":"100,100"}
@@ -402,7 +449,7 @@ if(hasSlimeDrop){
 在黑暗的掩盖下，我们可以<<link "攻击哥布林" "战斗画面">>
 	<<set $lastPassage to '巢穴深处'>>\
     <<set $enemyVarName to 'normalGoblin'>>\
-<</link>>攻击哥布林而不会引起骚乱。
+<</link>>而不会引起骚乱。
 
 从这里可以前往[[祭坛]]，[[王之间]]。
 或者返回[[哥布林前哨站]]。
@@ -574,9 +621,26 @@ if ('drops' in enemy){
 
 
 :: 王之间 {"position":"900,1025","size":"100,100"}
-(游戏进度暂时只到这里)
+=<<print passage()>>=
 
-[[巢穴深处]]
+宽敞的石室，两边挂着火把。
+和哥布林巢穴格格不入的光景。
+
+从入口望去，对面的岩壁上凿出一张石椅，
+石椅上坐着一只头戴王冠的哥布林。
+
+它正是我身处此地的原因。
+我要杀死它，为死去的同伴们复仇。
+然后离开这个令人不适的地方。
+
+只不过，在能够靠近它之前，还有不得不对付的敌人——三只哥布林骑士。
+它们有着山岭哥布林一样的巨躯，还身穿从人类士兵那里夺来的盔甲。
+
+它们已经发现了我这个闯入者，但却按兵不动。
+因为哥布林王制止了它们。
+
+<<if not $goblinKingTalked>>🟠[[听哥布林王说话]]<</if>>
+返回[[巢穴深处]]
 
 
 :: 王国旅行指南 {"position":"1000,400","size":"100,100"}
@@ -614,8 +678,8 @@ healing(G.me, -0.4); // 设置为60%HP
 addItem(G.inventory.items, G.smallHealingPotion);
 G.me.weapon = G.bloodedIronSword;
 G.me.armor = G.bloodedDeerskinArmor;
-G.meetWallPenetrater = false //是否遇见穿墙者
-
+G.meetWallPenetrater = false; //是否遇见穿墙者
+G.goblinKingTalked = false; //是否与哥布林王交谈
 <</script>>
 
 
