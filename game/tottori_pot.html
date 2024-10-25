@@ -115,6 +115,12 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 }
 .red{
 	color: red;
+}
+#history-forward{
+	visibility: hidden;
+}
+#history-backward{
+	visibility: hidden;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">window.fightObjectCopy = function(obj){
 	let resultObj = {};
 	resultObj.name = obj.name;
@@ -910,14 +916,28 @@ G.enemyNames.map(varName =&gt; {
 如果稍微靠近就能够回复健康。
 
 &lt;&lt;link &quot;使用梅利进行治疗&quot; &quot;梅利的尸体在发光&quot;&gt;&gt;&lt;&lt;set $temp to $healMySelf(0.05)&gt;&gt;&lt;&lt;/link&gt;&gt;
-[[返回-&gt;哥布林前哨站]]</tw-passagedata><tw-passagedata pid="25" name="死亡" tags="" position="1125,250" size="100,100">=死亡=
+[[返回-&gt;哥布林前哨站]]</tw-passagedata><tw-passagedata pid="25" name="死亡" tags="" position="1125,250" size="100,100">&lt;&lt;silent&gt;&gt;
+&lt;&lt;script&gt;&gt;
+console.log(&#39;回复怪物的血量&#39;);
+const enemies = State.variables.enemyNames.map(name =&gt; State.variables[name]);
+enemies.map(obj =&gt; {obj.hp = obj.max_hp});
+&lt;&lt;/script&gt;&gt;
+&lt;&lt;/silent&gt;&gt;\
+=死亡=
 
 &lt;span class=&#39;danger&#39;&gt;你被$enemy.name杀死了！&lt;/span&gt;
 $enemy.name的HP剩余$enemy.hp点，下次再努力吧。
 
 &lt;&lt;button &quot;查看战斗记录&quot;&gt;&gt;&lt;&lt;set _temp to $showDialogFightHistory()&gt;&gt;&lt;&lt;/button&gt;&gt;
 
-点击侧边栏的&quot;RESTART&quot;重新开始游戏。</tw-passagedata><tw-passagedata pid="26" name="片刻之后" tags="" position="475,1150" size="100,100">稍过片刻，传来了小小的当啷声，好像有什么东西掉在了地上。
+&lt;&lt;button &quot;满血复活（使用禁忌的时间回溯魔法）&quot;&gt;&gt;\
+&lt;&lt;set _deadMark to {name: &#39;死神的印记&#39;, desc: &#39;继续你的旅途，这双眼睛会注视着你&#39;}&gt;&gt;\
+&lt;&lt;set _temp to addItem($inventory.items, _deadMark)&gt;&gt;\
+&lt;&lt;set $me.hp to $me.max_hp&gt;&gt;\
+&lt;&lt;goto $lastPassage&gt;&gt;\
+&lt;&lt;/button&gt;&gt;
+
+或者你也可以点击侧边栏的&quot;RESTART&quot;重新开始游戏。</tw-passagedata><tw-passagedata pid="26" name="片刻之后" tags="" position="475,1150" size="100,100">稍过片刻，传来了小小的当啷声，好像有什么东西掉在了地上。
 难道说是刚刚那人说的东西吗？
 
 在地上摸索了一下，&lt;span class=&#39;good&#39;&gt;找到了一枚指环&lt;/span&gt;。

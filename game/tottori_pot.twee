@@ -617,6 +617,13 @@ G.enemyNames.map(varName => {
 
 
 :: 死亡 {"position":"1125,250","size":"100,100"}
+<<silent>>
+<<script>>
+console.log('回复怪物的血量');
+const enemies = State.variables.enemyNames.map(name => State.variables[name]);
+enemies.map(obj => {obj.hp = obj.max_hp});
+<</script>>
+<</silent>>\
 =死亡=
 
 <span class='danger'>你被$enemy.name杀死了！</span>
@@ -624,7 +631,14 @@ $enemy.name的HP剩余$enemy.hp点，下次再努力吧。
 
 <<button "查看战斗记录">><<set _temp to $showDialogFightHistory()>><</button>>
 
-点击侧边栏的"RESTART"重新开始游戏。
+<<button "满血复活（使用禁忌的时间回溯魔法）">>\
+<<set _deadMark to {name: '死神的印记', desc: '继续你的旅途，这双眼睛会注视着你'}>>\
+<<set _temp to addItem($inventory.items, _deadMark)>>\
+<<set $me.hp to $me.max_hp>>\
+<<goto $lastPassage>>\
+<</button>>
+
+或者你也可以点击侧边栏的"RESTART"重新开始游戏。
 
 
 :: 片刻之后 {"position":"475,1150","size":"100,100"}
@@ -1123,4 +1137,10 @@ window.expGot = function expGot(expBefore, expGot, level, levelUp) {
 }
 .red{
 	color: red;
+}
+#history-forward{
+	visibility: hidden;
+}
+#history-backward{
+	visibility: hidden;
 }
