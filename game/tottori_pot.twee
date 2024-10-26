@@ -18,6 +18,7 @@
 
 
 :: PassageFooter {"position":"1200,100","size":"100,100"}
+<<set _nowPassage to passage()>>\
 <<if ['初始之地', '物品栏', '称号栏'].includes(passage())>>\
 	<<set $footerOn to false>>\
 <<else>>\
@@ -26,9 +27,15 @@
 <<if $footerOn and $me>>\
 <hr/>\
 $me.name LV$me.level <<if $titles.items.length > 0>>【<<print $titles.items.last().name>>】<</if>>
+<<set $expNeed to $nextLevelExp()>>\
+经验值: $me.exp / $expNeed
 HP :<meter @value="$me.hp" min="0" @max="$me.max_hp"></meter>
 [[物品栏]], [[称号栏]]
+<<if $me.ring>>遗物：<<link $me.ring.name>><<set _temp to $showRelics()>><</link>> <<link "卸下" _nowPassage>><<set $me.ring to null>><</link>><</if>>
 <</if>>
+<<script>>
+	window.G = State.variables;
+<</script>>
 
 
 :: Start {"position":"1350,100","size":"100,100"}
@@ -54,21 +61,8 @@ $me.name LV$me.level
 :: “我明白了，我会离开，把东西给我” {"position":"900,1275","size":"100,100"}
 <<silently>>
 <<script>>
-const usegoblinSummonRod = () => {
-	State.variables.me.ring = State.variables.goblinSummonRod;
-    State.variables.showDialog('装备遗物', '成功装备了' + State.variables.goblinSummonRod.name + '!');
-}
-const goblinSummonRodGroupModifier = (group1, group2, fightHistory) => {
-    const spawnedGoblin = fightObjectCopy(State.variables.normalGoblin);
-    spawnedGoblin.name = '哥布林小鬼';
-    group1.push(spawnedGoblin);
-    console.log('哥布林权杖为' + group1[0].name + '的队伍召唤了哥布林小鬼!')
-    fightHistory.push('哥布林权杖为' + group1[0].name + '的队伍召唤了哥布林小鬼!');
-}
-State.variables.goblinSummonRod = {name: '哥布林王的权杖', desc: '召唤一只哥布林协同战斗。', groupModifier: goblinSummonRodGroupModifier, useCallback: usegoblinSummonRod};
-
-window.addItem(State.variables.inventory.items, State.variables.goblinSummonRod)
-State.variables.showDialog('获得物品', '获得了' + State.variables.goblinSummonRod.name + '!');
+addItem(State.variables.inventory.items, State.variables['哥布林王权杖'], 1);
+State.variables.showDialog('获得物品', '获得了' + State.variables['哥布林王权杖'].name + '!');
 State.variables.goblinKingTalked = true;
 <</script>>
 <</silently>>
@@ -154,6 +148,15 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
     <</silently>>\
 <</link>>
 
+<<if $theClownInWoods.hp > 0 and random(100) < 100>>\
+🟠【万圣节特典】树枝上吊着一个小丑。
+[[向他搭话->向小丑搭话]]
+<<link "攻击小丑" "战斗画面">>\
+	<<set $lastPassage to '低矮林地'>>\
+    <<set $enemyNames to ['theClownInWoods']>>\
+<</link>>
+<</if>>\
+
 返回[[小屋前十字路口]]
 
 
@@ -196,6 +199,7 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 
 /* NPC & Monsters */
 <<script>>
+window.G = State.variables;
 console.log('HELLO?')
 State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
 State.variables.mountainGoblinSoul =  {name: '山岭哥布林的灵魂', desc: '山岭哥布林的坚韧灵魂。'};
@@ -240,6 +244,18 @@ State.variables.normalGoblin = {
 }
 State.variables.clownMask = {
 	name: '小丑面具',  desc: '看起来有些诡异的面具，能够吓哭小孩。'
+}
+State.variables.theClownInWoods = {
+	name: '林中小丑', 
+    exp: 200,
+    max_hp: 200,
+    hp: 200, 
+    power: 20, 
+    resistance: 20, 
+    drops: [{
+    	item: State.variables.clownMask, 
+        chance: 0.9
+    }]
 }
 State.variables.oldManSlayer = {
 	name: '俄狄浦斯',  desc: '只是杀死了个老头而已，有什么好大惊小怪的。'
@@ -322,11 +338,106 @@ State.variables.showDialogFightHistory = function(){
 // 2024.10.25由于引用在每个新段落都会被破坏，只能通过保存名字的方式来保持联系
 State.variables.enemyNames = [];
 console.log('I am done')
+// State.variables.me.ring = State.variables['哥布林王权杖'];
+const useRodSlime = () => {
+	const rodName = '万圣节权杖';
+	window.G.me.ring = G[rodName];
+	window.G.showDialog('装备遗物', '成功装备了' + rodName + '!');
+}
+const rodSlimeGroupModifier = (group1, group2, fightHistory) => {
+	const rodName = '万圣节权杖';
+	const prototFightObj = State.variables.slime;
+	const familiarName = '【使魔】史莱姆';
+	const spawned = fightObjectCopy(prototFightObj);
+	spawned.name = familiarName;
+	group1.push(spawned);
+	console.log(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
+	fightHistory.push(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
+}
+window.G['万圣节权杖'] = {name: '万圣节权杖', desc: '召唤一只【使魔】史莱姆协同战斗。', groupModifier: rodSlimeGroupModifier, useCallback: useRodSlime};
+const useRodGoblin = () => {
+	const rodName = '哥布林王权杖';
+	window.G.me.ring = G[rodName];
+	window.G.showDialog('装备遗物', '成功装备了' + rodName + '!');
+}
+const rodGoblinGroupModifier = (group1, group2, fightHistory) => {
+	const rodName = '哥布林王权杖';
+	const prototFightObj = State.variables.normalGoblin;
+	const familiarName = '【使魔】哥布林';
+	const spawned = fightObjectCopy(prototFightObj);
+	spawned.name = familiarName;
+	group1.push(spawned);
+	console.log(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
+	fightHistory.push(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
+}
+window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一只【使魔】哥布林协同战斗。', groupModifier: rodGoblinGroupModifier, useCallback: useRodGoblin};
+// State.variables.me.ring = State.variables['哥布林王权杖'];
 <</script>>
-
 <<script>>
     window.dd = State.variables
 <</script>>
+
+
+:: 向小丑搭话 {"position":"450,775","size":"100,100"}
+嘻嘻……嘻嘻嘻
+
+<div class="aa">
+{{{
+&&&&&&&&&&&$&&&&&$XX$&&&&&&&&&&&&&&$&$
+&&&&&&&&&&&&&&&&&$xX$&&&&$X&&&&&&&&&&&
+&&&&&&&&&&&&&&&&$&&&&&&&&&$&&&&&&&&$&&
+&&&&&&&&&&&&&&&$x;::;+X&&&$&&&&&&&&&&&
+&&&&&&&&&&&&&$++X$$$Xx+;x&&&&&&&&&&&&&
+&&&&&&&&&&&&$+X;.:...:+x+x&&&&&&&&&&&&
+&&&&&&&&&&&&XXxxXX;.xXXXxx&&&&&&&&&&&&
+&&&&&&&&&&&&$X$&Xx+:$x&&$++&&&&&&&&&&&
+&&&&&&&&&&&&+;:;xx$$$xx;;;:x&&&&&&&&&&
+&&&&&&&&&&&&;.;+;;&&&;xX+;::X&&&&&&&&&
+&&&&&&&&&&$:..;x+x+xXx;++;;:.;$&&&&&&&
+&&&&&&&&&+......::;;+;;;;;;:::;$&&&&&&
+&&&&&&&$.........:xX+;;;;;;;;;:;$&&&&&
+&&&&&&X......:.....:::+xxx+;;::.;&&&&&
+&&&&&X.......   .:.::;++x+++;;:::x&&&&
+&&&&+.::.........:;::::;++++;;;;;:$&&&
+&&&;.................::::;;;;;;;;;;$&&
+&&;.........:........::::::;;;;;;;;x&&
+&;.........:...:.....:::::;;;;;;;;;;&&
+X.........:;.........:;:::;++;;;;;;;x&
+........::;;....:....:;:::;+++;;;;;;;&
+.......::;+:...::....;;:::;;+++++;;;:X
+......::;+;:...::....;;;:::;++++++;;;:
+}}}
+</div>
+
+有人寻找灵魂，有人找寻面具，
+如果你能带给我3个面具，也许我会给你一份礼物。
+
+<<silently>>\
+<<script>>
+State.variables.temp1 = checkHavingItem(State.variables.inventory.items, '小丑面具')
+if(State.variables.temp1){
+	State.variables.temp2 = getItem(State.variables.inventory.items, '小丑面具')
+}
+<</script>>
+<</silently>>\
+\
+<<if $temp1>>\
+小丑：你现在拥有$temp2.count个小丑面具。
+<<if $temp2.count >= 3>>\
+	<<link "使用3个小丑面具换取万圣节礼物" "向小丑搭话">>
+    	<<silently>>
+    	<<script>>
+        const itemName =  '小丑面具';
+		reduceItemCount(State.variables.inventory.items, itemName, 3);
+		addItem(State.variables.inventory.items, State.variables['万圣节权杖'], 1);
+        State.variables.showDialog('获得物品', '获得了' + State.variables['万圣节权杖'].name + '!');
+        <</script>>
+        <</silently>>\
+    <</link>>
+<</if>>
+<</if>>
+
+[[低矮林地]]
 
 
 :: 向穿墙者搭话 {"position":"475,900","size":"100,100"}
@@ -745,6 +856,8 @@ enemies.forEach(enemy => {
 :: 离开这里 {"position":"600,650","size":"100,100"}
 = 第二章 =
 
+
+
 [[继续->哥布林巢穴裂缝]]
 
 <<script>>
@@ -1124,6 +1237,25 @@ window.expGot = function expGot(expBefore, expGot, level, levelUp) {
 
     return { newExp: expNew, newLevel: level, levelsGained: levelsGained };
 }
+console.log('难道说每次都要重新？')
+
+//@deprecated 因为自动生成的法杖无法保存在游戏状态中，必须复制手写。
+window.summonRodProduce = function(rodName, familiarName, prototFightObj, desc = ''){
+	const useRod = () => {
+		console.log('我在这里啊')
+		window.G.me.ring = G[rodName];
+		window.G.showDialog('装备遗物', '成功装备了' + rodName + '!');
+	}
+	const groupModifier = (group1, group2, fightHistory) => {
+		const spawned = fightObjectCopy(prototFightObj);
+		spawned.name = familiarName;
+		group1.push(spawned);
+		console.log(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
+		fightHistory.push(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
+	}
+	const newDesc = desc || '召唤一只' + familiarName + '协同战斗。';
+	window.G[rodName] = {name: rodName, desc: newDesc, groupModifier: groupModifier, useCallback: useRod};
+}
 
 :: StoryStylesheet [stylesheet]
 .danger{
@@ -1143,4 +1275,8 @@ window.expGot = function expGot(expBefore, expGot, level, levelUp) {
 }
 #history-backward{
 	visibility: hidden;
+}
+div.aa pre{
+    font-family: Mona,'MS PGothic' !important; 
+    line-height: 100% !important;
 }
