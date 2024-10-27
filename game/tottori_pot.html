@@ -503,7 +503,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
     } else {
       // 如果内容不同，先把之前的重复合并
       if (repeatRoundIndex !== null) {
-        result.push(`<span class="important">回合${repeatRoundIndex + 1}</span>\n……`);
+        result.push(`<span class="important">回合${repeatRoundIndex}</span>\n……`);
         repeatRoundIndex = null;
       }
       result.push(...round);  // 当前回合内容直接加入
@@ -532,7 +532,7 @@ $me.name LV$me.level &lt;&lt;if $titles.items.length &gt; 0&gt;&gt;【&lt;&lt;pr
 经验值: $me.exp / $expNeed
 HP :&lt;meter @value=&quot;$me.hp&quot; min=&quot;0&quot; @max=&quot;$me.max_hp&quot;&gt;&lt;/meter&gt;
 [[物品栏]], [[称号栏]]
-&lt;&lt;if $me.ring&gt;&gt;遗物：&lt;&lt;link $me.ring.name&gt;&gt;&lt;&lt;set _temp to $showRelics()&gt;&gt;&lt;&lt;/link&gt;&gt; &lt;&lt;link &quot;卸下&quot; _nowPassage&gt;&gt;&lt;&lt;set $me.ring to null&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $me.legacy&gt;&gt;遗物：&lt;&lt;link $me.legacy.name&gt;&gt;&lt;&lt;set _temp to $showRelics()&gt;&gt;&lt;&lt;/link&gt;&gt; &lt;&lt;link &quot;卸下&quot; _nowPassage&gt;&gt;&lt;&lt;set $me.legacy to null&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;&lt;/if&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 &lt;&lt;script&gt;&gt;
 	window.G = State.variables;
@@ -548,7 +548,7 @@ console.log(&#39;Start?&#39;)
 血量: $me.hp / $me.max_hp
 武器: &lt;&lt;link $me.weapon.name&gt;&gt;&lt;&lt;set $temp to $showWeapon()&gt;&gt;&lt;&lt;/link&gt;&gt;(攻击力: $me.weapon.power)
 防具: &lt;&lt;link $me.armor.name&gt;&gt;&lt;&lt;set $temp to $showArmor()&gt;&gt;&lt;&lt;/link&gt;&gt; (防御力:  $me.armor.resistance)
-&lt;&lt;if $me.ring&gt;&gt;遗物：&lt;&lt;link $me.ring.name&gt;&gt;&lt;&lt;set _temp to $showRelics()&gt;&gt;&lt;&lt;/link&gt;&gt; &lt;&lt;link &quot;卸下&quot; _nowPassage&gt;&gt;&lt;&lt;set $me.ring to null&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="5" name="“我明白了，我会离开，把东西给我”" tags="" position="900,1275" size="100,100">&lt;&lt;silently&gt;&gt;
+&lt;&lt;if $me.legacy&gt;&gt;遗物：&lt;&lt;link $me.legacy.name&gt;&gt;&lt;&lt;set _temp to $showRelics()&gt;&gt;&lt;&lt;/link&gt;&gt; &lt;&lt;link &quot;卸下&quot; _nowPassage&gt;&gt;&lt;&lt;set $me.legacy to null&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="5" name="“我明白了，我会离开，把东西给我”" tags="" position="900,1275" size="100,100">&lt;&lt;silently&gt;&gt;
 &lt;&lt;script&gt;&gt;
 addItem(State.variables.inventory.items, State.variables[&#39;哥布林王权杖&#39;], 1);
 State.variables.showDialog(&#39;获得物品&#39;, &#39;获得了&#39; + State.variables[&#39;哥布林王权杖&#39;].name + &#39;!&#39;);
@@ -758,8 +758,8 @@ State.variables.showArmor = function(){
 	State.variables.showDialog(title, desc)
 }
 State.variables.showRelics = function(){
-	let title = State.variables.me.ring.name
-    let desc = State.variables.me.ring.desc
+	let title = State.variables.me.legacy.name
+    let desc = State.variables.me.legacy.desc
 	State.variables.showDialog(title, desc)
 }
 State.variables.armorPiercingRingDamageCalculator = function (me, enemy, fightHistory = []){
@@ -768,11 +768,10 @@ State.variables.armorPiercingRingDamageCalculator = function (me, enemy, fightHi
     return Math.max(1, damage);
 }
 State.variables.armorPiercingRingUseCb = function(){
-	State.variables.me.ring = State.variables.armorPiercingRing;
+	State.variables.me.legacy = State.variables.armorPiercingRing;
     State.variables.showDialog(&#39;装备指环&#39;, &#39;成功装备了破甲指环!&#39;);
 }
 State.variables.armorPiercingRing = {name: &#39;破甲指环&#39;, desc: &#39;指环的水晶里封存着一小片骨头。&#39;, damageCalculator : State.variables.armorPiercingRingDamageCalculator, useCallback: State.variables.armorPiercingRingUseCb}
-// State.variables.me.ring = State.variables.armorPiercingRing;
 State.variables.globalUseCallback = function(idx){
 	console.log(&#39;globalUseCallback &#39; + idx);
     console.log(&#39;I am going to call &#39; + State.variables.inventory.items[idx].name + &#39; callback&#39;);
@@ -785,10 +784,9 @@ State.variables.showDialogFightHistory = function(){
 // 2024.10.25由于引用在每个新段落都会被破坏，只能通过保存名字的方式来保持联系
 State.variables.enemyNames = [];
 console.log(&#39;I am done&#39;)
-// State.variables.me.ring = State.variables[&#39;哥布林王权杖&#39;];
 const useRodSlime = () =&gt; {
 	const rodName = &#39;万圣节权杖&#39;;
-	window.G.me.ring = G[rodName];
+	window.G.me.legacy = G[rodName];
 	window.G.showDialog(&#39;装备遗物&#39;, &#39;成功装备了&#39; + rodName + &#39;!&#39;);
 }
 const rodSlimeGroupModifier = (group1, group2, fightHistory) =&gt; {
@@ -804,7 +802,7 @@ const rodSlimeGroupModifier = (group1, group2, fightHistory) =&gt; {
 window.G[&#39;万圣节权杖&#39;] = {name: &#39;万圣节权杖&#39;, desc: &#39;万圣节特典。召唤一只【使魔】史莱姆协同战斗！&#39;, groupModifier: rodSlimeGroupModifier, useCallback: useRodSlime};
 const useRodGoblin = () =&gt; {
 	const rodName = &#39;哥布林王权杖&#39;;
-	window.G.me.ring = G[rodName];
+	window.G.me.legacy = G[rodName];
 	window.G.showDialog(&#39;装备遗物&#39;, &#39;成功装备了&#39; + rodName + &#39;!&#39;);
 }
 State.variables.theClownInWoods = {
@@ -830,7 +828,6 @@ const rodGoblinGroupModifier = (group1, group2, fightHistory) =&gt; {
 	fightHistory.push(rodName + &#39;为&#39; + group1[0].name + &#39;的队伍召唤了&#39; + familiarName + &#39;!&#39;);
 }
 window.G[&#39;哥布林王权杖&#39;] = {name: &#39;哥布林王权杖&#39;, desc: &#39;召唤一只【使魔】哥布林协同战斗。&#39;, groupModifier: rodGoblinGroupModifier, useCallback: useRodGoblin};
-// State.variables.me.ring = State.variables[&#39;哥布林王权杖&#39;];
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;script&gt;&gt;
     window.dd = State.variables
@@ -1006,8 +1003,6 @@ if (!isGroupAlive(enemies)){
     const enemiesCopy = enemies.map(enemy =&gt; fightObjectCopy(enemy));
 	// 2024.10.21 增加指环效果
 	const cb = {&#39;g1&#39;: {}, &#39;g2&#39;: {}};
-	State.variables.me.ring = State.variables.me.ring || State.variables.me.legacy;
-	State.variables.me.legacy = State.variables.me.legacy || State.variables.me.ring;
 	for (let i = 0; i &lt; us.length; i++){
 		const ally = us[i];
 		if (ally.legacy){
@@ -1086,7 +1081,7 @@ G.enemyNames.map(varName =&gt; {
             addItem(State.variables.titles.items, State.variables.oldManSlayer)
         }
     }else if (varName == &#39;theOutpostMountainGoblin&#39;){
-        if (!State.variables.me.ring || State.variables.me.ring.name != &#39;破甲指环&#39;){
+        if (!State.variables.me.legacy || State.variables.me.legacy.name != &#39;破甲指环&#39;){
             console.log(&#39;不使用破甲戒指击破山岭哥布林&#39;);
             const title = {name: &#39;手撕重坦者&#39;, desc: &#39;不使用破甲戒指击破前哨站的山岭哥布林。&#39;}
             addItem(State.variables.titles.items, title)
