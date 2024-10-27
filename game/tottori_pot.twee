@@ -536,7 +536,7 @@ if(hasSlimeDrop){
 仔细看的话能够发现，[[梅利的尸体在发光]]。
 
 [[躲进岩石裂缝->哥布林巢穴裂缝]]
-<<if $theGoblinKing.hp < 0>>
+<<if $theGoblinKing.hp <= 0>>
 🟢风风光光地[[离开哥布林巢穴]]
 <</if>>
 
@@ -934,7 +934,9 @@ enemies.forEach(enemy => {
 <</if>>
 
 <<if not $goblinKingTalked and $theGoblinKing.hp > 0>>🟠[[听哥布林王说话]]<</if>>
-<<if $goblinKingTalked or $theGoblinKing.hp < 0>>
+<<if $theGoblinKing.hp <= 0>>
+🟢现在我可以从前哨站离开。
+<<else>>
 🟠击败哥布林王后可以从前哨站离开。
 <</if>>
 返回[[巢穴深处]]
@@ -1649,7 +1651,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
     } else {
       // 如果内容不同，先把之前的重复合并
       if (repeatRoundIndex !== null) {
-        result.push(`<span class="important">回合${repeatRoundIndex}</span>\n……`);
+        result.push(`<span class="important">回合……</span>`);
         repeatRoundIndex = null;
       }
       result.push(...round);  // 当前回合内容直接加入

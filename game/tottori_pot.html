@@ -503,7 +503,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
     } else {
       // 如果内容不同，先把之前的重复合并
       if (repeatRoundIndex !== null) {
-        result.push(`<span class="important">回合${repeatRoundIndex}</span>\n……`);
+        result.push(`<span class="important">回合……</span>`);
         repeatRoundIndex = null;
       }
       result.push(...round);  // 当前回合内容直接加入
@@ -976,7 +976,7 @@ if(hasSlimeDrop){
 仔细看的话能够发现，[[梅利的尸体在发光]]。
 
 [[躲进岩石裂缝-&gt;哥布林巢穴裂缝]]
-&lt;&lt;if $theGoblinKing.hp &lt; 0&gt;&gt;
+&lt;&lt;if $theGoblinKing.hp &lt;= 0&gt;&gt;
 🟢风风光光地[[离开哥布林巢穴]]
 &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="18" name="哥布林巢穴裂缝" tags="" position="600,775" size="100,100">=狭窄的岩石裂缝=
 
@@ -1322,7 +1322,9 @@ enemies.forEach(enemy =&gt; {
 &lt;&lt;/if&gt;&gt;
 
 &lt;&lt;if not $goblinKingTalked and $theGoblinKing.hp &gt; 0&gt;&gt;🟠[[听哥布林王说话]]&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $goblinKingTalked or $theGoblinKing.hp &lt; 0&gt;&gt;
+&lt;&lt;if $theGoblinKing.hp &lt;= 0&gt;&gt;
+🟢现在我可以从前哨站离开。
+&lt;&lt;else&gt;&gt;
 🟠击败哥布林王后可以从前哨站离开。
 &lt;&lt;/if&gt;&gt;
 返回[[巢穴深处]]</tw-passagedata><tw-passagedata pid="31" name="王国旅行指南" tags="" position="1000,400" size="100,100">翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面潦草地写着：
