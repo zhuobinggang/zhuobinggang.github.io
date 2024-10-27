@@ -555,7 +555,9 @@ State.variables.showDialog(&#39;获得物品&#39;, &#39;获得了&#39; + State.v
 State.variables.goblinKingTalked = true;
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;/silently&gt;&gt;
-🟢现在我可以返回哥布林前哨站并离开。
+拿到了权杖，现在我可以风风光光地收拾哥布林王了。
+（需要打开物品栏进行装备）
+
 [[王之间]]</tw-passagedata><tw-passagedata pid="6" name="一本翻开的书" tags="" position="525,250" size="100,100">仔细一看，这不是一本书，而是自己写下的笔记。
 
 最上面的一页写着：
@@ -831,7 +833,65 @@ window.G[&#39;哥布林王权杖&#39;] = {name: &#39;哥布林王权杖&#39;, de
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;script&gt;&gt;
     window.dd = State.variables
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="向穿墙者搭话" tags="" position="475,900" size="100,100">那是十分诡异的光景，那人直直站着，上半身完全没入了岩层之中。
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="向小丑搭话" tags="" position="450,775" size="100,100">嘻嘻……嘻嘻嘻
+
+&lt;div class=&quot;aa&quot;&gt;
+{{{
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;$XX$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;$
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$xX$&amp;&amp;&amp;&amp;$X&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$x;::;+X&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$++X$$$Xx+;x&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$+X;.:...:+x+x&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;XXxxXX;.xXXXxx&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$X$&amp;Xx+:$x&amp;&amp;$++&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;+;:;xx$$$xx;;;:x&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;;.;+;;&amp;&amp;&amp;;xX+;::X&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$:..;x+x+xXx;++;;:.;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;+......::;;+;;;;;;:::;$&amp;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;$.........:xX+;;;;;;;;;:;$&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;&amp;X......:.....:::+xxx+;;::.;&amp;&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;&amp;X.......   .:.::;++x+++;;:::x&amp;&amp;&amp;&amp;
+&amp;&amp;&amp;&amp;+.::.........:;::::;++++;;;;;:$&amp;&amp;&amp;
+&amp;&amp;&amp;;.................::::;;;;;;;;;;$&amp;&amp;
+&amp;&amp;;.........:........::::::;;;;;;;;x&amp;&amp;
+&amp;;.........:...:.....:::::;;;;;;;;;;&amp;&amp;
+X.........:;.........:;:::;++;;;;;;;x&amp;
+........::;;....:....:;:::;+++;;;;;;;&amp;
+.......::;+:...::....;;:::;;+++++;;;:X
+......::;+;:...::....;;;:::;++++++;;;:
+}}}
+&lt;/div&gt;
+
+有人寻找灵魂，有人找寻面具，
+如果你能带给我3个面具，也许我会给你一份礼物。
+
+&lt;&lt;silently&gt;&gt;\
+&lt;&lt;script&gt;&gt;
+State.variables.temp1 = checkHavingItem(State.variables.inventory.items, &#39;小丑面具&#39;)
+if(State.variables.temp1){
+	State.variables.temp2 = getItem(State.variables.inventory.items, &#39;小丑面具&#39;)
+}
+&lt;&lt;/script&gt;&gt;
+&lt;&lt;/silently&gt;&gt;\
+\
+&lt;&lt;if $temp1&gt;&gt;\
+小丑：你现在拥有$temp2.count个小丑面具。
+&lt;&lt;if $temp2.count &gt;= 3&gt;&gt;\
+	&lt;&lt;link &quot;使用3个小丑面具换取万圣节礼物&quot; &quot;向小丑搭话&quot;&gt;&gt;
+    	&lt;&lt;silently&gt;&gt;
+    	&lt;&lt;script&gt;&gt;
+        const itemName =  &#39;小丑面具&#39;;
+		reduceItemCount(State.variables.inventory.items, itemName, 3);
+		addItem(State.variables.inventory.items, State.variables[&#39;万圣节权杖&#39;], 1);
+        State.variables.showDialog(&#39;获得物品&#39;, &#39;获得了&#39; + State.variables[&#39;万圣节权杖&#39;].name + &#39;!&#39;);
+        &lt;&lt;/script&gt;&gt;
+        &lt;&lt;/silently&gt;&gt;\
+    &lt;&lt;/link&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+[[低矮林地]]</tw-passagedata><tw-passagedata pid="14" name="向穿墙者搭话" tags="" position="475,900" size="100,100">那是十分诡异的光景，那人直直站着，上半身完全没入了岩层之中。
 或者说，像是从岩石中长出来两条腿一样。
 
 发出声音，试图吸引那个东西的注意。
@@ -844,7 +904,7 @@ window.G[&#39;哥布林王权杖&#39;] = {name: &#39;哥布林王权杖&#39;, de
 沉默了一会儿。
 “哪个国家的哪个方位？”男人问道。
 
-“[[你能不能先从那里出来]]？”</tw-passagedata><tw-passagedata pid="14" name="向老头搭话" tags="" position="550,375" size="100,100">老头：今天是你的十六岁生日。从今天开始，&lt;span class=&#39;good&#39;&gt;$me.name&lt;/span&gt;，你将要开始独自的冒险生活。
+“[[你能不能先从那里出来]]？”</tw-passagedata><tw-passagedata pid="15" name="向老头搭话" tags="" position="550,375" size="100,100">老头：今天是你的十六岁生日。从今天开始，&lt;span class=&#39;good&#39;&gt;$me.name&lt;/span&gt;，你将要开始独自的冒险生活。
 
 老头：现在，我有一个任务交给你，去&lt;span class=&#39;important&#39;&gt;杀死5只史莱姆，带回它们掉落的粘液&lt;/span&gt;，向我证明你的能力。
 
@@ -869,7 +929,7 @@ if(hasSlimeDrop){
 老头： 你还没有拿到史莱姆粘液。
 &lt;&lt;/if&gt;&gt;
 
-[[返回-&gt;大厅]]</tw-passagedata><tw-passagedata pid="15" name="听哥布林王说话" tags="" position="900,1150" size="100,100">哥布林王用嘶哑，走调的&lt;span class=&#39;important&#39;&gt;王国公用语&lt;/span&gt;开口说话了：
+[[返回-&gt;大厅]]</tw-passagedata><tw-passagedata pid="16" name="听哥布林王说话" tags="" position="900,1150" size="100,100">哥布林王用嘶哑，走调的&lt;span class=&#39;important&#39;&gt;王国公用语&lt;/span&gt;开口说话了：
 
 “你想要胜利的证明——我把这柄权杖给你，拿上它离开，别再回来。”
 哥布林会王国公用语已经足够令人吃惊了，可是更加令我惊讶的是，它好像要放我离开。
@@ -884,7 +944,7 @@ if(hasSlimeDrop){
 
 到做选择的时候了:
 [[“我明白了，我会离开，把东西给我”]]。
-[[&quot;我会杀了你，然后把东西带走&quot;]]。</tw-passagedata><tw-passagedata pid="16" name="哥布林前哨站" tags="" position="725,900" size="100,100">&lt;&lt;set $normalGoblin.hp to $normalGoblin.max_hp&gt;&gt;\
+[[&quot;我会杀了你，然后把东西带走&quot;]]。</tw-passagedata><tw-passagedata pid="17" name="哥布林前哨站" tags="" position="725,900" size="100,100">&lt;&lt;set $normalGoblin.hp to $normalGoblin.max_hp&gt;&gt;\
 =哥布林前哨站=
 
 一个黑乎乎的洞口通往[[巢穴深处]]。
@@ -916,9 +976,9 @@ if(hasSlimeDrop){
 仔细看的话能够发现，[[梅利的尸体在发光]]。
 
 [[躲进岩石裂缝-&gt;哥布林巢穴裂缝]]
-&lt;&lt;if $goblinKingTalked or $theGoblinKing.hp &lt; 0&gt;&gt;
-🟢[[离开哥布林巢穴]]
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="哥布林巢穴裂缝" tags="" position="600,775" size="100,100">=狭窄的岩石裂缝=
+&lt;&lt;if $theGoblinKing.hp &lt; 0&gt;&gt;
+🟢风风光光地[[离开哥布林巢穴]]
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="18" name="哥布林巢穴裂缝" tags="" position="600,775" size="100,100">=狭窄的岩石裂缝=
 
 昏暗的洞穴，空气中漂浮着腐肉和粪便的味道。
 
@@ -933,7 +993,7 @@ if(hasSlimeDrop){
     &lt;&lt;set $enemyNames to [&#39;theWallPenetrator&#39;]&gt;&gt;\
 &lt;&lt;/link&gt;&gt;
 &lt;&lt;/if&gt;&gt;\
-&lt;&lt;/if&gt;&gt;\</tw-passagedata><tw-passagedata pid="18" name="大厅" tags="" position="700,375" size="100,100">=大厅=
+&lt;&lt;/if&gt;&gt;\</tw-passagedata><tw-passagedata pid="19" name="大厅" tags="" position="700,375" size="100,100">=大厅=
 
 老旧木头房子的客厅。
 从这里可以前往[[小屋前十字路口]]，[[起居室]]和[[老头的房间]]。
@@ -950,7 +1010,7 @@ if(hasSlimeDrop){
 &lt;&lt;else&gt;&gt;
 客厅中央躺着$oldMan.name的尸体。
 🟢现在，我可以从小屋前面的十字路口离开。
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="小屋前十字路口" tags="" position="725,525" size="100,100">=小屋前十字路口=
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="小屋前十字路口" tags="" position="725,525" size="100,100">=小屋前十字路口=
 
 从这里可以看见破烂的[[小屋-&gt;大厅]]，和小屋背后的[[低矮林地]]。
 
@@ -958,7 +1018,7 @@ if(hasSlimeDrop){
 
 &lt;&lt;if $oldMan.hp &lt; 1&gt;&gt;
 🟢是时候[[离开这里]]了。
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="巢穴深处" tags="" position="900,900" size="100,100">=&lt;&lt;print passage()&gt;&gt;=
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="巢穴深处" tags="" position="900,900" size="100,100">=&lt;&lt;print passage()&gt;&gt;=
 
 哥布林巢穴深处，莫名的腐臭更加严重了。
 
@@ -972,7 +1032,7 @@ if(hasSlimeDrop){
 🟢现在我可以前往祭坛，[[王之间]]。
 &lt;&lt;/if&gt;&gt;
 
-返回[[哥布林前哨站]]。</tw-passagedata><tw-passagedata pid="21" name="思考我现在应该做的事情" tags="" position="600,900" size="100,100">选择永远只有两种，前进，或者是后退。
+返回[[哥布林前哨站]]。</tw-passagedata><tw-passagedata pid="22" name="思考我现在应该做的事情" tags="" position="600,900" size="100,100">选择永远只有两种，前进，或者是后退。
 
 如今付出了惨重的代价，我已经失去了后退的选项。
 我必须取下哥布林王的头颅，以此凭吊死去的队友们。
@@ -980,7 +1040,7 @@ if(hasSlimeDrop){
 [[返回-&gt;哥布林巢穴裂缝]]
 &lt;&lt;script&gt;&gt;
 State.variables.consideredInCave = true;
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="22" name="战斗画面" tags="" position="1000,225" size="100,100">=战斗=
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="战斗画面" tags="" position="1000,225" size="100,100">=战斗=
 &lt;&lt;silently&gt;&gt;\
 &lt;&lt;script&gt;&gt;
 console.log(&#39;Second check&#39;);
@@ -1067,7 +1127,7 @@ if (!isGroupAlive(enemies)){
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\
 
-&lt;&lt;link &quot;返回&quot; $lastPassage&gt;&gt;&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="杀死怪物回调" tags="" position="1250,425" size="100,100">&lt;&lt;silently&gt;&gt;\
+&lt;&lt;link &quot;返回&quot; $lastPassage&gt;&gt;&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="24" name="杀死怪物回调" tags="" position="1250,425" size="100,100">&lt;&lt;silently&gt;&gt;\
 &lt;&lt;script&gt;&gt;
 const G = State.variables;
 G.enemyNames.map(varName =&gt; {
@@ -1106,12 +1166,12 @@ G.enemyNames.map(varName =&gt; {
     }
 })
 &lt;&lt;/script&gt;&gt;
-&lt;&lt;/silently&gt;&gt;\</tw-passagedata><tw-passagedata pid="24" name="梅利的尸体在发光" tags="" position="725,1025" size="100,100">梅利是我们队伍中的牧师。
+&lt;&lt;/silently&gt;&gt;\</tw-passagedata><tw-passagedata pid="25" name="梅利的尸体在发光" tags="" position="725,1025" size="100,100">梅利是我们队伍中的牧师。
 她给自己施加了诅咒，一旦死亡就会近乎永久地为四周施加治疗光环。
 如果稍微靠近就能够回复健康。
 
 &lt;&lt;link &quot;使用梅利进行治疗&quot; &quot;梅利的尸体在发光&quot;&gt;&gt;&lt;&lt;set $temp to $healMySelf(0.05)&gt;&gt;&lt;&lt;/link&gt;&gt;
-[[返回-&gt;哥布林前哨站]]</tw-passagedata><tw-passagedata pid="25" name="死亡" tags="" position="1125,250" size="100,100">&lt;&lt;silent&gt;&gt;
+[[返回-&gt;哥布林前哨站]]</tw-passagedata><tw-passagedata pid="26" name="死亡" tags="" position="1125,250" size="100,100">&lt;&lt;silent&gt;&gt;
 &lt;&lt;script&gt;&gt;
 console.log(&#39;回复怪物的血量&#39;);
 const enemies = State.variables.enemyNames.map(name =&gt; State.variables[name]);
@@ -1133,7 +1193,7 @@ $enemy.name的HP剩余$enemy.hp点，下次再努力吧。
 &lt;&lt;goto $lastPassage&gt;&gt;\
 &lt;&lt;/button&gt;&gt;
 
-或者你也可以点击侧边栏的&quot;RESTART&quot;重新开始游戏。</tw-passagedata><tw-passagedata pid="26" name="片刻之后" tags="" position="475,1150" size="100,100">稍过片刻，传来了小小的当啷声，好像有什么东西掉在了地上。
+或者你也可以点击侧边栏的&quot;RESTART&quot;重新开始游戏。</tw-passagedata><tw-passagedata pid="27" name="片刻之后" tags="" position="475,1150" size="100,100">稍过片刻，传来了小小的当啷声，好像有什么东西掉在了地上。
 难道说是刚刚那人说的东西吗？
 
 在地上摸索了一下，&lt;span class=&#39;good&#39;&gt;找到了一枚指环&lt;/span&gt;。
@@ -1145,7 +1205,7 @@ $enemy.name的HP剩余$enemy.hp点，下次再努力吧。
     State.variables.wallPenetratorTalked = true;
     State.variables.showDialog(&#39;获得物品&#39;, &#39;获得了&#39; + State.variables.armorPiercingRing.name + &#39;!&#39;);
 &lt;&lt;/script&gt;&gt;
-&lt;&lt;/silently&gt;&gt;\</tw-passagedata><tw-passagedata pid="27" name="物品掉落" tags="" position="1125,375" size="100,100">&lt;&lt;silently&gt;&gt;\
+&lt;&lt;/silently&gt;&gt;\</tw-passagedata><tw-passagedata pid="28" name="物品掉落" tags="" position="1125,375" size="100,100">&lt;&lt;silently&gt;&gt;\
 &lt;&lt;script&gt;&gt;
 State.variables.dropLog = &#39;&#39;;
 const enemies = State.variables.enemyNames.map(name =&gt; State.variables[name]);
@@ -1169,17 +1229,44 @@ enemies.forEach(enemy =&gt; {
 });
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;/silently&gt;&gt;
-&lt;span class=&#39;good&#39;&gt;$dropLog&lt;/span&gt;</tw-passagedata><tw-passagedata pid="28" name="物品栏" tags="" position="875,100" size="100,100">&lt;&lt;for _i, _item range  $inventory.items&gt;&gt;
+&lt;span class=&#39;good&#39;&gt;$dropLog&lt;/span&gt;</tw-passagedata><tw-passagedata pid="29" name="物品栏" tags="" position="875,100" size="100,100">&lt;&lt;for _i, _item range  $inventory.items&gt;&gt;
 	&lt;&lt;if _item.count &gt; 0&gt;&gt;
     	名称: _item.name x _item.count &lt;&lt;if _item.useCallback&gt;&gt;&lt;&lt;print &#39;&lt;&lt;link &quot;使用&quot; &quot;物品栏&quot;&gt;&gt;&lt;&lt;set _temp to $globalUseCallback(&#39; + _i + &#39;)&gt;&gt;&lt;&lt;/link&gt;&gt;&#39;&gt;&gt;&lt;&lt;/if&gt;&gt;
         _item.desc
     &lt;&lt;/if&gt;&gt;
 &lt;&lt;/for&gt;&gt;
 
-&lt;&lt;return &quot;返回&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="29" name="王之间" tags="" position="900,1025" size="100,100">=&lt;&lt;print passage()&gt;&gt;=
+&lt;&lt;return &quot;返回&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="30" name="王之间" tags="" position="900,1025" size="100,100">=&lt;&lt;print passage()&gt;&gt;=
 
 宽敞的石室，两边挂着炽烈燃烧的火把，
 和哥布林巢穴格格不入的光景。
+
+&lt;div class=&quot;aa&quot;&gt;
+{{{
+                                           
+      ::-..    :.          :.   ..-::      
+   . . ..       +@@@@@@@@@%        :   :   
+    -::      @@**          *%@%     .:=.   
+  :.:.    #@@  %  @@@@@@@% @* +@@    . .:. 
+    .    @@@@    @@@@%%@@@:   @@@+*   .    
+ =      =@%   @@@@ =@@@@ +@@@:  =@%        
+ @ @:  %@@  @@@  = .: .:--  +@@  *@@   @ % 
+ @%@@      @@  :*#%%%%@%%*#:  =@  + : @@@@ 
+       @   @  -==**%@@@%@#*#*. +@  %@      
+      +@@@@. ==+%%@@@@@@@%%*==  @ @@@      
+  =   :   @@ ===*+@     %#**+= =@   %   @  
+ %    @   @  =*@@%@ =*+:=@%*==   =  @  @   
+ #    @   @*.= -*-- ++=+ %*@*+:.@@  @  @@  
+ @ =  @   @==@@@@@+ ++=+ @@@@@@ @%  @ @@@: 
+ @@@@ @   @@@@@@@@= ==== @%@@@@-@@  @ :@@@ 
+ % @  @  :@ #:*%#:  =--- ***% % @@  @:   : 
+ :    @  %@    =-**      %:=    :@  @%     
+      @   .                     @   %      
+ =@+       @@@@@@@@@@@@@@@@@@@@@@      :@* 
+       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@       
+   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   
+}}}
+&lt;/div&gt;
 
 石室深处摆着一张石椅——看样子是直接从岩壁上凿出来的，
 &lt;&lt;if $theGoblinKing.hp &gt; 0&gt;&gt;\
@@ -1236,18 +1323,57 @@ enemies.forEach(enemy =&gt; {
 
 &lt;&lt;if not $goblinKingTalked and $theGoblinKing.hp &gt; 0&gt;&gt;🟠[[听哥布林王说话]]&lt;&lt;/if&gt;&gt;
 &lt;&lt;if $goblinKingTalked or $theGoblinKing.hp &lt; 0&gt;&gt;
-🟢现在我可以返回哥布林前哨站并离开。
+🟠击败哥布林王后可以从前哨站离开。
 &lt;&lt;/if&gt;&gt;
-返回[[巢穴深处]]</tw-passagedata><tw-passagedata pid="30" name="王国旅行指南" tags="" position="1000,400" size="100,100">翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面潦草地写着：
+返回[[巢穴深处]]</tw-passagedata><tw-passagedata pid="31" name="王国旅行指南" tags="" position="1000,400" size="100,100">翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面潦草地写着：
 
 &lt;blockquote&gt;
 在大洪水来临之前，离开这里
 &lt;small&gt;PS: 我把书全都撕了，因为你是自由的&lt;/small&gt;
 &lt;/blockquote&gt;
 
-[[老头的房间]]</tw-passagedata><tw-passagedata pid="31" name="祭坛" tags="" position="1025,1025" size="100,100">(游戏进度暂时只到这里)
+[[老头的房间]]</tw-passagedata><tw-passagedata pid="32" name="祭坛" tags="" position="1025,1025" size="100,100">(游戏进度暂时只到这里)
 
-[[巢穴深处]]</tw-passagedata><tw-passagedata pid="32" name="离开这里" tags="" position="600,650" size="100,100">= 第二章 =
+[[巢穴深处]]</tw-passagedata><tw-passagedata pid="33" name="离开哥布林巢穴" tags="" position="600,1025" size="100,100">在洞窟里待久了，外边的阳光真的十分刺眼。
+
+在这明媚的阳光下，等待我的是整齐的军队。盔甲明晃晃的让人眼花。
+
+&lt;div class=&quot;aa&quot;&gt;
+{{{
+&amp;&amp;&amp;x;;x;x$+.+  ..       :;..;&amp;X.;:.X
+&amp;&amp;&amp;+:;X+X$;;+:.:..      :+..+x&amp;.;; $
+&amp;&amp;&amp;;..X+$&amp;;+x:.x.       .+. ;x&amp;:.;:$
+&amp;&amp;&amp;;. X+$&amp;:+. .x.:.     :;. :.&amp;x:;x&amp;
+&amp;&amp;&amp;;. $+$&amp;.x. .x.       .x:.+:X$::x$
+&amp;&amp;&amp;+. $x$&amp;.X. .x.       .x..+.;&amp;;:x&amp;
+&amp;&amp;&amp;+. $x$&amp;.X...+.       .x:.+..&amp;$;x&amp;
+&amp;&amp;&amp;x..Xx&amp;&amp;.$..::.        x;.+.:X&amp;;x&amp;
+&amp;&amp;&amp;+. $x&amp;&amp;:$. ::.        x;.+.:X&amp;;x&amp;
+&amp;&amp;&amp;;..$+&amp;&amp;:X. ;:.        x+.+::x&amp;;X&amp;
+&amp;&amp;&amp;+..&amp;&amp;&amp;&amp;:+. ; .X&amp;      xxxx::+&amp;+XX
+&amp;&amp;&amp;;.&amp;&amp;&amp;&amp;&amp;+&amp;;$X&amp;X&amp;$&amp;$X$x$x&amp;&amp;&amp;;:;&amp;x$&amp;
+&amp;&amp;&amp;:x&amp;&amp;&amp;&amp;&amp;&amp;&amp;X&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;X:..$$X&amp;
+&amp;&amp;$:$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$$:::;+X&amp;
+&amp;&amp;X+&amp;&amp;&amp;&amp;&amp;&amp;;:.::X+$&amp;$:;;:&amp;&amp;&amp;&amp;&amp;:::::;:
+&amp;X$.xX..&amp;+......:;++;::..::::::::X;.
+$:..::;xxx;;:.........    ...:..::.:
+XX$X++;::;.....:.:.::..........::..;
+$++&amp;X&amp;&amp;&amp;x::.::::.:::;::::..:...:.::.
+}}}
+&lt;/div&gt;
+
+从军队中站出来一名我的熟人。
+他的头上缠着厚厚的绷带。
+
+“哟，塔尔，你来迎接我了吗？”我说，“用不着那么大排场的”。
+……
+沉默。
+
+“你为什么露出这样的表情？”我说，“到底发生了什么事，是遇到了一种特殊的，永远无法弥补的不幸吗？我们真的无法从中恢复过来了吗？一切都完蛋了吗？”
+
+“你为什么要做出&lt;span class=&#39;red&#39;&gt;这样的事情&lt;/span&gt;？”卡尔问。
+
+“[[这样的事情]]？”</tw-passagedata><tw-passagedata pid="34" name="离开这里" tags="" position="600,650" size="100,100">= 第二章 =
 
 
 
@@ -1389,14 +1515,14 @@ G.theGoblinKing = {
         chance: 1.0
     }]
 }
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="33" name="称号栏" tags="" position="1000,100" size="100,100">&lt;&lt;for $i, $item range  $titles.items&gt;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="35" name="称号栏" tags="" position="1000,100" size="100,100">&lt;&lt;for $i, $item range  $titles.items&gt;&gt;
 	&lt;&lt;if $item.count &gt; 0&gt;&gt;
     	《$item.name》&lt;&lt;if $item.count &gt; 1&gt;&gt;x $item.count&lt;&lt;/if&gt;&gt;
         $item.desc
     &lt;&lt;/if&gt;&gt;
 &lt;&lt;/for&gt;&gt;
 
-&lt;&lt;return &quot;返回&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="34" name="老头的信" tags="" position="1000,550" size="100,100">你看到这封信的时候，我大概已经死了吧。
+&lt;&lt;return &quot;返回&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="36" name="老头的信" tags="" position="1000,550" size="100,100">你看到这封信的时候，我大概已经死了吧。
 你肯定以为这老头房间里藏着不得了的东西，
 结果只发现了这封信。
 
@@ -1407,7 +1533,7 @@ G.theGoblinKing = {
 
 是的，我会告诉你一切真相。
 
-[[下一页]]</tw-passagedata><tw-passagedata pid="35" name="老头的房间" tags="" position="850,425" size="100,100">=老头的房间=
+[[下一页]]</tw-passagedata><tw-passagedata pid="37" name="老头的房间" tags="" position="850,425" size="100,100">=老头的房间=
 
 &lt;&lt;if $oldMan.hp &gt; 0&gt;&gt;
 老头： 站住。谁允许你随便进我的房间了？
@@ -1420,7 +1546,26 @@ G.theGoblinKing = {
 &lt;&lt;/if&gt;&gt;
 
 
-[[大厅]]</tw-passagedata><tw-passagedata pid="36" name="起居室" tags="" position="700,250" size="100,100">=起居室=
+[[大厅]]</tw-passagedata><tw-passagedata pid="38" name="起居室" tags="" position="700,250" size="100,100">=起居室=
+
+&lt;div class=&quot;aa&quot;&gt;
+{{{
+                                    
+    :----========                   
+    =#++++***++**                   
+    :-::::::::::::::                
+    :%=:::::::::::::::.             
+    .-#=:::::::::::::::::.          
+      .#=:::::::::::::::::::.       
+       .#+::::::::::::::::====*:.   
+        .%*--=***#%%%%%%%%%%%%%%=   
+        .:#%####%%%%%%%%%#+==-%%:   
+         .:*##*+==--:::::::::=%*    
+          .*%#--::..                
+           *%#..                    
+                                    
+}}}
+&lt;/div&gt;
 
 一个小小的房间，整洁，也可以说是没有什么生活气息。 
 一张床，一张椅子，桌子。
@@ -1448,104 +1593,7 @@ G.theGoblinKing = {
 
 
 [[休息]]
-到[[大厅]]去。</tw-passagedata><tw-passagedata pid="37" name="向小丑搭话" tags="" position="450,775" size="100,100">嘻嘻……嘻嘻嘻
-
-&lt;div class=&quot;aa&quot;&gt;
-{{{
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;$XX$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;$
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$xX$&amp;&amp;&amp;&amp;$X&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$x;::;+X&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$++X$$$Xx+;x&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$+X;.:...:+x+x&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;XXxxXX;.xXXXxx&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$X$&amp;Xx+:$x&amp;&amp;$++&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;+;:;xx$$$xx;;;:x&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;;.;+;;&amp;&amp;&amp;;xX+;::X&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$:..;x+x+xXx;++;;:.;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;+......::;;+;;;;;;:::;$&amp;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;&amp;$.........:xX+;;;;;;;;;:;$&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;&amp;X......:.....:::+xxx+;;::.;&amp;&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;&amp;X.......   .:.::;++x+++;;:::x&amp;&amp;&amp;&amp;
-&amp;&amp;&amp;&amp;+.::.........:;::::;++++;;;;;:$&amp;&amp;&amp;
-&amp;&amp;&amp;;.................::::;;;;;;;;;;$&amp;&amp;
-&amp;&amp;;.........:........::::::;;;;;;;;x&amp;&amp;
-&amp;;.........:...:.....:::::;;;;;;;;;;&amp;&amp;
-X.........:;.........:;:::;++;;;;;;;x&amp;
-........::;;....:....:;:::;+++;;;;;;;&amp;
-.......::;+:...::....;;:::;;+++++;;;:X
-......::;+;:...::....;;;:::;++++++;;;:
-}}}
-&lt;/div&gt;
-
-有人寻找灵魂，有人找寻面具，
-如果你能带给我3个面具，也许我会给你一份礼物。
-
-&lt;&lt;silently&gt;&gt;\
-&lt;&lt;script&gt;&gt;
-State.variables.temp1 = checkHavingItem(State.variables.inventory.items, &#39;小丑面具&#39;)
-if(State.variables.temp1){
-	State.variables.temp2 = getItem(State.variables.inventory.items, &#39;小丑面具&#39;)
-}
-&lt;&lt;/script&gt;&gt;
-&lt;&lt;/silently&gt;&gt;\
-\
-&lt;&lt;if $temp1&gt;&gt;\
-小丑：你现在拥有$temp2.count个小丑面具。
-&lt;&lt;if $temp2.count &gt;= 3&gt;&gt;\
-	&lt;&lt;link &quot;使用3个小丑面具换取万圣节礼物&quot; &quot;向小丑搭话&quot;&gt;&gt;
-    	&lt;&lt;silently&gt;&gt;
-    	&lt;&lt;script&gt;&gt;
-        const itemName =  &#39;小丑面具&#39;;
-		reduceItemCount(State.variables.inventory.items, itemName, 3);
-		addItem(State.variables.inventory.items, State.variables[&#39;万圣节权杖&#39;], 1);
-        State.variables.showDialog(&#39;获得物品&#39;, &#39;获得了&#39; + State.variables[&#39;万圣节权杖&#39;].name + &#39;!&#39;);
-        &lt;&lt;/script&gt;&gt;
-        &lt;&lt;/silently&gt;&gt;\
-    &lt;&lt;/link&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-
-[[低矮林地]]</tw-passagedata><tw-passagedata pid="38" name="离开哥布林巢穴" tags="" position="600,1025" size="100,100">在洞窟里待久了，外边的阳光真的十分刺眼。
-
-在这明媚的阳光下，等待我的是整齐的军队。盔甲明晃晃的让人眼花。
-
-&lt;div class=&quot;aa&quot;&gt;
-{{{
-&amp;&amp;&amp;x;;x;x$+.+  ..       :;..;&amp;X.;:.X
-&amp;&amp;&amp;+:;X+X$;;+:.:..      :+..+x&amp;.;; $
-&amp;&amp;&amp;;..X+$&amp;;+x:.x.       .+. ;x&amp;:.;:$
-&amp;&amp;&amp;;. X+$&amp;:+. .x.:.     :;. :.&amp;x:;x&amp;
-&amp;&amp;&amp;;. $+$&amp;.x. .x.       .x:.+:X$::x$
-&amp;&amp;&amp;+. $x$&amp;.X. .x.       .x..+.;&amp;;:x&amp;
-&amp;&amp;&amp;+. $x$&amp;.X...+.       .x:.+..&amp;$;x&amp;
-&amp;&amp;&amp;x..Xx&amp;&amp;.$..::.        x;.+.:X&amp;;x&amp;
-&amp;&amp;&amp;+. $x&amp;&amp;:$. ::.        x;.+.:X&amp;;x&amp;
-&amp;&amp;&amp;;..$+&amp;&amp;:X. ;:.        x+.+::x&amp;;X&amp;
-&amp;&amp;&amp;+..&amp;&amp;&amp;&amp;:+. ; .X&amp;      xxxx::+&amp;+XX
-&amp;&amp;&amp;;.&amp;&amp;&amp;&amp;&amp;+&amp;;$X&amp;X&amp;$&amp;$X$x$x&amp;&amp;&amp;;:;&amp;x$&amp;
-&amp;&amp;&amp;:x&amp;&amp;&amp;&amp;&amp;&amp;&amp;X&amp;&amp;&amp;&amp;&amp;&amp;&amp;$&amp;&amp;&amp;&amp;&amp;&amp;&amp;X:..$$X&amp;
-&amp;&amp;$:$&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;$$:::;+X&amp;
-&amp;&amp;X+&amp;&amp;&amp;&amp;&amp;&amp;;:.::X+$&amp;$:;;:&amp;&amp;&amp;&amp;&amp;:::::;:
-&amp;X$.xX..&amp;+......:;++;::..::::::::X;.
-$:..::;xxx;;:.........    ...:..::.:
-XX$X++;::;.....:.:.::..........::..;
-$++&amp;X&amp;&amp;&amp;x::.::::.:::;::::..:...:.::.
-}}}
-&lt;/div&gt;
-
-从军队中站出来一名我的熟人。
-他的头上缠着厚厚的绷带。
-
-“哟，塔尔，你来迎接我了吗？”我说，“用不着那么大排场的”。
-……
-沉默。
-
-“你为什么露出这样的表情？”我说，“到底发生了什么事，是遇到了一种特殊的，永远无法弥补的不幸吗？我们真的无法从中恢复过来了吗？一切都完蛋了吗？”
-
-“你为什么要做出&lt;span class=&#39;red&#39;&gt;这样的事情&lt;/span&gt;？”卡尔问。
-
-“[[这样的事情]]？”</tw-passagedata><tw-passagedata pid="39" name="这样的事情" tags="" position="600,1150" size="100,100">“你杀了梅利和索尔坦。”卡尔说。
+到[[大厅]]去。</tw-passagedata><tw-passagedata pid="39" name="这样的事情" tags="" position="600,1150" size="100,100">“你杀了梅利和索尔坦。”卡尔说。
 
 “你在说什么呢，他们可是我最好的朋友啊……当然了，你也是。”我说，“你有什么证据证明是我干的吗？”
 
