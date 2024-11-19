@@ -588,6 +588,9 @@ if(hasSlimeDrop){
 由于失去了双眼，我什么都看不见，但现在大概是深夜。
 
 [[思考人生的意义]]
+<<silently>>\
+<<audio "big_prison" loop play>>
+<</silently>>\
 
 
 :: 小屋前十字路口 {"position":"725,525","size":"100,100"}
@@ -689,6 +692,10 @@ if (!isGroupAlive(enemies)){
 			if (ally.legacy.deadCallback){
 				cb['g1'][i]['deadCallback'] = ally.legacy.deadCallback;
 			}
+			// 2024.11.19 增加伤害减缓器
+			if (ally.legacy.damageReductor){
+				cb['g1'][i]['damageReductor'] = ally.legacy.damageReductor;
+			}
 		}
 	}
 	// 2024.10.27 循环为敌人设置callback函数
@@ -707,6 +714,10 @@ if (!isGroupAlive(enemies)){
 			if (enemy.legacy.deadCallback){
 				cb['g2'][i]['deadCallback'] = enemy.legacy.deadCallback;
 				console.log('为'+enemy.name+'设置了死亡回调!')
+			}
+			// 2024.11.19 增加伤害减缓器
+			if (enemy.legacy.damageReductor){
+				cb['g2'][i]['damageReductor'] = enemy.legacy.damageReductor;
 			}
 		}
 	}
@@ -1194,7 +1205,7 @@ G.theGoblinKing = {
 这似乎是一个宽敞的空间。
 透过两个空洞的眼窝，我觉察到这里散布着人形的黄色灵魂，以及在地上匍匐前进的黄色灵魂。
 还有在那空间的深处，一对红色的灵魂。
-
+至于在我旁边自称“兜帽”的人的灵魂则是白色的。
 
 <<if $theWolfTrainer.hp > 0>>\
 <<link "🔴攻击红色灵魂" "战斗画面">>\
@@ -1353,20 +1364,34 @@ G.theGoblinKing = {
 
 <<silently>>
 <<script>>
-State.variables['驯狼者的灵魂'] = {name: '驯狼者的灵魂',  desc: '驯狼者的炽热灵魂'};
-State.variables.theWolfTrainer = {
+let G = State.variables;
+// 训狼者：lv30 几率闪避
+G['hermesBootsDamageReductor'] = function (enemy, me, damage, fightHistory = []) {
+	let chance = 0.3;
+    let randomChance = Math.random();
+    if (randomChance <= chance) {
+		fightHistory.push(me.name + '的赫尔墨斯靴被动触发并躲开了攻击!');
+		damage = 0;
+	}
+	return damage;
+}
+G['hermesBoots'] = {name: '赫尔墨斯靴', desc: '30%几率闪避', damageReductor: G.hermesBootsDamageReductor};
+G['驯狼者的灵魂'] = {name: '驯狼者的灵魂',  desc: '驯狼者的机敏灵魂'};
+G.theWolfTrainer = {
 	name: '训狼者', 
     exp: 400,
     max_hp: 300,
     hp: 300, 
     power: 20, 
-    resistance: 35, 
+    resistance: 20, 
+	legacy: G['hermesBoots'],
     drops: [{
     	item: State.variables['驯狼者的灵魂'], 
         chance: 1.0
     }]
 }
 <</script>>
+<<cacheaudio "big_prison" "mp3|https://zhuobinggang.github.io/game/audio/in_big_prison.mp3">>
 <</silently>>
 
 
@@ -1474,6 +1499,11 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                 } else {
                 	damage = calculateDamage(obj1.power, obj2.resistance);
                 }
+				// 2024.11.19 被攻击者触发被动 G1[i] 攻击 G2[j]
+				if (j in callbackFuncDict['g2'] && 'damageReductor' in callbackFuncDict['g2'][j]){
+                  	console.log(obj2.name + '被攻击者触发被动');
+                	damage = callbackFuncDict['g2'][j]['damageReductor'](obj1, obj2, damage, fightHistory);
+                }
               	fightHistory.push(`${obj1.name}对${obj2.name}造成了${damage}点伤害！`);
               	// 2024.10.27 增加自爆逻辑
               	if (obj2.hp - damage <= 0) {
@@ -1507,6 +1537,11 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                 	damage = callbackFuncDict['g2'][i]['damageCalculator'](obj2, obj1, fightHistory);
                 } else {
                 	damage = calculateDamage(obj2.power, obj1.resistance);
+                }
+				// 2024.11.19 被攻击者触发被动 (G2[i]攻击G1[j])
+				if (j in callbackFuncDict['g1'] && 'damageReductor' in callbackFuncDict['g1'][j]){
+                  	console.log(obj1.name + '被攻击者触发被动');
+                	damage = callbackFuncDict['g1'][j]['damageReductor'](obj2, obj1, damage, fightHistory);
                 }
               	fightHistory.push(`${obj2.name}对${obj1.name}造成了${damage}点伤害！`);
               	if (obj1.hp - damage <= 0) { // 2024.10.27 增加自爆逻辑
