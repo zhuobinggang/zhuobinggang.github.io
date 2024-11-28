@@ -100,6 +100,20 @@ State.variables.oldManLetterRead = true
 <</script>>
 
 
+:: 不祥的红色灵魂 {"position":"850,1775","size":"100,100"}
+“看看是谁来了，”红色的灵魂开口了，“我亲爱的客人，您是对我的服务不满吗？”
+
+“你知道接下来要面对的是谁吧。”兜帽说。
+我点点头。
+仅仅感受到它的存在就令我的眼窝生疼——剜眼者，这就是它的名字。
+
+“把我的眼睛还来。”
+“不好意思，我们不提供退款服务。”剜眼者说到，“因为你的眼球，已经在我的肚子里了。”
+
+[[进入战斗]]
+[[再等等->行刑室]]
+
+
 :: 交出5个史莱姆粘液 {"position":"425,375","size":"100,100"}
 <<script>>
 let itemName =  '史莱姆粘液'
@@ -164,16 +178,22 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 
 
 :: 你能不能先从那里出来 {"position":"475,1025","size":"100,100"}
-“我也想出来，可这东西不支持细微的调节。唉我现在没时间和你解释那么多，你能不能告诉我这里是哪里？”
-“方位上应该是<span class='important'>底里斯王国的东南</span>。”
-“哦！居然来到这种地方了吗。”
-“你究竟是怎么回事？”
-“一时半会给你解释不清楚，时间快到了，你有机会的话到<span class='important'>布里斯坦王国</span>来找我，就说是找<span class='important'>天才科学家卢恩</span>别人就懂了。到时候我再向你解释。”
+“我也想出来，可这东西不支持细微的调节。我现在没时间和你解释那么多，告诉我这里是哪里。”
+“方位上是<span class='important'>底里斯王国的东南</span>。”
+“居然给我干这种地方来了。”
+
+“你究竟是什么东西？”
+“我？天才科学家卢恩。”
+从来没听说过。
+
+“没时间了，有机会的话到<span class='important'>布里斯坦王国</span>来，就说是找<span class='important'>天才科学家卢恩</span>。到时候我再向你解释。”
+
 眼看着那人的腿上出现了一些亮绿色的噪点，这过分诡异的光景让$me.name感到毛骨悚然。
 
-"遇见能够交流的人真是不可思议。多亏底里斯和布里斯坦是邻近国家，使用同样的语言。如果是更远或者是某些古怪的地方就难说了。“
+"多亏底里斯和布里斯坦是邻近国家，我们的语言才相通。如果是更远或者是某些古怪的地方就难说了。“卢恩说。
 这还不算是古怪的地方吗。
-”你说你在哥布林巢穴，那你应该是冒险者对吧。我待会给你<span class='important'>传送个东西过来</span>，希望能对你的冒险有帮助。希望我们有缘再见。没时间了，就"
+
+”你说你在哥布林巢穴，我待会给你<span class='important'>传送个东西过来</span>，希望能对你的冒险有帮助。希望我们有缘再见。没时间了，就"
 话音戛然而止，随之消失的是男人的半身，只留下了和往常一样的岩面。
 
 [[片刻之后]]
@@ -439,18 +459,20 @@ if(State.variables.temp1){
 
 
 :: 向穿墙者搭话 {"position":"475,900","size":"100,100"}
-那是十分诡异的光景，那人直直站着，上半身完全没入了岩层之中。
-或者说，像是从岩石中长出来两条腿一样。
+那人直直站着，上半身完全没入了岩层之中。
+或者说，就像是岩石中长出来两条人腿一样。
 
 发出声音，试图吸引那个东西的注意。
-“你，你好……”<span class='good'>$me.name</span>说。
 
-“有人在那里？”那个东西用一个男人的声音回话了。
-“对。”
-“你能告诉我这里是什么地方吗？”
-“应该是哥布林的巢穴。”
-沉默了一会儿。
-“哪个国家的哪个方位？”男人问道。
+“有人在那里？”那个东西问道。
+是我能够理解的语言。
+想了想，给了它肯定的答复。
+
+“这是什么地方？”
+哥布林巢穴，我说。
+
+沉默。
+“哪个国家的哪个方位？”那东西继续问。
 
 “[[你能不能先从那里出来]]？”
 
@@ -1060,7 +1082,7 @@ G.me.armor = G.bloodedDeerskinArmor;
 G.wallPenetratorTalked = false; //是否遇见穿墙者
 G.goblinKingTalked = false; //是否与哥布林王交谈
 const geniusScientistLeft = '天才科学家的悲鸣';
-G[geniusScientistLeft] = {name: geniusScientistLeft, desc: '我怎么又死了？？？'}
+G[geniusScientistLeft] = {name: geniusScientistLeft, desc: '除了我想知道的东西，没有什么是重要的。'}
 G.theWallPenetrator = {
 	name: '穿墙者', 
     exp: 10,
@@ -1204,17 +1226,45 @@ G.theGoblinKing = {
 
 这似乎是一个宽敞的空间。
 透过两个空洞的眼窝，我觉察到这里散布着人形的黄色灵魂，以及在地上匍匐前进的黄色灵魂。
-还有在那空间的深处，一对红色的灵魂。
-至于在我旁边自称“兜帽”的人的灵魂则是白色的。
+看来有一些东西是失去了视力才能够看见的。
+
+在我旁边自称“兜帽”的人的灵魂则是白色的。
+
+<<link "让兜帽给我治疗" "第三巡逻点">><<set $temp to $healMySelf(0.5)>><</link>>
+<<link "攻击黄色灵魂" "战斗画面">>\
+	<<set $prisonGuard.hp to $prisonGuard.max_hp>>\
+	<<set $lastPassage to passage()>>\
+    <<set $enemyNames to ['prisonGuard']>>\
+<</link>>
+<<link "同时攻击三个黄色灵魂" "战斗画面">>\
+	<<set $prisonGuard.hp to $prisonGuard.max_hp>>\
+	<<set $lastPassage to passage()>>\
+    <<silently>>\
+    <<script>>
+        const G = State.variables;
+        // spawn goblins
+        G.enemyNames = []
+        for (let i = 0; i < 3; i++) {
+            const enemyName = 'prisonGuard_' + i;
+            const prisonGuardCloned = structuredClone(G.prisonGuard);
+            prisonGuardCloned.name = '监狱守卫' + i + '号';
+            G[enemyName] = prisonGuardCloned;
+            G.enemyNames.push(enemyName);
+        }
+    <</script>>
+    <</silently>>\
+<</link>>
 
 <<if $theWolfTrainer.hp > 0>>\
+在空间的深处，能看到一对红色的灵魂。
+“看来我们必须击败看守人才能离开，”兜帽说。
 <<link "🔴攻击红色灵魂" "战斗画面">>\
 	<<set $theWolfTrainer.hp to $theWolfTrainer.max_hp>>\
 	<<set $lastPassage to passage()>>\
-    <<set $enemyNames to ['theWolfTrainer']>>\
+    <<set $enemyNames to ['theWolfTrainer', 'theWildWolf']>>\
 <</link>>
 <<else>>\
-🟢红色灵魂已经消散。
+🟢红色灵魂已经消散。现在我们可以前往[[行刑室]]。
 <</if>>\
 
 
@@ -1253,12 +1303,26 @@ G.theGoblinKing = {
 :: 自杀 {"position":"725,1525","size":"100,100"}
 “停停停，你想干什么？”
 本该无人的牢房里，有人这样对我说了。
-他是什么时候出现的呢？
+那人是什么时候出现的呢？
 “谁在那里？”
 
 “我？你可以叫我兜帽。跟我来，我们去夺回你失去的东西。”
 
 [[跟上兜帽->第三巡逻点]]
+
+
+:: 行刑室 {"position":"725,1775","size":"100,100"}
+=行刑室=
+
+漂浮着令人作呕的浓重血腥味的空间。
+
+<<if $theEyeScooper.hp > 0>>
+空间中央存在着一个[[不祥的红色灵魂]]。
+<<else>>
+红色灵魂已经消散。
+<</if>>
+
+返回[[第三巡逻点]]
 
 
 :: 起居室 {"position":"700,250","size":"100,100"}
@@ -1341,6 +1405,10 @@ G.theGoblinKing = {
 [[进入第三章]]
 
 
+:: 进入战斗 {"position":"850,1900","size":"100,100"}
+
+
+
 :: 进入第三章 {"position":"600,1275","size":"100,100"}
 =王城法庭=
 
@@ -1387,6 +1455,47 @@ G.theWolfTrainer = {
 	legacy: G['hermesBoots'],
     drops: [{
     	item: State.variables['驯狼者的灵魂'], 
+        chance: 1.0
+    }]
+}
+G['荒原狼的灵魂'] = {name: '荒原狼的灵魂',  desc: '荒原狼的荒芜灵魂'};
+G.theWildWolf = {
+	name: '荒原狼', 
+    exp: 400,
+    max_hp: 200,
+    hp: 200, 
+    power: 30, 
+    resistance: 15, 
+	legacy: G.armorPiercingRing,
+    drops: [{
+    	item: State.variables['荒原狼的灵魂'], 
+        chance: 1.0
+    }]
+}
+G['监狱守卫的灵魂'] = {name: '监狱守卫的灵魂',  desc: '监狱守卫的苦闷灵魂'};
+G.prisonGuard = {
+	name: '监狱守卫', 
+    exp: 200,
+    max_hp: 230,
+    hp: 230, 
+    power: 23, 
+    resistance: 23, 
+    drops: [{
+    	item: State.variables['监狱守卫的灵魂'], 
+        chance: 0.6
+    }]
+}
+G['剜眼者的灵魂'] = {name: '剜眼者的灵魂',  desc: '剜眼者的残暴灵魂'};
+G.theEyeScooper = {
+	name: '剜眼者', 
+    exp: 500,
+    max_hp: 350,
+    hp: 350, 
+    power: 30, 
+    resistance: 20, 
+    // TODO: 遗物=死眼
+    drops: [{
+    	item: State.variables['剜眼者的灵魂'], 
         chance: 1.0
     }]
 }
