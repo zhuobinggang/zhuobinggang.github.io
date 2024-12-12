@@ -101,16 +101,20 @@ State.variables.oldManLetterRead = true
 
 
 :: 不祥的红色灵魂 {"position":"850,1775","size":"100,100"}
-“看看是谁来了，”红色的灵魂开口了，“我亲爱的客人，您是对我的服务不满吗？”
+“看看是谁来了，”红色的灵魂开口了，“亲爱的客人，你是需要售后服务吗？”
 
 “你知道接下来要面对的是谁吧。”兜帽说。
 我点点头。
 仅仅感受到它的存在就令我的眼窝生疼——剜眼者，这就是它的名字。
 
 “把我的眼睛还来。”
-“不好意思，我们不提供退款服务。”剜眼者说到，“因为你的眼球，已经在我的肚子里了。”
+“刁难人的请求本店不予受理。”剜眼者说到，“毕竟你的眼球已经被我吃掉了。”
 
-[[进入战斗]]
+<<link "🔴进入战斗" "战斗画面">>\
+	<<set $theEyeScooper.hp to $theEyeScooper.max_hp>>\
+	<<set $lastPassage to '行刑室'>>\
+    <<set $enemyNames to ['theEyeScooper']>>\
+<</link>>
 [[再等等->行刑室]]
 
 
@@ -1265,6 +1269,8 @@ G.theGoblinKing = {
     <<set $enemyNames to ['theWolfTrainer', 'theWildWolf']>>\
 <</link>>
 <<else>>\
+对现在的你来说，这种程度的敌人已经不成问题了。
+可是这样的胜利又有什么意义呢？
 🟢红色灵魂已经消散。现在我们可以前往[[行刑室]]。
 <</if>>\
 
@@ -1317,10 +1323,11 @@ G.theGoblinKing = {
 
 漂浮着令人作呕的浓重血腥味的空间。
 
-<<if $theEyeScooper.hp > 0>>
+<<if $theEyeScooper.hp > 0>>\
 空间中央存在着一个[[不祥的红色灵魂]]。
-<<else>>
-红色灵魂已经消散。
+<<else>>\
+🟢红色灵魂已经消散。
+你获得了对这个空间的审美愉悦。
 <</if>>
 
 返回[[第三巡逻点]]
@@ -1406,10 +1413,6 @@ G.theGoblinKing = {
 [[进入第三章]]
 
 
-:: 进入战斗 {"position":"850,1900","size":"100,100"}
-
-
-
 :: 进入第三章 {"position":"600,1275","size":"100,100"}
 =王城法庭=
 
@@ -1486,17 +1489,33 @@ G.prisonGuard = {
         chance: 0.6
     }]
 }
-G['剜眼者的灵魂'] = {name: '剜眼者的灵魂',  desc: '剜眼者的残暴灵魂'};
+G['剜眼者的灵魂'] = {name: '剜眼者的灵魂',  desc: '剜眼者的残暴灵魂。从中你感受到某种共鸣——执刀医生般的严谨，以及施虐者的愉悦与狂信。'};
+G.deadEyeDamageCalculator = function (me, enemy, fightHistory = []) {
+    fightHistory.push(me.name + '的死眼锁定了' + enemy.name + '的要害，暴击100%！');
+    let damage = Math.max(1, me.power - enemy.resistance);
+    damage = damage * 2;
+    return damage;
+}
+const useDeadEye = () => {
+	window.G.me.legacy = G.deadEye;
+	window.G.showDialog('装备遗物', '成功装备了' + G.deadEye.name + '!');
+}
+G.deadEye = {name: '剜眼者', desc: '称手的长柄勺子。比普通的勺子更深，凹陷的部分呈半球形。不具备锋利的边缘，却能给观者带来某种幻痛。会出现在眼科手术室的东西。', damageCalculator: G.deadEyeDamageCalculator, useCallback: useDeadEye};
+// TODO: 死眼作为自身的遗物可以被使用
 G.theEyeScooper = {
 	name: '剜眼者', 
     exp: 500,
-    max_hp: 350,
-    hp: 350, 
+    max_hp: 400,
+    hp: 400, 
     power: 30, 
     resistance: 20, 
-    // TODO: 遗物=死眼
+    // 遗物=死眼
+    legacy: G.deadEye,
     drops: [{
-    	item: State.variables['剜眼者的灵魂'], 
+    	item: G['剜眼者的灵魂'], 
+        chance: 1.0
+    },{
+    	item: G.deadEye, 
         chance: 1.0
     }]
 }
