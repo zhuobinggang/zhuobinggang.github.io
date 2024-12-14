@@ -1063,7 +1063,8 @@ if(hasSlimeDrop){
     &lt;&lt;set $enemyNames to [&#39;theWallPenetrator&#39;]&gt;&gt;\
 &lt;&lt;/link&gt;&gt;
 &lt;&lt;/if&gt;&gt;\
-&lt;&lt;/if&gt;&gt;\</tw-passagedata><tw-passagedata pid="23" name="大厅" tags="" position="700,375" size="100,100">=大厅=
+&lt;&lt;/if&gt;&gt;\
+</tw-passagedata><tw-passagedata pid="23" name="大厅" tags="" position="700,375" size="100,100">=大厅=
 
 老旧木头房子的客厅。
 从这里可以前往[[小屋前十字路口]]，[[起居室]]和[[老头的房间]]。
@@ -1088,7 +1089,8 @@ if(hasSlimeDrop){
 [[思考人生的意义]]
 &lt;&lt;silently&gt;&gt;\
 &lt;&lt;audio &quot;big_prison&quot; loop play&gt;&gt;
-&lt;&lt;/silently&gt;&gt;\</tw-passagedata><tw-passagedata pid="25" name="小屋前十字路口" tags="" position="725,525" size="100,100">=小屋前十字路口=
+&lt;&lt;/silently&gt;&gt;\
+</tw-passagedata><tw-passagedata pid="25" name="小屋前十字路口" tags="" position="725,525" size="100,100">=小屋前十字路口=
 
 从这里可以看见破烂的[[小屋-&gt;大厅]]，和小屋背后的[[低矮林地]]。
 
@@ -1645,7 +1647,12 @@ G.theGoblinKing = {
         chance: 1.0
     }]
 }
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="43" name="称号栏" tags="" position="1000,100" size="100,100">&lt;&lt;for $i, $item range  $titles.items&gt;&gt;
+&lt;&lt;/script&gt;&gt;
+
+&lt;&lt;silently&gt;&gt;\
+&lt;&lt;cacheaudio &quot;golden_season&quot; &quot;mp3|https://zhuobinggang.github.io/game/audio/golden_season.mp3&quot;&gt;&gt;
+&lt;&lt;audio &quot;golden_season&quot; loop play&gt;&gt;
+&lt;&lt;/silently&gt;&gt;\</tw-passagedata><tw-passagedata pid="43" name="称号栏" tags="" position="1000,100" size="100,100">&lt;&lt;for $i, $item range  $titles.items&gt;&gt;
 	&lt;&lt;if $item.count &gt; 0&gt;&gt;
     	《$item.name》&lt;&lt;if $item.count &gt; 1&gt;&gt;x $item.count&lt;&lt;/if&gt;&gt;
         $item.desc

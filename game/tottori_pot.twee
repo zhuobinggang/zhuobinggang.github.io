@@ -633,6 +633,7 @@ if(hasSlimeDrop){
 <</if>>\
 
 
+
 :: 大厅 {"position":"700,375","size":"100,100"}
 =大厅=
 
@@ -664,6 +665,7 @@ if(hasSlimeDrop){
 <<silently>>\
 <<audio "big_prison" loop play>>
 <</silently>>\
+
 
 
 :: 小屋前十字路口 {"position":"725,525","size":"100,100"}
@@ -1293,6 +1295,11 @@ G.theGoblinKing = {
     }]
 }
 <</script>>
+
+<<silently>>\
+<<cacheaudio "golden_season" "mp3|https://zhuobinggang.github.io/game/audio/golden_season.mp3">>
+<<audio "golden_season" loop play>>
+<</silently>>\
 
 
 :: 称号栏 {"position":"1000,100","size":"100,100"}
