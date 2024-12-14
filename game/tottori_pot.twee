@@ -89,7 +89,6 @@ State.variables.goblinKingTalked = true;
 [[……->关于索尔坦]]
 
 
-
 :: 一本翻开的书 {"position":"525,250","size":"100,100"}
 仔细一看，这不是一本书，而是自己写下的笔记。
 
@@ -232,8 +231,6 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 他秘密通敌，把重要军事情报交给敌国，意图引发战乱。
 
 [[……->混乱的终幕]]
-
-
 
 
 :: 初始之地 {"position":"700,100","size":"100,100"}
@@ -448,7 +445,6 @@ window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一�
 <<set $plotAfterKillEyeScooperRead to true>>
 
 [[睁开眼睛->行刑室]]
-
 
 
 :: 向小丑搭话 {"position":"450,775","size":"100,100"}
@@ -1206,7 +1202,11 @@ G.rouletteV1DamageCalculator = function (me, enemy, fightHistory = []) {
     // 返回计算后的伤害值
     return damage;
 }
-G.rouletteV1 = {name: '命运转轮', desc: 'Alive or Dead?\n1~3:倒吊人，造成0点伤害\n4~5:战车，造成40%最大生命值的伤害\n6:死神，造成120%最大生命值的伤害\n可是我似乎用不了它。', damageCalculator: G.rouletteV1DamageCalculator};
+G.useRouletteV1 = () => {
+	window.G.me.legacy = G.rouletteV1;
+	window.G.showDialog('装备遗物', '成功装备了' + G.rouletteV1.name + '!');
+}
+G.rouletteV1 = {name: '命运转轮', desc: 'Alive or Dead?\n1~3:倒吊人，造成0点伤害\n4~5:战车，造成40%最大生命值的伤害\n6:死神，造成120%最大生命值的伤害\n可是我似乎用不了它。', damageCalculator: G.rouletteV1DamageCalculator, useCallback: G.useRouletteV1};
 G.theRouletteEscort = {
 	name: '哥布林轮盘搀扶者', 
     exp: 500,
@@ -1366,8 +1366,6 @@ G.theGoblinKing = {
 就这样意识逐渐沉向深渊。
 
 [[……->半梦半醒]]
-
-
 
 
 :: 老头的信 {"position":"1000,550","size":"100,100"}
@@ -1549,10 +1547,10 @@ G['驯狼者的灵魂'] = {name: '驯狼者的灵魂',  desc: '驯狼者的机�
 G.theWolfTrainer = {
 	name: '训狼者', 
     exp: 400,
-    max_hp: 300,
-    hp: 300, 
-    power: 20, 
-    resistance: 20, 
+    max_hp: 200,
+    hp: 200, 
+    power: 12, 
+    resistance: 25, 
 	legacy: G['hermesBoots'],
     drops: [{
     	item: State.variables['驯狼者的灵魂'], 
@@ -1565,8 +1563,8 @@ G.theWildWolf = {
     exp: 400,
     max_hp: 200,
     hp: 200, 
-    power: 30, 
-    resistance: 15, 
+    power: 20, 
+    resistance: 8, 
 	legacy: G.armorPiercingRing,
     drops: [{
     	item: State.variables['荒原狼的灵魂'], 
@@ -1577,10 +1575,10 @@ G['监狱守卫的灵魂'] = {name: '监狱守卫的灵魂',  desc: '监狱守�
 G.prisonGuard = {
 	name: '监狱守卫', 
     exp: 200,
-    max_hp: 230,
-    hp: 230, 
-    power: 23, 
-    resistance: 23, 
+    max_hp: 180	,
+    hp: 180, 
+    power: 18, 
+    resistance: 18, 
     drops: [{
     	item: State.variables['监狱守卫的灵魂'], 
         chance: 0.6
@@ -1602,9 +1600,9 @@ G.deadEye = {name: '剜眼者', desc: '称手的长柄勺子。比普通的勺�
 G.theEyeScooper = {
 	name: '剜眼者', 
     exp: 500,
-    max_hp: 400,
-    hp: 400, 
-    power: 30, 
+    max_hp: 250,
+    hp: 250, 
+    power: 20, 
     resistance: 20, 
     // 遗物=死眼
     legacy: G.deadEye,
