@@ -38,18 +38,11 @@ $me.name LV$me.level <<if $titles.items.length > 0>>【<<print $titles.items.las
 <<set $expNeed to $nextLevelExp()>>\
 经验值: $me.exp / $expNeed
 HP :<meter @value="$me.hp" min="0" @max="$me.max_hp"></meter>
-[[物品栏]], [[称号栏]]
-<<if $me.legacy>>遗物：<<link $me.legacy.name>><<set _temp to $showRelics()>><</link>> <<link "卸下" _nowPassage>><<set $me.legacy to null>><</link>><</if>>
+<<link "物品栏" "物品栏">><<audio "menu_click" play>><</link>>, <<link "称号栏" "称号栏">><<audio "menu_click" play>><</link>>
+<<if $me.legacy>>遗物：<<link $me.legacy.name>><<audio "menu_click" play>><<set _temp to $showRelics()>><</link>> <<link "卸下" _nowPassage>><<audio "menu_click" play>><<set $me.legacy to null>><</link>><</if>>
 <</if>>
 <<script>>
 	window.G = State.variables;
-<</script>>
-
-
-:: Start {"position":"1350,100","size":"100,100"}
-Start
-<<script>>
-console.log('Start?')
 <</script>>
 
 
@@ -61,9 +54,17 @@ $me.name LV$me.level
 固有攻击力: $me.intrinsicPower
 固有防御力: $me.intrinsicResistance
 血量: $me.hp / $me.max_hp
-武器: <<link $me.weapon.name>><<set $temp to $showWeapon()>><</link>>(攻击力: $me.weapon.power)
-防具: <<link $me.armor.name>><<set $temp to $showArmor()>><</link>> (防御力:  $me.armor.resistance)
-<<if $me.legacy>>遗物：<<link $me.legacy.name>><<set _temp to $showRelics()>><</link>> <<link "卸下" _nowPassage>><<set $me.legacy to null>><</link>><</if>>
+武器: <<link $me.weapon.name>><<audio "menu_click" play>><<set $temp to $showWeapon()>><</link>>(攻击力: $me.weapon.power)
+防具: <<link $me.armor.name>><<audio "menu_click" play>><<set $temp to $showArmor()>><</link>> (防御力:  $me.armor.resistance)
+<<if $me.legacy>>遗物：<<link $me.legacy.name>><<audio "menu_click" play>><<set _temp to $showRelics()>><</link>> <<link "卸下" _nowPassage>><<set $me.legacy to null>><</link>><</if>>
+
+
+:: StoryInit {"position":"1350,100","size":"100,100"}
+<<cacheaudio "menu_click" "mp3|https://zhuobinggang.github.io/game/audio/sfx/menu_click.mp3">>\
+dd
+<<script>>
+console.log('story init?')
+<</script>>
 
 
 :: “你去问不死者之王吧！“ {"position":"525,2150","size":"100,100"}
@@ -341,7 +342,7 @@ State.variables.slime = {
     hp: 10, 
     power: 1, 
     resistance: 1, 
-    drops: [{item: State.variables.slimeDrop, chance: 0.6}, {item: State.variables.slimeSoul, chance: 0.8, count: 2}, ]
+    drops: [{item: State.variables.slimeDrop, chance: 0.8, count: 3}, {item: State.variables.slimeSoul, chance: 0.6}, ]
 }
 State.variables.mountainGoblin = {
 	name: '山岭哥布林', 
@@ -1192,6 +1193,7 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 <<script>>
 State.variables.dropLog = '';
 const enemies = State.variables.enemyNames.map(name => State.variables[name]);
+// DONE:请更改下列代码，当同样名字的物品存在多个的时候，直接显示其数量而不要将每一个都列出来
 enemies.forEach(enemy => {
     if ('drops' in enemy) {
         // 随机计算掉落的物品
@@ -1199,15 +1201,29 @@ enemies.forEach(enemy => {
         console.log(items);
 
         // 生成掉落信息文本并追加到temp中
-        if (items.length > 0){
-        	let text = dropString(items);
-        	State.variables.dropLog += enemy.name + '掉落了' + text + '\n';  // 添加换行符，便于区分多个敌人掉落的信息
+        if (items.length > 0) {
+            // 统计每种物品的数量
+            let itemCounts = {};
+            items.forEach(item => {
+                // 假设 item 是一个对象，包含 `name` 属性
+                let itemName = typeof item === 'object' && 'name' in item ? item.name : item;
+                itemCounts[itemName] = (itemCounts[itemName] || 0) + 1;
+            });
+
+            // 生成掉落信息文本
+            let text = Object.entries(itemCounts)
+                .map(([itemName, count]) => `${itemName}×${count}`)
+                .join('，'); // 用中文逗号分隔
+
+            State.variables.dropLog += enemy.name + '掉落了' + text + '\n'; // 添加换行符，便于区分多个敌人掉落的信息
+
+            // 将物品添加到库存中
             addToInventory(State.variables.inventory.items, items);
         } else {
-        	State.variables.dropLog += enemy.name + '什么都没有掉落就离开了这个世界\n'
+            State.variables.dropLog += enemy.name + '什么都没有掉落就离开了这个世界\n';
         }
     } else {
-    	State.variables.dropLog += enemy.name + '不存在可掉落的物品。'
+        State.variables.dropLog += enemy.name + '不存在可掉落的物品。';
     }
 });
 <</script>>
@@ -2187,26 +2203,24 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
     return fightHistory;
 }
 
-
+// DONE:请更改以下代码，使掉落数量随机扰动，掉落1到drop.count个物品而非固定数量
 window.dropItems = function dropItems(drops) {
     let itemList = [];
-
     // 遍历drops数组
     drops.forEach(drop => {
         // 生成一个随机数 (0-1)
         let randomChance = Math.random();
-      	console.log(randomChance)
-      	console.log(drop.chance)
-        
         // 如果随机数小于等于掉落几率，则掉落物品
         if (randomChance <= drop.chance) {
-          	drop.count = drop.count || 1;
-         	for (let i = 0; i < drop.count; i++){
+            drop.count = drop.count || 1;
+            // 随机生成掉落数量 (1 到 drop.count)
+            let randomDropCount = Math.floor(Math.random() * drop.count) + 1;
+            // 将随机数量的物品添加到列表中
+            for (let i = 0; i < randomDropCount; i++) {
                 itemList.push(drop.item);
             }
         }
     });
-
     return itemList; // 返回掉落的物品列表
 }
 
