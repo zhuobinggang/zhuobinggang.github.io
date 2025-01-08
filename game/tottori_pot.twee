@@ -12,7 +12,7 @@
 }
 
 
-:: "因为你没有母亲。" {"position":"650,2150","size":"100,100"}
+:: "因为你没有母亲。" {"position":"1425,2800","size":"100,100"}
 真想这样骂他，不知道卢恩会有什么反应。
 可是现在还是先忍忍吧，毕竟有求于人的是我。
 
@@ -67,7 +67,7 @@ console.log('story init?')
 <</script>>
 
 
-:: “你去问不死者之王吧！“ {"position":"525,2150","size":"100,100"}
+:: “你去问不死者之王吧！“ {"position":"1300,2800","size":"100,100"}
 ”那么想知道，你去问不死者之王吧！“$me.name说。
 听完，卢恩禁不住大笑起来。
 好不容易等他笑完，卢恩开口了，”你真他妈是个小丑，看在你那么有趣的份上，我给你一点提示好了。“
@@ -132,6 +132,23 @@ State.variables.oldManLetterRead = true
 <</script>>
 
 
+:: 不死之王初见 {"position":"850,2275","size":"100,100"}
+在墓碑的包围下，从泥土中探出半身的巨大骷髅。
+头顶皇冠，黑黝黝的眼窝中飘着两抹凶光。
+
+<<link "🔴挑战不死者之王" "战斗画面">>\
+	<<set $undeadKing.hp to $undeadKing.max_hp>>\
+	<<set $lastPassage to "大墓地外围">>\
+    <<set $enemyNames to ['undeadKing']>>\
+<</link>>
+
+[[逃跑->逃离不死者之王]]
+
+
+:: 不死王座 {"position":"1600,2300","size":"100,100"}
+[[大墓地外围]]
+
+
 :: 不祥的红色灵魂 {"position":"975,1525","size":"100,100"}
 “看看谁来了，”红色的灵魂开口了，“亲爱的客人，你是需要售后服务吗？还有旁边这位戴兜帽的客人……哦，是吗，这就是你的选择吗。”
 
@@ -150,7 +167,7 @@ State.variables.oldManLetterRead = true
 [[再等等->行刑室]]
 
 
-:: 与卢恩交谈 {"position":"400,1775","size":"100,100"}
+:: 与卢恩交谈 {"position":"1175,2425","size":"100,100"}
 "我会帮你击败不死者之王，但是你需要准备好一些必要的东西。"卢恩说。
 
 [[击败不死之王的提示]]
@@ -178,6 +195,30 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 <<set $me.hp to $me.max_hp>>\
 
 [[起居室]]
+
+
+:: 低矮墓地 {"position":"1475,2300","size":"100,100"}
+=低矮墓地=
+
+视野开阔的低矮墓地群。
+灌木丛中晃动着一些黄色的影子。
+仔细观察能够发现，那是一些类似史莱姆的生物，不过颜色是半透明的黄色。
+<<link "发起攻击" "战斗画面">>
+	<<set $lastPassage to passage()>>\
+    <<set $silverIodideOozingOne.hp to $silverIodideOozingOne.max_hp>>
+    <<set $enemyNames to ['silverIodideOozingOne']>>\
+<</link>>\
+
+<<if random(100) < 30>>
+空中飘荡着一个淡蓝色的，火焰一样的存在。
+<<link "发起攻击" "战斗画面">>
+	<<set $lastPassage to passage()>>\
+    <<set $soulClumps.hp to $soulClumps.max_hp>>
+    <<set $enemyNames to ['soulClumps']>>\
+<</link>>\
+<</if>>
+
+[[大墓地外围]]
 
 
 :: 低矮林地 {"position":"575,525","size":"100,100"}
@@ -259,7 +300,7 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 [[……->混乱的终幕]]
 
 
-:: 击败不死之王的提示 {"position":"400,2150","size":"100,100"}
+:: 击败不死之王的提示 {"position":"1175,2800","size":"100,100"}
 ”提示，”卢恩说，“我已经跟你说过了。”
 说过了？你不禁回忆起和他的交谈。
 
@@ -522,7 +563,7 @@ window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一�
 [[穿过窄门]]
 
 
-:: 半梦半醒 {"position":"1275,1775","size":"100,100"}
+:: 半梦半醒 {"position":"1000,1675","size":"100,100"}
 你当然知道这是什么，毕竟又不是失忆。
 不过，也只是一些无足挂齿的小事罢了，这也是事实。 
 
@@ -805,7 +846,7 @@ if(hasSlimeDrop){
 <</if>>
 
 
-:: 大墓地外围 {"position":"525,1650","size":"100,100"}
+:: 大墓地外围 {"position":"1300,2300","size":"100,100"}
 =大墓地外围=
 
 环顾四周，眼中所见是绵延不绝的墓碑的海洋。
@@ -819,6 +860,10 @@ if(hasSlimeDrop){
 [[身后传来脚步声]]
 <<else>>
 [[与卢恩交谈]]
+前往东边的[[低矮墓地]]
+前往南边的[[风暴山丘]]
+前往西边的[[死海]]
+或者前往北边的[[不死王座]]
 <</if>>
 
 
@@ -887,21 +932,37 @@ if(hasSlimeDrop){
 返回[[哥布林前哨站]]。
 
 
-:: 必要的东西 {"position":"400,2025","size":"100,100"}
-为了执行计划代号默示录，卢恩列出的物品清单如下：
+:: 必要的东西 {"position":"1175,2675","size":"100,100"}
+<<silently>>
+<<script>>
+let G = State.variables;
+G.soulsEnough = checkHavingItem(G.inventory.items, '等待回收的灵魂', 100); 
+G.silverIodidePowderEnough = checkHavingItem(G.inventory.items, '碘化银粉末', 100);
+G.airHumidifierEnough = checkHavingItem(G.inventory.items, '空气加湿器', 1); G.cannonEnough = checkHavingItem(G.inventory.items, '高射炮', 1); 
+G.cannonBallEnough = checkHavingItem(G.inventory.items, '加农炮弹', 10); 
+G.taskMakeRainsComplete = G.soulsEnough && G.silverIodidePowderEnough && G.airHumidifierEnough && G.cannonEnough && G.cannonBallEnough;
+<</script>>
+<</silently>>\
+卢恩列出的物品清单如下：
 
-* 等待回收的灵魂 x100
-* 空气加湿器 x 1
-* 碘化银粉末 x 100
-* 高射炮 x 1
-* 炮弹 x 10
+* 等待回收的灵魂 x100 <<print (($soulsEnough) ? '✅' : '❌');>>
+* 空气加湿器 x 1 <<print (($airHumidifierEnough) ? '✅' : '❌');>>
+* 碘化银粉末 x 100 <<print (($silverIodidePowderEnough) ? '✅' : '❌');>>
+* 高射炮 x 1 <<print (($cannonEnough) ? '✅' : '❌');>>
+* 炮弹 x 10 <<print (($cannonBallEnough) ? '✅' : '❌');>>
 
+<<if not $taskMakeRainsComplete>>
 “准备好材料再来找我，”卢恩说。
+<<else>>
+“看来你已经准备好了，”卢恩说。
+<</if>>
 
 [[离开->大墓地外围]]
 
 
-:: 怎样击败不死者之王？ {"position":"525,2025","size":"100,100"}
+
+
+:: 怎样击败不死者之王？ {"position":"1300,2675","size":"100,100"}
 “怎样才能击败不死者之王？”$me.name问。
 “要想知道怎么做，首先要理解为什么做不到，”卢恩说，“那我问你，为什么你无法击败不死者之王？”
 
@@ -1154,6 +1215,10 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 或者你也可以点击侧边栏的"RESTART"重新开始游戏。
 
 
+:: 死海 {"position":"1475,2175","size":"100,100"}
+[[大墓地外围]]
+
+
 :: 混乱的终幕 {"position":"1275,1650","size":"100,100"}
 视野很狭窄。
 具体来说，只是一条缝隙。
@@ -1232,9 +1297,11 @@ enemies.forEach(enemy => {
 
 
 :: 物品栏 {"position":"875,100","size":"100,100"}
+<<return "返回">>
+
 <<for _i, _item range  $inventory.items>>
 	<<if _item.count > 0>>
-    	名称: _item.name x _item.count <<if _item.useCallback>><<print '<<link "使用" "物品栏">><<set _temp to $globalUseCallback(' + _i + ')>><</link>>'>><</if>>
+    	_item.name x _item.count <<if _item.useCallback>><<print '<<link "使用" "物品栏">><<set _temp to $globalUseCallback(' + _i + ')>><</link>>'>><</if>>
         _item.desc
     <</if>>
 <</for>>
@@ -1396,7 +1463,7 @@ $++&X&&&x::.::::.:::;::::..:...:.::.
 “[[这样的事情]]？”
 
 
-:: 离开的方法 {"position":"525,1900","size":"100,100"}
+:: 离开的方法 {"position":"1300,2550","size":"100,100"}
 “你知道怎么离开这里吗？”$me.name说。
 “大坟墓的边界被高浓度的瘴气所包围，”卢恩说，“想出去只能清除瘴气的源头。”
 “瘴气的源头？”
@@ -1649,16 +1716,7 @@ G.bloodedDagger = {name: '血迹斑斑的匕首', desc: '爱用的匕首。\n已
 :: 第四章 {"position":"850,2150","size":"100,100"}
 =第四章=
 
-在墓碑的包围下，从泥土中探出半身的巨大骷髅。
-头顶皇冠，黑黝黝的眼窝中飘着两抹凶光。
-
-<<link "🔴挑战不死者之王" "战斗画面">>\
-	<<set $undeadKing.hp to $undeadKing.max_hp>>\
-	<<set $lastPassage to "大墓地外围">>\
-    <<set $enemyNames to ['undeadKing']>>\
-<</link>>
-
-[[逃跑->逃离不死者之王]]
+[[……->不死之王初见]]
 
 <<silently>>
 <<script>>
@@ -1696,14 +1754,48 @@ G.silverIodidePowder = {name: '碘化银粉末', desc: '黄色粉末。碘化银
 G.airHumidifier = {name: '空气加湿器', desc: '往空气中释放水汽。'}
 G.cannonball = {name: '加农炮弹', desc: '海盗船必备。'}
 G.cannon = {name: '高射炮', desc: '阳物崇拜。'}
+// 2025.1.7 新增怪物
+G.ghostBeing = {name: '幽灵实体', desc: '躲避几率较高。'}; // TODO: 增加功能
+G.silverIodideOozingOne = {name: '碘化银渗出者', desc: '外表看起来像是黄色的史莱姆。掉落碘化银粉末，概率100%。',
+	exp: 200,
+    max_hp: 100,
+    hp: 100, 
+    power: 15, 
+    resistance: 15, 
+    drops: [{
+    	item: G.silverIodidePowder, 
+        count: 5,
+        chance: 1.0
+    }]}
+G.teruTeruBozu = {name: '晴天娃娃', desc: '一种幽灵存在。掉落空气加湿器，概率10%。', exp: 400,
+    max_hp: 200,
+    hp: 200, 
+    power: 18, 
+    resistance: 15, 
+    // 遗物: 幽灵实体
+    legacy: G.ghostBeing,
+    drops: [{
+    	item: G.airHumidifier, 
+        chance: 0.1
+    }]}
+G.teruTeruBozu = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%。'}
+G.teruTeruBozu = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。'}
+G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回收的灵魂。', exp: 400,
+    max_hp: 800,
+    hp: 800, 
+    power: 20, 
+    resistance: 20, 
+    // 遗物: 幽灵实体
+    legacy: G.ghostBeing,
+    drops: [{
+    	item: G.soulWaitingRecycle, 
+        chance: 1.0,
+		count: 20
+    }]}
 <</script>>
 <<audio "big_prison" stop>>
 <!--<<cacheaudio "big_prison" "mp3|https://zhuobinggang.github.io/game/audio/in_big_prison.mp3">>-->
 <</silently>>
-
-
-:: 等候多时 {"position":"650,1775","size":"100,100"}
-ddd
 
 
 :: 红色的闭幕 {"position":"1125,1775","size":"100,100"}
@@ -1850,7 +1942,7 @@ ddd
 [[继续->守墓人]]
 
 
-:: 身后传来脚步声 {"position":"525,1775","size":"100,100"}
+:: 身后传来脚步声 {"position":"1300,2425","size":"100,100"}
 当$me.name转过头去，看见的是一副陌生面孔。
 穿着一身白袍的男人扬起手，说，”还记得我吗？“
 这声音唤起了你的回忆——
@@ -2047,10 +2139,10 @@ G.karl = {
 <</silently>>
 
 
-:: 逃离不死者之王 {"position":"650,1650","size":"100,100"}
+:: 逃离不死者之王 {"position":"1000,2275","size":"100,100"}
 由于瘴气的包围，无法逃跑！
 
-[[返回->第四章]]
+[[返回->不死之王初见]]
 
 
 :: 遭遇卡尔和军队 {"position":"975,1775","size":"100,100"}
@@ -2074,6 +2166,10 @@ G.karl = {
     <<set $enemyNames to ['karl']>>\
 <</link>>
 
+
+
+:: 风暴山丘 {"position":"1600,2175","size":"100,100"}
+[[大墓地外围]]
 
 
 :: StoryScript [script]
@@ -2266,17 +2362,12 @@ window.addToInventory = function(inventory, itemList) {
     });
 }
 
-window.checkHavingItem = function(inventory, itemName) {
-    // 查找 inventory 中的物品
-    let item = inventory.find(inventoryItem => inventoryItem.name === itemName);
-    
-    // 如果物品不存在，或者 count 为 0，返回 false（不持有）
-    if (!item || item.count === 0) {
-        return false;
-    }
-    
-    // 否则返回 true（持有）
-    return true;
+// DONE: 请更改下列函数以增加一个minimalCount的变量，默认为1，如果item.count大于等于minimalCount的时候才返回true
+window.checkHavingItem = function(inventory, itemName, minimalCount = 1) {
+    // 在 inventory 中查找物品
+    const item = inventory.find(inventoryItem => inventoryItem.name === itemName);
+    // 如果物品存在且其 count 大于或等于 minimalCount，返回 true；否则返回 false
+    return item && item.count >= minimalCount;
 }
 
 window.getItem = function getItem(inventory, itemName) {
