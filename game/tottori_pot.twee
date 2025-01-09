@@ -563,7 +563,7 @@ window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一�
 [[穿过窄门]]
 
 
-:: 半梦半醒 {"position":"1000,1675","size":"100,100"}
+:: 半梦半醒 {"position":"1275,1775","size":"100,100"}
 你当然知道这是什么，毕竟又不是失忆。
 不过，也只是一些无足挂齿的小事罢了，这也是事实。 
 
@@ -1755,7 +1755,19 @@ G.airHumidifier = {name: '空气加湿器', desc: '往空气中释放水汽。'}
 G.cannonball = {name: '加农炮弹', desc: '海盗船必备。'}
 G.cannon = {name: '高射炮', desc: '阳物崇拜。'}
 // 2025.1.7 新增怪物
-G.ghostBeing = {name: '幽灵实体', desc: '躲避几率较高。'}; // TODO: 增加功能
+// 遗物：幽灵实体
+G.ghostBeingDodgeRate = 0.5;
+G.ghostBeingDamageReductor = function (enemy, me, damage, fightHistory = []) {
+	let chance = G.ghostBeingDodgeRate;
+    let randomChance = Math.random();
+    if (randomChance <= chance) {
+		fightHistory.push(me.name + '的<span class="orange">幽灵实体</span>触发并躲开了攻击!');
+		damage = 0;
+	}
+	return damage;
+}
+G.ghostBeing = {name: '幽灵实体', desc: '躲避几率较高。', damageReductor: G.ghostBeingDamageReductor}; 
+// END
 G.silverIodideOozingOne = {name: '碘化银渗出者', desc: '外表看起来像是黄色的史莱姆。掉落碘化银粉末，概率100%。',
 	exp: 200,
     max_hp: 100,
@@ -1770,7 +1782,7 @@ G.silverIodideOozingOne = {name: '碘化银渗出者', desc: '外表看起来像
 G.teruTeruBozu = {name: '晴天娃娃', desc: '一种幽灵存在。掉落空气加湿器，概率10%。', exp: 400,
     max_hp: 200,
     hp: 200, 
-    power: 18, 
+    power: 20, 
     resistance: 15, 
     // 遗物: 幽灵实体
     legacy: G.ghostBeing,
@@ -1778,8 +1790,8 @@ G.teruTeruBozu = {name: '晴天娃娃', desc: '一种幽灵存在。掉落空气
     	item: G.airHumidifier, 
         chance: 0.1
     }]}
-G.teruTeruBozu = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%。'}
-G.teruTeruBozu = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。'}
+G.sailor = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%。'}
+G.captain = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。'}
 G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回收的灵魂。', exp: 400,
     max_hp: 800,
     hp: 800, 
@@ -1943,9 +1955,10 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
 
 
 :: 身后传来脚步声 {"position":"1300,2425","size":"100,100"}
-当$me.name转过头去，看见的是一副陌生面孔。
+$me.name转过头去，看见的是一副陌生面孔。
 穿着一身白袍的男人扬起手，说，”还记得我吗？“
 这声音唤起了你的回忆——
+在某个阴暗逼仄的地方听过这样的声音——
 ”怪人卢恩？“
 ”是天才学者卢恩！“
 
@@ -2139,7 +2152,7 @@ G.karl = {
 <</silently>>
 
 
-:: 逃离不死者之王 {"position":"1000,2275","size":"100,100"}
+:: 逃离不死者之王 {"position":"975,2275","size":"100,100"}
 由于瘴气的包围，无法逃跑！
 
 [[返回->不死之王初见]]
@@ -2169,6 +2182,19 @@ G.karl = {
 
 
 :: 风暴山丘 {"position":"1600,2175","size":"100,100"}
+=风暴山丘=
+
+乌云笼罩，狂风大作的山丘。
+半空中漂浮着某种帐篷一样的东西，在狂风中呼啦作响。
+帐篷的顶部像是用墨水涂鸦一样画着夸张的笑脸，看起来有些瘆人。
+狂风的呼啸之间夹杂着不知道哪里传来的孩童的嬉笑声。
+<<link "发起攻击" "战斗画面">>
+	<<set $lastPassage to passage()>>\
+    <<set $teruTeruBozu.hp to $teruTeruBozu.max_hp>>
+    <<set $enemyNames to ['teruTeruBozu']>>\
+<</link>>\
+
+
 [[大墓地外围]]
 
 
@@ -2215,8 +2241,8 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
     }
 
     while (isGroupAlive(group1) && isGroupAlive(group2)) {
-        fightHistory.push(`<span class="important">回合${round}</span>`);
-        fightHistory.push('<span class="good">' + group1[0].name + '的队伍展开攻击。</span>');
+        fightHistory.push(`<span>回合${round}</span>`);
+        fightHistory.push('<span class="beat">' + group1[0].name + '的队伍展开攻击。</span>');
         // Group1攻击Group2
         for (let i = 0; i < group1.length; i++) {
             let obj1 = group1[i]
@@ -2236,7 +2262,7 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                   	console.log(obj2.name + '被攻击者触发被动');
                 	damage = callbackFuncDict['g2'][j]['damageReductor'](obj1, obj2, damage, fightHistory);
                 }
-              	fightHistory.push(`${obj1.name}对${obj2.name}造成了${damage}点伤害！`);
+              	fightHistory.push(`${obj1.name}对${obj2.name}造成了<span class="red">${damage}</span>点伤害！`);
                 obj2.hp = Math.max(obj2.hp - damage, 0);
 				// 2024.10.27 增加自爆逻辑
               	if (obj2.hp == 0) {
@@ -2255,7 +2281,7 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
             break;
         }
 
-        fightHistory.push('<span class="red">' + group2[0].name + '的队伍展开攻击。</span>');
+        fightHistory.push('<span class="beaten">' + group2[0].name + '的队伍展开攻击。</span>');
         // Group2攻击Group1
         for (let i = 0; i < group2.length; i++) {
           	let obj2 = group2[i]
@@ -2275,10 +2301,10 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                   	console.log(obj1.name + '被攻击者触发被动');
                 	damage = callbackFuncDict['g1'][j]['damageReductor'](obj2, obj1, damage, fightHistory);
                 }
-              	fightHistory.push(`${obj2.name}对${obj1.name}造成了${damage}点伤害！`);
+              	fightHistory.push(`${obj2.name}对${obj1.name}造成了<span class="red">${damage}</span>点伤害！`);
                 obj1.hp = Math.max(obj1.hp - damage, 0);
 				if (obj1.hp == 0) { // 2024.10.27 增加自爆逻辑
-                	fightHistory.push(`${obj1.name}倒下了！`);
+                	fightHistory.push(`<span class="red">${obj1.name}倒下了</span>！`);
                     if (j in callbackFuncDict['g1'] && 'deadCallback' in callbackFuncDict['g1'][j]){
                       	console.log(`${obj1.name}的自爆逻辑！`)
                     	callbackFuncDict['g1'][j]['deadCallback'](group1, group2, fightHistory, {round, me: obj1});
@@ -2475,7 +2501,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
   // 1. 分割为不同的回合部分
   for (let i = 0; i < battleLogs.length; i++) {
     const log = battleLogs[i];
-    if (log.startsWith('<span class="important">回合')) {
+    if (log.startsWith('<span>回合')) {
       // 如果有累积的回合数据，先推入 rounds
       if (currentRound.length > 0) {
         rounds.push(currentRound);
@@ -2496,6 +2522,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
   // 2. 合并相同回合部分
   for (let i = 0; i < rounds.length; i++) {
     const round = rounds[i];
+    //console.log(round)
     const roundContent = round.slice(1); // 去掉"回合n"的内容，仅比较回合内的具体内容
 
     if (previousRoundContent && JSON.stringify(roundContent) === JSON.stringify(previousRoundContent)) {
@@ -2506,7 +2533,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
     } else {
       // 如果内容不同，先把之前的重复合并
       if (repeatRoundIndex !== null) {
-        result.push(`<span class="important">回合……</span>`);
+        result.push(`<span>回合……</span>`);
         repeatRoundIndex = null;
       }
       result.push(...round);  // 当前回合内容直接加入

@@ -173,8 +173,8 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
     }
 
     while (isGroupAlive(group1) && isGroupAlive(group2)) {
-        fightHistory.push(`<span class="important">回合${round}</span>`);
-        fightHistory.push('<span class="good">' + group1[0].name + '的队伍展开攻击。</span>');
+        fightHistory.push(`<span>回合${round}</span>`);
+        fightHistory.push('<span class="beat">' + group1[0].name + '的队伍展开攻击。</span>');
         // Group1攻击Group2
         for (let i = 0; i < group1.length; i++) {
             let obj1 = group1[i]
@@ -194,7 +194,7 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                   	console.log(obj2.name + '被攻击者触发被动');
                 	damage = callbackFuncDict['g2'][j]['damageReductor'](obj1, obj2, damage, fightHistory);
                 }
-              	fightHistory.push(`${obj1.name}对${obj2.name}造成了${damage}点伤害！`);
+              	fightHistory.push(`${obj1.name}对${obj2.name}造成了<span class="red">${damage}</span>点伤害！`);
                 obj2.hp = Math.max(obj2.hp - damage, 0);
 				// 2024.10.27 增加自爆逻辑
               	if (obj2.hp == 0) {
@@ -213,7 +213,7 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
             break;
         }
 
-        fightHistory.push('<span class="red">' + group2[0].name + '的队伍展开攻击。</span>');
+        fightHistory.push('<span class="beaten">' + group2[0].name + '的队伍展开攻击。</span>');
         // Group2攻击Group1
         for (let i = 0; i < group2.length; i++) {
           	let obj2 = group2[i]
@@ -233,10 +233,10 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                   	console.log(obj1.name + '被攻击者触发被动');
                 	damage = callbackFuncDict['g1'][j]['damageReductor'](obj2, obj1, damage, fightHistory);
                 }
-              	fightHistory.push(`${obj2.name}对${obj1.name}造成了${damage}点伤害！`);
+              	fightHistory.push(`${obj2.name}对${obj1.name}造成了<span class="red">${damage}</span>点伤害！`);
                 obj1.hp = Math.max(obj1.hp - damage, 0);
 				if (obj1.hp == 0) { // 2024.10.27 增加自爆逻辑
-                	fightHistory.push(`${obj1.name}倒下了！`);
+                	fightHistory.push(`<span class="red">${obj1.name}倒下了</span>！`);
                     if (j in callbackFuncDict['g1'] && 'deadCallback' in callbackFuncDict['g1'][j]){
                       	console.log(`${obj1.name}的自爆逻辑！`)
                     	callbackFuncDict['g1'][j]['deadCallback'](group1, group2, fightHistory, {round, me: obj1});
@@ -433,7 +433,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
   // 1. 分割为不同的回合部分
   for (let i = 0; i < battleLogs.length; i++) {
     const log = battleLogs[i];
-    if (log.startsWith('<span class="important">回合')) {
+    if (log.startsWith('<span>回合')) {
       // 如果有累积的回合数据，先推入 rounds
       if (currentRound.length > 0) {
         rounds.push(currentRound);
@@ -454,6 +454,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
   // 2. 合并相同回合部分
   for (let i = 0; i < rounds.length; i++) {
     const round = rounds[i];
+    //console.log(round)
     const roundContent = round.slice(1); // 去掉"回合n"的内容，仅比较回合内的具体内容
 
     if (previousRoundContent && JSON.stringify(roundContent) === JSON.stringify(previousRoundContent)) {
@@ -464,7 +465,7 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
     } else {
       // 如果内容不同，先把之前的重复合并
       if (repeatRoundIndex !== null) {
-        result.push(`<span class="important">回合……</span>`);
+        result.push(`<span>回合……</span>`);
         repeatRoundIndex = null;
       }
       result.push(...round);  // 当前回合内容直接加入
@@ -870,7 +871,7 @@ window.G[&#39;哥布林王权杖&#39;] = {name: &#39;哥布林王权杖&#39;, de
 
 “是呢，”兜帽说，“&lt;span class=&quot;orange&quot;&gt;去一个更加真实的地方怎么样&lt;/span&gt;？”说完便迈出脚步。
 
-[[跟上-&gt;遭遇卡尔和军队]]</tw-passagedata><tw-passagedata pid="18" name="半梦半醒" tags="" position="1000,1675" size="100,100">你当然知道这是什么，毕竟又不是失忆。
+[[跟上-&gt;遭遇卡尔和军队]]</tw-passagedata><tw-passagedata pid="18" name="半梦半醒" tags="" position="1275,1775" size="100,100">你当然知道这是什么，毕竟又不是失忆。
 不过，也只是一些无足挂齿的小事罢了，这也是事实。 
 
 &lt;span class=&quot;orange&quot;&gt;莫名其妙被选中&lt;/span&gt;，加入勇者的小队，半年，试着接受他们的规矩，跟他们一起行动，然后看到这些无聊的东西，让人连回忆都懒得回忆。
@@ -2101,7 +2102,19 @@ G.airHumidifier = {name: &#39;空气加湿器&#39;, desc: &#39;往空气中释�
 G.cannonball = {name: &#39;加农炮弹&#39;, desc: &#39;海盗船必备。&#39;}
 G.cannon = {name: &#39;高射炮&#39;, desc: &#39;阳物崇拜。&#39;}
 // 2025.1.7 新增怪物
-G.ghostBeing = {name: &#39;幽灵实体&#39;, desc: &#39;躲避几率较高。&#39;}; // TODO: 增加功能
+// 遗物：幽灵实体
+G.ghostBeingDodgeRate = 0.5;
+G.ghostBeingDamageReductor = function (enemy, me, damage, fightHistory = []) {
+	let chance = G.ghostBeingDodgeRate;
+    let randomChance = Math.random();
+    if (randomChance &lt;= chance) {
+		fightHistory.push(me.name + &#39;的&lt;span class=&quot;orange&quot;&gt;幽灵实体&lt;/span&gt;触发并躲开了攻击!&#39;);
+		damage = 0;
+	}
+	return damage;
+}
+G.ghostBeing = {name: &#39;幽灵实体&#39;, desc: &#39;躲避几率较高。&#39;, damageReductor: G.ghostBeingDamageReductor}; 
+// END
 G.silverIodideOozingOne = {name: &#39;碘化银渗出者&#39;, desc: &#39;外表看起来像是黄色的史莱姆。掉落碘化银粉末，概率100%。&#39;,
 	exp: 200,
     max_hp: 100,
@@ -2116,7 +2129,7 @@ G.silverIodideOozingOne = {name: &#39;碘化银渗出者&#39;, desc: &#39;外表
 G.teruTeruBozu = {name: &#39;晴天娃娃&#39;, desc: &#39;一种幽灵存在。掉落空气加湿器，概率10%。&#39;, exp: 400,
     max_hp: 200,
     hp: 200, 
-    power: 18, 
+    power: 20, 
     resistance: 15, 
     // 遗物: 幽灵实体
     legacy: G.ghostBeing,
@@ -2124,8 +2137,8 @@ G.teruTeruBozu = {name: &#39;晴天娃娃&#39;, desc: &#39;一种幽灵存在。
     	item: G.airHumidifier, 
         chance: 0.1
     }]}
-G.teruTeruBozu = {name: &#39;水手&#39;, desc: &#39;游荡的水手僵尸。掉落炮弹概率50%。&#39;}
-G.teruTeruBozu = {name: &#39;船长&#39;, desc: &#39;游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。&#39;}
+G.sailor = {name: &#39;水手&#39;, desc: &#39;游荡的水手僵尸。掉落炮弹概率50%。&#39;}
+G.captain = {name: &#39;船长&#39;, desc: &#39;游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。&#39;}
 G.soulClumps = {name: &#39;灵魂团块&#39;, desc: &#39;随机刷新。掉落20个等待回收的灵魂。&#39;, exp: 400,
     max_hp: 800,
     hp: 800, 
@@ -2173,7 +2186,7 @@ G.soulClumps = {name: &#39;灵魂团块&#39;, desc: &#39;随机刷新。掉落20
 ……
 …
 
-[[……-&gt;第四章]]</tw-passagedata><tw-passagedata pid="63" name="逃离不死者之王" tags="" position="1000,2275" size="100,100">由于瘴气的包围，无法逃跑！
+[[……-&gt;第四章]]</tw-passagedata><tw-passagedata pid="63" name="逃离不死者之王" tags="" position="975,2275" size="100,100">由于瘴气的包围，无法逃跑！
 
 [[返回-&gt;不死之王初见]]</tw-passagedata><tw-passagedata pid="64" name="大墓地外围" tags="" position="1300,2300" size="100,100">=大墓地外围=
 
@@ -2192,9 +2205,10 @@ G.soulClumps = {name: &#39;灵魂团块&#39;, desc: &#39;随机刷新。掉落20
 前往南边的[[风暴山丘]]
 前往西边的[[死海]]
 或者前往北边的[[不死王座]]
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="65" name="身后传来脚步声" tags="" position="1300,2425" size="100,100">当$me.name转过头去，看见的是一副陌生面孔。
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="65" name="身后传来脚步声" tags="" position="1300,2425" size="100,100">$me.name转过头去，看见的是一副陌生面孔。
 穿着一身白袍的男人扬起手，说，”还记得我吗？“
 这声音唤起了你的回忆——
+在某个阴暗逼仄的地方听过这样的声音——
 ”怪人卢恩？“
 ”是天才学者卢恩！“
 
@@ -2321,7 +2335,20 @@ G.taskMakeRainsComplete = G.soulsEnough &amp;&amp; G.silverIodidePowderEnough &a
 &lt;&lt;/link&gt;&gt;\
 &lt;&lt;/if&gt;&gt;
 
-[[大墓地外围]]</tw-passagedata><tw-passagedata pid="74" name="风暴山丘" tags="" position="1600,2175" size="100,100">[[大墓地外围]]</tw-passagedata><tw-passagedata pid="75" name="死海" tags="" position="1475,2175" size="100,100">[[大墓地外围]]</tw-passagedata><tw-passagedata pid="76" name="不死王座" tags="" position="1600,2300" size="100,100">[[大墓地外围]]</tw-passagedata><tw-passagedata pid="77" name="不死之王初见" tags="" position="850,2275" size="100,100">在墓碑的包围下，从泥土中探出半身的巨大骷髅。
+[[大墓地外围]]</tw-passagedata><tw-passagedata pid="74" name="风暴山丘" tags="" position="1600,2175" size="100,100">=风暴山丘=
+
+乌云笼罩，狂风大作的山丘。
+半空中漂浮着某种帐篷一样的东西，在狂风中呼啦作响。
+帐篷的顶部像是用墨水涂鸦一样画着夸张的笑脸，看起来有些瘆人。
+狂风的呼啸之间夹杂着不知道哪里传来的孩童的嬉笑声。
+&lt;&lt;link &quot;发起攻击&quot; &quot;战斗画面&quot;&gt;&gt;
+	&lt;&lt;set $lastPassage to passage()&gt;&gt;\
+    &lt;&lt;set $teruTeruBozu.hp to $teruTeruBozu.max_hp&gt;&gt;
+    &lt;&lt;set $enemyNames to [&#39;teruTeruBozu&#39;]&gt;&gt;\
+&lt;&lt;/link&gt;&gt;\
+
+
+[[大墓地外围]]</tw-passagedata><tw-passagedata pid="75" name="死海" tags="" position="1475,2175" size="100,100">[[大墓地外围]]</tw-passagedata><tw-passagedata pid="76" name="不死王座" tags="" position="1600,2300" size="100,100">[[大墓地外围]]</tw-passagedata><tw-passagedata pid="77" name="不死之王初见" tags="" position="850,2275" size="100,100">在墓碑的包围下，从泥土中探出半身的巨大骷髅。
 头顶皇冠，黑黝黝的眼窝中飘着两抹凶光。
 
 &lt;&lt;link &quot;🔴挑战不死者之王&quot; &quot;战斗画面&quot;&gt;&gt;\
