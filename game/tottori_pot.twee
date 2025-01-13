@@ -144,6 +144,8 @@ State.variables.oldManLetterRead = true
 
 [[逃跑->逃离不死者之王]]
 
+<<audio "big_grave" loop play>>\
+
 
 :: 不死王座 {"position":"1600,2300","size":"100,100"}
 [[大墓地外围]]
@@ -1806,7 +1808,7 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
     }]}
 <</script>>
 <<audio "big_prison" stop>>
-<!--<<cacheaudio "big_prison" "mp3|https://zhuobinggang.github.io/game/audio/in_big_prison.mp3">>-->
+<<cacheaudio "big_grave" "mp3|https://zhuobinggang.github.io/game/audio/in_big_grave.mp3">>
 <</silently>>
 
 
