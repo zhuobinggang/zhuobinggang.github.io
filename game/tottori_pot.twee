@@ -148,6 +148,9 @@ State.variables.oldManLetterRead = true
 
 
 :: 不死王座 {"position":"1600,2300","size":"100,100"}
+=不死王座=
+
+
 [[大墓地外围]]
 
 
@@ -173,7 +176,7 @@ State.variables.oldManLetterRead = true
 "我会帮你击败不死者之王，但是你需要准备好一些必要的东西。"卢恩说。
 
 [[击败不死之王的提示]]
-[[必要的东西]]
+🟠[[必要的东西]]
 [[返回->大墓地外围]]
 
 
@@ -212,7 +215,7 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 <</link>>\
 
 <<if random(100) < 30>>
-空中飘荡着一个淡蓝色的，火焰一样的存在。
+🟠空中飘荡着一团淡蓝色的，火焰一样的存在。
 <<link "发起攻击" "战斗画面">>
 	<<set $lastPassage to passage()>>\
     <<set $soulClumps.hp to $soulClumps.max_hp>>
@@ -854,7 +857,7 @@ if(hasSlimeDrop){
 环顾四周，眼中所见是绵延不绝的墓碑的海洋。
 
 抬头，看不见天空。
-种种迹象表明自己身处洞穴内部。
+种种迹象表明身处洞穴内部。
 但是这洞穴未免又太过巨大，目力所及之处见不到墙壁，而只能看见穹顶。
 爬满穹顶的发光植物为整个空间提供了微弱，如同阴雨天气一般的照明。
 
@@ -1218,6 +1221,31 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 
 
 :: 死海 {"position":"1475,2175","size":"100,100"}
+=死海=
+
+一块巨大的洼地，灌满了黑色的浓稠泥浆，咕嘟咕嘟地冒着泡。
+随处可见不知名生物的骸骨。
+
+靠近岸边的地方，停靠着一艘搁浅大船——的残骸。
+船骸旁边，一些人形的东西在没过膝盖的泥浆中缓步行走，看起来只是在无目的地徘徊
+仔细望去，那是身上披着破烂布片的骷髅，有些身上还残留着腐肉。
+<<link "发起攻击" "战斗画面">>
+	<<set $lastPassage to passage()>>\
+    <<set $silverIodideOozingOne.hp to $silverIodideOozingOne.max_hp>>
+    <<set $enemyNames to ['silverIodideOozingOne']>>\
+<</link>>\
+
+乌鸦似的生物在岸边的枯萎大树上大量聚集，却一声不响。
+
+<<if random(100) < 30>>
+🟠空中飘荡着一团淡蓝色的，火焰一样的存在。
+<<link "发起攻击" "战斗画面">>
+	<<set $lastPassage to passage()>>\
+    <<set $soulClumps.hp to $soulClumps.max_hp>>
+    <<set $enemyNames to ['soulClumps']>>\
+<</link>>\
+<</if>>
+
 [[大墓地外围]]
 
 
@@ -2196,6 +2224,14 @@ G.karl = {
     <<set $enemyNames to ['teruTeruBozu']>>\
 <</link>>\
 
+<<if random(100) < 30>>
+🟠空中飘荡着一团淡蓝色的，火焰一样的存在。
+<<link "发起攻击" "战斗画面">>
+	<<set $lastPassage to passage()>>\
+    <<set $soulClumps.hp to $soulClumps.max_hp>>
+    <<set $enemyNames to ['soulClumps']>>\
+<</link>>\
+<</if>>
 
 [[大墓地外围]]
 
