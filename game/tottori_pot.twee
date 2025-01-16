@@ -138,7 +138,7 @@ State.variables.oldManLetterRead = true
 
 <<link "🔴挑战不死者之王" "战斗画面">>\
 	<<set $undeadKing.hp to $undeadKing.max_hp>>\
-	<<set $lastPassage to "大墓地外围">>\
+	<<set $lastPassage to "破土而出">>\
     <<set $enemyNames to ['undeadKing']>>\
 <</link>>
 
@@ -861,9 +861,9 @@ if(hasSlimeDrop){
 但是这洞穴未免又太过巨大，目力所及之处见不到墙壁，而只能看见穹顶。
 爬满穹顶的发光植物为整个空间提供了微弱，如同阴雨天气一般的照明。
 
-<<if not $talkedToRune>>
+<<if not $talkedToRune>>\
 [[身后传来脚步声]]
-<<else>>
+<<else>>\
 [[与卢恩交谈]]
 前往东边的[[低矮墓地]]
 前往南边的[[风暴山丘]]
@@ -888,21 +888,21 @@ if(hasSlimeDrop){
 :: 守墓人 {"position":"975,2150","size":"100,100"}
 “那是守墓人，”兜帽说，“地下世界的引路人。”
 
-守墓人将十字架用右手托住，高高举起，展示出投掷的姿态。
+眼看着守墓人将十字架用右手托住，高高举起，展示出投掷的姿态。
 当意识到他要做什么的时候——糟糕了，你不禁这样想——已经躲不掉了。
+
 “你会找到真相的，”兜帽说。
 然后你感到身体腾空，兜帽用全身的力气把你撞开。
-破空之声传来，强劲的气流掀起你的额发。
+破空之声传来，感受到强劲的气流。
 咚的一声，碗口粗的木头把兜帽的胸脯刺穿，倾斜着把她钉在黑色柔软的土地上。
 大量的红色液体从她的胸口，还有嘴角汩汩流出。
+
 啊，没救了，你想。
 还没来得及发出感慨，守墓人便朝你走了过来，伴随着沉重的脚步声，你挣扎着爬起，却被他一脚踢飞。
 内脏大量破损——致命伤。
 但是没关系，<span class="orange">只要重新来过就好了</span>，于是你又站了起来。
 可是还没等你站起，你便感到失重——守墓人用巨手将你抓起，狠狠地往地面拍去。
 这一击就没有那么好受了，你的五脏六腑和脑浆喷洒了一地。
-……
-…
 
 [[……->第四章]]
 
@@ -941,20 +941,21 @@ if(hasSlimeDrop){
 <<silently>>
 <<script>>
 let G = State.variables;
-G.soulsEnough = checkHavingItem(G.inventory.items, '等待回收的灵魂', 100); 
-G.silverIodidePowderEnough = checkHavingItem(G.inventory.items, '碘化银粉末', 100);
-G.airHumidifierEnough = checkHavingItem(G.inventory.items, '空气加湿器', 1); G.cannonEnough = checkHavingItem(G.inventory.items, '高射炮', 1); 
-G.cannonBallEnough = checkHavingItem(G.inventory.items, '加农炮弹', 10); 
-G.taskMakeRainsComplete = G.soulsEnough && G.silverIodidePowderEnough && G.airHumidifierEnough && G.cannonEnough && G.cannonBallEnough;
+G.soulsCount = getItem(G.inventory.items, '等待回收的灵魂')?.count || 0;
+G.silverIodideCount = getItem(G.inventory.items, '碘化银粉末')?.count || 0;
+G.airHumidifierCount = getItem(G.inventory.items, '空气加湿器')?.count || 0; 
+G.cannonCount = getItem(G.inventory.items, '高射炮')?.count || 0; 
+G.cannonBallCount = getItem(G.inventory.items, '加农炮弹')?.count || 0; 
+G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodidePowderCount >= 100 && G.airHumidifierCount >= 1 && G.cannonCount >= 1 && G.cannonBallCount >= 10;
 <</script>>
 <</silently>>\
 卢恩列出的物品清单如下：
 
-* 等待回收的灵魂 x100 <<print (($soulsEnough) ? '✅' : '❌');>>
-* 空气加湿器 x 1 <<print (($airHumidifierEnough) ? '✅' : '❌');>>
-* 碘化银粉末 x 100 <<print (($silverIodidePowderEnough) ? '✅' : '❌');>>
-* 高射炮 x 1 <<print (($cannonEnough) ? '✅' : '❌');>>
-* 炮弹 x 10 <<print (($cannonBallEnough) ? '✅' : '❌');>>
+* 等待回收的灵魂 ($soulsCount/100) <<print (($soulsCount >= 100) ? '✅' : '❌');>>
+* 空气加湿器 ($airHumidifierCount/1) <<print (($airHumidifierCount >= 1) ? '✅' : '❌');>>
+* 碘化银粉末 ($silverIodideCount/100) <<print (($silverIodideCount >= 100) ? '✅' : '❌');>>
+* 高射炮 ($cannonCount/1) <<print (($cannonCount >= 1) ? '✅' : '❌');>>
+* 炮弹 ($cannonBallCount/10) <<print (($cannonBallCount >= 10) ? '✅' : '❌');>>
 
 <<if not $taskMakeRainsComplete>>
 “准备好材料再来找我，”卢恩说。
@@ -969,11 +970,12 @@ G.taskMakeRainsComplete = G.soulsEnough && G.silverIodidePowderEnough && G.airHu
 
 :: 怎样击败不死者之王？ {"position":"1300,2675","size":"100,100"}
 “怎样才能击败不死者之王？”$me.name问。
-“要想知道怎么做，首先要理解为什么做不到，”卢恩说，“那我问你，为什么你无法击败不死者之王？”
+“要想知道怎么做，首先要理解为什么做不到，”卢恩说，“为什么你无法击败不死者之王？”
 
 答案显而易见。
 “因为它会复活。”$me.name说。
-“没错，”卢恩说，“那为什么它能做到这一点？”
+
+“没错，名字不会骗人，不死者之王会复活，”卢恩说，“可是，为什么它能复活？”
 ”就是因为不知道，我才会问你。“
 
 啧啧啧，卢恩摇摇头，说，”这可不行啊，和蠢人打交道不符合我的美学，毕竟我可是天才学者。“
@@ -1223,19 +1225,19 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 :: 死海 {"position":"1475,2175","size":"100,100"}
 =死海=
 
-一块巨大的洼地，灌满了黑色的浓稠泥浆，咕嘟咕嘟地冒着泡。
-随处可见不知名生物的骸骨。
+谷底是一片沼泽，灌满了黑色的浓稠泥浆，散发恶臭，咕嘟咕嘟地冒着泡。
+到处散落着不知名生物的骸骨。
 
 靠近岸边的地方，停靠着一艘搁浅大船——的残骸。
-船骸旁边，一些人形的东西在没过膝盖的泥浆中缓步行走，看起来只是在无目的地徘徊
-仔细望去，那是身上披着破烂布片的骷髅，有些身上还残留着腐肉。
+船骸旁边，一些人形的东西在没过膝盖的泥浆中缓步行走，看起来只是在无目的地徘徊。
+仔细望去，那是一些身上披着破布的骷髅，有些身上还残留着腐肉。
 <<link "发起攻击" "战斗画面">>
-	<<set $lastPassage to passage()>>\
-    <<set $silverIodideOozingOne.hp to $silverIodideOozingOne.max_hp>>
-    <<set $enemyNames to ['silverIodideOozingOne']>>\
-<</link>>\
+	<<set $lastPassage to passage()>>
+    <<set $sailor.hp to $sailor.max_hp>>
+    <<set $enemyNames to ['sailor']>>
+<</link>>
 
-乌鸦似的生物在岸边的枯萎大树上大量聚集，却一声不响。
+乌鸦似的生物在岸边张牙舞爪的黑色枯树上大量聚集，一声不响。
 
 <<if random(100) < 30>>
 🟠空中飘荡着一团淡蓝色的，火焰一样的存在。
@@ -1445,6 +1447,25 @@ enemies.forEach(enemy => {
 [[老头的房间]]
 
 
+:: 破土而出 {"position":"1300,2175","size":"100,100"}
+黑暗，无尽的黑暗。令人窒息，同时又令人怀念的黑暗。
+然后是泥土的腥味。
+
+我在哪里？我是谁？
+对了，我叫<span class="orange">$me.name</span>来着。
+能动吗？
+试着伸出手，阻力，被什么柔软的东西挡住了，但是向上的阻力比较小，于是便向上抬手。
+然后我的右手便自由了，从那上方的开口，光线便涌了进来，照的我的眼睛有些痛。
+那应该是幻痛，因为我只有两对玻璃眼球——是兜帽给我的。
+想起她死去的模样。
+……
+我的眼睛——不是幻痛，我的眼睛不知何时回来了。
+
+我用力扒拉着泥土，努力让自己坐起身来，黑色的泥土哗啦哗啦地向身体两边落去，泥土里边混着一些虫子，不知道是蚯蚓还是尸蛆。
+
+[[站起身来->大墓地外围]]
+
+
 :: 祭坛 {"position":"1075,775","size":"100,100"}
 (游戏进度暂时只到这里)
 
@@ -1495,15 +1516,16 @@ $++&X&&&x::.::::.:::;::::..:...:.::.
 
 :: 离开的方法 {"position":"1300,2550","size":"100,100"}
 “你知道怎么离开这里吗？”$me.name说。
+“很难。”
 “大坟墓的边界被高浓度的瘴气所包围，”卢恩说，“想出去只能清除瘴气的源头。”
 “瘴气的源头？”
-“你应该已经见过了，”卢恩说，“就是不死者之王啊。”
+“你应该已经见过了，”卢恩说，“那个巨大的骷髅。”
 
 $me.name沉思片刻，说，“你说你在这里研究很久了，那你是怎么出去的？”
 卢恩说，“好问题，答案是我从来没有出去过。然后你肯定会问这怎么可能，然后我会告诉你，我的本体不在这里。”
-本体不在这里……像是哥布林巢穴的时候那样吗？
-“你这个身体看起来可不像是幻影。”
-“副本也有很多种存在形式，”卢恩说，“不过，拥有物质存在正是这个副本的特殊之处。这是只有在大坟墓内才有可能完成的副本形式。”
+“本体不在这里……像是哥布林巢穴的时候那样吗？“$me.name说，”你这个身体看起来可不像是幻影。”
+
+“非本体——或者说副本——也有很多种存在形式，”卢恩说，“不过，拥有物质存在正是这个副本的特殊之处。这是只有在大坟墓内才有可能完成的副本形式。”
 “只有在大坟墓内才有可能？这是什么意思？”
 
 卢恩用手指了指地下，说，“大坟墓的泥土，是构成肉体的原料。我称之为<span class="orange">秽土</span>。”
@@ -1820,8 +1842,27 @@ G.teruTeruBozu = {name: '晴天娃娃', desc: '一种幽灵存在。掉落空气
     	item: G.airHumidifier, 
         chance: 0.1
     }]}
-G.sailor = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%。'}
-G.captain = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。'}
+G.sailor = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%。', exp: 400,
+    max_hp: 200,
+    hp: 200, 
+    power: 20, 
+    resistance: 20,     
+	drops: [{
+    	item: G.cannonball, 
+        chance: 0.5,
+		count: 2
+    }]}
+G.captain = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。', 
+	exp: 600,
+    max_hp: 600,
+    hp: 600, 
+    power: 25, 
+    resistance: 25,     
+	drops: [{
+    	item: G.cannon, 
+        chance: 1,
+		count: 1
+    }]}
 G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回收的灵魂。', exp: 400,
     max_hp: 800,
     hp: 800, 
@@ -1985,10 +2026,12 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
 
 
 :: 身后传来脚步声 {"position":"1300,2425","size":"100,100"}
-$me.name转过头去，看见的是一副陌生面孔。
-穿着一身白袍的男人扬起手，说，”还记得我吗？“
-这声音唤起了你的回忆——
-在某个阴暗逼仄的地方听过这样的声音——
+$me.name转过头去，看见的是一副陌生面孔——
+应该是这样没错，可是一身白色长袍的男人熟络地扬起手，说，”还记得我吗？“
+
+这声音唤起了$me.name的回忆——
+总记得在某个阴暗逼仄的地方听过这样的声音——
+
 ”怪人卢恩？“
 ”是天才学者卢恩！“
 
@@ -2214,10 +2257,10 @@ G.karl = {
 :: 风暴山丘 {"position":"1600,2175","size":"100,100"}
 =风暴山丘=
 
-乌云笼罩，狂风大作的山丘。
-半空中漂浮着某种帐篷一样的东西，在狂风中呼啦作响。
-帐篷的顶部像是用墨水涂鸦一样画着夸张的笑脸，看起来有些瘆人。
+不知何故常年乌云笼罩，狂风大作的山丘。
+半空中漂浮着一些破布一样的东西，在狂风中呼啦作响。
 狂风的呼啸之间夹杂着不知道哪里传来的孩童的嬉笑声。
+仔细看的话会发现，那些东西比起破布更像是娃娃，娃娃的头部像是用墨水涂鸦一样画着夸张的笑脸，看起来有些瘆人。
 <<link "发起攻击" "战斗画面">>
 	<<set $lastPassage to passage()>>\
     <<set $teruTeruBozu.hp to $teruTeruBozu.max_hp>>
