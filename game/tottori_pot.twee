@@ -961,6 +961,7 @@ G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodidePowderCount >= 10
 “准备好材料再来找我，”卢恩说。
 <<else>>
 “看来你已经准备好了，”卢恩说。
+🟠[[获取对付不死之王的道具]]
 <</if>>
 
 [[离开->大墓地外围]]
@@ -1120,6 +1121,24 @@ if (!isGroupAlive(enemies)){
 <<link "返回" $lastPassage>><</link>>
 
 
+:: 接受亚哈船长的招待 {"position":"1475,2025","size":"100,100"}
+<<script>>window.G = State.variables;<</script>>\
+<<script>>G.haveTicket = checkHavingItem(G.inventory.items, '亚哈船长的招待券');<</script>>\
+<<if not $haveTicket>><<goto '死海'>><</if>>\
+=亚哈船长的招待=
+
+头戴船长帽的独眼骷髅拄着一根比人还高的不知道什么东西，
+静静等待着你做出选择。
+
+<<link "发起攻击" "战斗画面">>
+	<<set $lastPassage to passage()>>
+    <<set $captain.hp to $captain.max_hp>>
+    <<set $enemyNames to ['captain']>>
+    <<script>>reduceItemCount(G.inventory.items, '亚哈船长的招待券');<</script>>
+<</link>>
+[[死海]]
+
+
 :: 杀死剜眼者后剧情 {"position":"1125,1525","size":"100,100"}
 杀死剜眼者给你一种从未有过的奇妙感觉，就像是找回了丢失掉很久的宝物那样的感觉。
 但是你没能沉浸在这余韵中很久。
@@ -1223,12 +1242,16 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 
 
 :: 死海 {"position":"1475,2175","size":"100,100"}
+<<script>>window.G = State.variables;<</script>>\
 =死海=
 
 谷底是一片沼泽，灌满了黑色的浓稠泥浆，散发恶臭，咕嘟咕嘟地冒着泡。
 到处散落着不知名生物的骸骨。
 
 靠近岸边的地方，停靠着一艘搁浅大船——的残骸。
+<<script>>G.haveTicket = checkHavingItem(G.inventory.items, '亚哈船长的招待券');<</script>>\
+<<if $haveTicket>>🟠[[接受亚哈船长的招待]]<</if>>
+
 船骸旁边，一些人形的东西在没过膝盖的泥浆中缓步行走，看起来只是在无目的地徘徊。
 仔细望去，那是一些身上披着破布的骷髅，有些身上还残留着腐肉。
 <<link "发起攻击" "战斗画面">>
@@ -1329,6 +1352,7 @@ enemies.forEach(enemy => {
 
 
 :: 物品栏 {"position":"875,100","size":"100,100"}
+<<script>>window.G = State.variables;<</script>>\
 <<return "返回">>
 
 <<for _i, _item range  $inventory.items>>
@@ -1453,15 +1477,16 @@ enemies.forEach(enemy => {
 
 我在哪里？我是谁？
 对了，我叫<span class="orange">$me.name</span>来着。
+
 能动吗？
-试着伸出手，阻力，被什么柔软的东西挡住了，但是向上的阻力比较小，于是便向上抬手。
+试着伸出手，感受到阻力，被什么柔软的东西挡住了，但是向上的阻力比较小，于是便向上抬手。
 然后我的右手便自由了，从那上方的开口，光线便涌了进来，照的我的眼睛有些痛。
 那应该是幻痛，因为我只有两对玻璃眼球——是兜帽给我的。
 想起她死去的模样。
 ……
 我的眼睛——不是幻痛，我的眼睛不知何时回来了。
 
-我用力扒拉着泥土，努力让自己坐起身来，黑色的泥土哗啦哗啦地向身体两边落去，泥土里边混着一些虫子，不知道是蚯蚓还是尸蛆。
+我用力扒拉着泥土，努力让自己坐起身来，黑色的泥土哗啦哗啦地向身体两边落去，泥土里边混着一些虫子，不知道是蚯蚓还是蛆。
 
 [[站起身来->大墓地外围]]
 
@@ -1806,6 +1831,33 @@ G.silverIodidePowder = {name: '碘化银粉末', desc: '黄色粉末。碘化银
 G.airHumidifier = {name: '空气加湿器', desc: '往空气中释放水汽。'}
 G.cannonball = {name: '加农炮弹', desc: '海盗船必备。'}
 G.cannon = {name: '高射炮', desc: '阳物崇拜。'}
+// 2025.1.18 新增物品
+G.ticketOfCaptainUseCb = function(){
+	// BUG: 似乎在物品列表里调用这个会导致。大概原因是因为G是之前的G。打算直接呈现在游戏里算了。
+	G.captain.hp = G.captain.max_hp;
+    G.enemyNames = ['captain']
+	G.lastPassage = getPrevPassageName()
+	SugarCube.Engine.play("战斗画面")
+}
+G.ticketOfCaptain = {name: '亚哈船长的招待券', desc: '进入船骸的门票。使用后消失。'} // TODO: 实现使用效果
+// 鲸叉
+G.harpoonDamageCal = function (me, enemy, fightHistory = []) {
+	let damage = window.calculateDamage(me.power, enemy.resistance);
+    // 30% 几率造成额外 50%生命值的伤害
+	let extraDamage = 0;
+	let chance = Math.random() * 100;
+    if (chance < 30){
+		extraDamage = Math.floor(enemy.hp / 3);
+		fightHistory.push('<span class="purple">鲸叉</span>击中了要害，造成了额外<span class="purple">' + extraDamage + '</span>点伤害!');
+	}
+    // 返回计算后的伤害值
+    return damage + extraDamage;
+}
+G.useHarpoon = () => {
+	window.G.me.legacy = G.harpoon;
+	window.G.showDialog('装备遗物', '成功装备了' + G.harpoon.name + '!');
+}
+G.harpoon = {name: '鲸叉', desc: '与强于自己百倍的怪物战斗的武器，船长存在的证明。30%几率造成50%当前生命值的伤害。', damageCalculator: G.harpoonDamageCal, useCallback: G.useHarpoon};
 // 2025.1.7 新增怪物
 // 遗物：幽灵实体
 G.ghostBeingDodgeRate = 0.5;
@@ -1851,17 +1903,25 @@ G.sailor = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%
     	item: G.cannonball, 
         chance: 0.5,
 		count: 2
+    },{
+    	item: G.ticketOfCaptain, 
+        chance: 1.0,
+		count: 1
     }]}
 G.captain = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。', 
 	exp: 600,
     max_hp: 600,
     hp: 600, 
     power: 25, 
-    resistance: 25,     
+    resistance: 25, 
+	legacy: G.harpoon,
 	drops: [{
     	item: G.cannon, 
         chance: 1,
 		count: 1
+    },{
+    	item: G.harpoon, 
+        chance: 1
     }]}
 G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回收的灵魂。', exp: 400,
     max_hp: 800,
@@ -1935,6 +1995,10 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
 “我？你可以叫我兜帽。跟我来，我们去夺回你失去的东西。”
 
 [[跟上兜帽->第三巡逻点]]
+
+
+:: 获取对付不死之王的道具 {"position":"1050,2800","size":"100,100"}
+
 
 
 :: 行刑室 {"position":"850,1525","size":"100,100"}
@@ -2304,11 +2368,11 @@ function loopCall(callbackName, group1, group2, callbackFuncDict, fightHistory =
   	
 }
 
+window.calculateDamage = (attackerPower, defenderResistance) => Math.max(attackerPower - defenderResistance, 1);
+
 window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1': {}, 'g2': {}}) {
   	window.temp2 = callbackFuncDict;
-
-  
-    const calculateDamage = (attackerPower, defenderResistance) => Math.max(attackerPower - defenderResistance, 1);
+    let calculateDamage = window.calculateDamage;
     let fightHistory = [];
     let round = 1;
     
@@ -2629,6 +2693,11 @@ window.mergeBattleLogs = function mergeBattleLogs(battleLogs) {
 
   return result;
 }
+
+window.getPrevPassageName = () => {
+  let dd = SugarCube.State.history;
+  return dd.length > 1 ? dd[dd.length - 2].title : '';
+};
 
 :: StoryStylesheet [stylesheet]
 .danger{
