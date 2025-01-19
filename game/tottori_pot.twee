@@ -149,9 +149,33 @@ State.variables.oldManLetterRead = true
 
 :: 不死王座 {"position":"1600,2300","size":"100,100"}
 =不死王座=
+<<silently>>\
+<<script>>
+	let G = State.variables;
+	G.purifierCount = getItem(G.inventory.items, '秽土净化者')?.count || 0;
+<</script>>
+<</silently>>\
 
+大墓地的中央，愈靠近，四周愈显得黑暗，
+似乎光也在逃离这个地方。
 
-[[大墓地外围]]
+你已经不是第一次来到这里了。
+
+<<if $undeadKing.hp < 1>>
+不死者之王已经死了！但是接下来的故事我还没做好！
+<<else>>
+在墓碑的包围下，从泥土中探出半身的巨大骷髅。
+头顶皇冠，黑黝黝的眼窝中飘着两抹凶光。
+<<link "🔴挑战不死者之王" "战斗画面">>\
+	<<set $undeadKing.hp to $undeadKing.max_hp>>\
+	<<set $lastPassage to passage()>>\
+    <<set $enemyNames to ['undeadKing']>>\
+<</link>>\
+<</if>>\
+
+<<if $purifierCount > 0>>🟠[[使用秽土净化者]]<</if>>
+
+[[逃跑->大墓地外围]]
 
 
 :: 不祥的红色灵魂 {"position":"975,1525","size":"100,100"}
@@ -175,9 +199,11 @@ State.variables.oldManLetterRead = true
 :: 与卢恩交谈 {"position":"1175,2425","size":"100,100"}
 "我会帮你击败不死者之王，但是你需要准备好一些必要的东西。"卢恩说。
 
-[[击败不死之王的提示]]
 🟠[[必要的东西]]
+[[击败不死之王的提示]]
 [[返回->大墓地外围]]
+
+<<if $gotDirtPurifier>><<goto "卢恩的催促">><</if>>
 
 
 :: 交出5个史莱姆粘液 {"position":"425,375","size":"100,100"}
@@ -289,6 +315,28 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 话音戛然而止，两条腿凭空消失，只留下了和往常一样的岩石。
 
 [[片刻之后]]
+
+
+:: 使用秽土净化者 {"position":"1600,2425","size":"100,100"}
+$me.name撑开秽土净化者——
+什么都没有改变。
+
+但是就这样静静等待，两三分钟后，雨滴滴答答地落了下来。
+
+雨？
+比起雨来，更加轻飘飘的存在，就像是发光的雪花。
+那是灵魂的碎片，不一会儿就覆盖了这一片土地。
+
+缠绕不死之王的瘴气变弱了。
+
+[[返回->不死王座]]
+<<silently>>\
+<<script>>
+	let G = State.variables;
+	reduceItemCount(G.inventory.items, '秽土净化者', 1);
+    G.undeadKing.legacy = null;
+<</script>>
+<</silently>>\
 
 
 :: 关于索尔坦 {"position":"1125,1650","size":"100,100"}
@@ -586,6 +634,29 @@ window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一�
 [[睁开眼睛->行刑室]]
 
 
+:: 卢恩的催促 {"position":"1175,2550","size":"100,100"}
+”怎么了？“卢恩看着$me.name说，”害怕去战斗吗？“
+”怎么可能，“$me.name说。
+”如果你不知道怎么用秽土净化者，去到不死王座你就知道了。“卢恩说。
+
+[[离开->大墓地外围]]
+
+
+:: 去哪里找空气加湿器 {"position":"1050,2550","size":"100,100"}
+”我研究室就有一台呢，要不要拿给你？”卢恩说。
+“好的谢谢。”$me.name说。
+
+“想得美！”卢恩说，“给你点提示吧，我的研究室在风暴山丘附近，那边的破布怪物会有大概10%的几率掉空气加湿器。”
+
+[[返回->必要的东西]]
+
+
+:: 去哪里找高射炮 {"position":"1050,2675","size":"100,100"}
+“我听说死海旁边那艘大船里面有，你可以进去找找看，”卢恩说。
+
+[[必要的东西]]
+
+
 :: 向小丑搭话 {"position":"450,775","size":"100,100"}
 嘻嘻……嘻嘻嘻
 
@@ -870,6 +941,9 @@ if(hasSlimeDrop){
 前往西边的[[死海]]
 或者前往北边的[[不死王座]]
 <</if>>
+<<if $testing>>
+[[测试用代码]]
+<</if>>
 
 
 :: 大监狱304室 {"position":"600,1400","size":"100,100"}
@@ -946,7 +1020,7 @@ G.silverIodideCount = getItem(G.inventory.items, '碘化银粉末')?.count || 0;
 G.airHumidifierCount = getItem(G.inventory.items, '空气加湿器')?.count || 0; 
 G.cannonCount = getItem(G.inventory.items, '高射炮')?.count || 0; 
 G.cannonBallCount = getItem(G.inventory.items, '加农炮弹')?.count || 0; 
-G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodidePowderCount >= 100 && G.airHumidifierCount >= 1 && G.cannonCount >= 1 && G.cannonBallCount >= 10;
+G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodideCount >= 100 && G.airHumidifierCount >= 1 && G.cannonCount >= 1 && G.cannonBallCount >= 10;
 <</script>>
 <</silently>>\
 卢恩列出的物品清单如下：
@@ -964,6 +1038,8 @@ G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodidePowderCount >= 10
 🟠[[获取对付不死之王的道具]]
 <</if>>
 
+[[去哪里找空气加湿器]]
+[[去哪里找高射炮]]
 [[离开->大墓地外围]]
 
 
@@ -1122,8 +1198,10 @@ if (!isGroupAlive(enemies)){
 
 
 :: 接受亚哈船长的招待 {"position":"1475,2025","size":"100,100"}
-<<script>>window.G = State.variables;<</script>>\
-<<script>>G.haveTicket = checkHavingItem(G.inventory.items, '亚哈船长的招待券');<</script>>\
+<<script>>
+const G = State.variables;
+G.haveTicket = checkHavingItem(G.inventory.items, '亚哈船长的招待券');
+<</script>>
 <<if not $haveTicket>><<goto '死海'>><</if>>\
 =亚哈船长的招待=
 
@@ -1134,7 +1212,7 @@ if (!isGroupAlive(enemies)){
 	<<set $lastPassage to passage()>>
     <<set $captain.hp to $captain.max_hp>>
     <<set $enemyNames to ['captain']>>
-    <<script>>reduceItemCount(G.inventory.items, '亚哈船长的招待券');<</script>>
+    <<script>>reduceItemCount(State.variables.inventory.items, '亚哈船长的招待券', 1);<</script>>
 <</link>>
 [[死海]]
 
@@ -1245,7 +1323,9 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 <<script>>window.G = State.variables;<</script>>\
 =死海=
 
-谷底是一片沼泽，灌满了黑色的浓稠泥浆，散发恶臭，咕嘟咕嘟地冒着泡。
+风暴山丘旁边的谷地。
+底部是一片沼地，灌满了黑色的浓稠泥浆。
+散发恶臭，咕嘟咕嘟地冒着泡。
 到处散落着不知名生物的骸骨。
 
 靠近岸边的地方，停靠着一艘搁浅大船——的残骸。
@@ -1272,6 +1352,21 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 <</if>>
 
 [[大墓地外围]]
+
+
+:: 测试用代码 {"position":"1425,2425","size":"100,100"}
+测试！
+先帮你完成任务试试。
+
+[[大墓地外围]]
+<<script>>
+	let G = State.variables
+	addItem(G.inventory.items, G.airHumidifier, 2);
+	addItem(G.inventory.items, G.silverIodidePowder, 101);
+	addItem(G.inventory.items, G.soulWaitingRecycle, 101);
+	addItem(G.inventory.items, G.cannonball, 11);
+	addItem(G.inventory.items, G.cannon, 2);
+<</script>>
 
 
 :: 混乱的终幕 {"position":"1275,1650","size":"100,100"}
@@ -1355,12 +1450,13 @@ enemies.forEach(enemy => {
 <<script>>window.G = State.variables;<</script>>\
 <<return "返回">>
 
-<<for _i, _item range  $inventory.items>>
-	<<if _item.count > 0>>
+<<for _i, _item range  $inventory.items>>\
+	<<if _item.count > 0>>\
     	_item.name x _item.count <<if _item.useCallback>><<print '<<link "使用" "物品栏">><<set _temp to $globalUseCallback(' + _i + ')>><</link>>'>><</if>>
         _item.desc
-    <</if>>
-<</for>>
+        
+    <</if>>\
+<</for>>\
 
 <<return "返回">>
 
@@ -1800,6 +1896,7 @@ G.bloodedDagger = {name: '血迹斑斑的匕首', desc: '爱用的匕首。\n已
 let G = State.variables;
 //必要变量
 G.talkedToRune = false;
+G.gotDirtPurifier = false;
 //新增的物品与敌人
 G.dirtCurseCb = function (us, they, fightHistory = [], info = {}) {
 	let me = info.me;
@@ -1858,6 +1955,7 @@ G.useHarpoon = () => {
 	window.G.showDialog('装备遗物', '成功装备了' + G.harpoon.name + '!');
 }
 G.harpoon = {name: '鲸叉', desc: '与强于自己百倍的怪物战斗的武器，船长存在的证明。30%几率造成50%当前生命值的伤害。', damageCalculator: G.harpoonDamageCal, useCallback: G.useHarpoon};
+G.dirtPurifier = {name: '秽土净化者', desc: '卢恩出品。'}
 // 2025.1.7 新增怪物
 // 遗物：幽灵实体
 G.ghostBeingDodgeRate = 0.5;
@@ -1905,7 +2003,7 @@ G.sailor = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%
 		count: 2
     },{
     	item: G.ticketOfCaptain, 
-        chance: 1.0,
+        chance: 1,
 		count: 1
     }]}
 G.captain = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。', 
@@ -1998,7 +2096,32 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
 
 
 :: 获取对付不死之王的道具 {"position":"1050,2800","size":"100,100"}
+卢恩让$me.name在原地等候，一个人朝着位于风暴山丘附近的研究所去了。
+回来的时候，他手上拿了一个雨伞一样的东西。
 
+“我把它命名为秽土净化者，”卢恩说。
+$me.name将秽土净化者收入囊中。
+”到了不死王座之后再启动，“卢恩说，”然后击败不死者之王。“
+”那之后会发生什么事？“
+”你知道了又能怎么样呢？我们只能尽力做好自己能做的事情不是吗。“卢恩说，”即便世界毁灭，你也要打破这个状况不是吗？总不能永远留在这个不毛之地吧？“
+$me.name陷入了沉默。
+
+”走吧，去做你应该做的事情。“
+
+[[离开->大墓地外围]]
+<<silently>>\
+<<script>>
+	let G = State.variables
+	addItem(G.inventory.items, G.dirtPurifier);
+    G.gotDirtPurifier = true;
+    G.showDialog('获得物品', '获得了' + G.dirtPurifier.name + '!');
+	reduceItemCount(G.inventory.items, '等待回收的灵魂', 100);
+	reduceItemCount(G.inventory.items, '碘化银粉末', 100);
+	reduceItemCount(G.inventory.items, '空气加湿器', 1);
+	reduceItemCount(G.inventory.items, '高射炮', 1);
+	reduceItemCount(G.inventory.items, '加农炮弹', 10);
+<</script>>
+<</silently>>\
 
 
 :: 行刑室 {"position":"850,1525","size":"100,100"}
@@ -2368,11 +2491,11 @@ function loopCall(callbackName, group1, group2, callbackFuncDict, fightHistory =
   	
 }
 
-window.calculateDamage = (attackerPower, defenderResistance) => Math.max(attackerPower - defenderResistance, 1);
-
 window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1': {}, 'g2': {}}) {
   	window.temp2 = callbackFuncDict;
-    let calculateDamage = window.calculateDamage;
+
+  
+    const calculateDamage = (attackerPower, defenderResistance) => Math.max(attackerPower - defenderResistance, 1);
     let fightHistory = [];
     let round = 1;
     
@@ -2549,7 +2672,7 @@ window.getItem = function getItem(inventory, itemName) {
     return item || null;
 }
 
-window.reduceItemCount = function reduceItemCount(inventory, itemName, count) {
+window.reduceItemCount = function reduceItemCount(inventory, itemName, count = 1) {
     // 查找 inventory 中的物品
     let item = inventory.find(inventoryItem => inventoryItem.name === itemName);
     
