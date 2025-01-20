@@ -154,6 +154,9 @@ State.variables.oldManLetterRead = true
 	let G = State.variables;
 	G.purifierCount = getItem(G.inventory.items, '秽土净化者')?.count || 0;
 <</script>>
+<<if not $undeadKing.legacy and $karlTheReviver.hp > 0>>
+<<goto "卡尔无头骑士">>
+<</if>>
 <</silently>>\
 
 大墓地的中央，愈靠近，四周愈显得黑暗，
@@ -204,6 +207,18 @@ State.variables.oldManLetterRead = true
 [[返回->大墓地外围]]
 
 <<if $gotDirtPurifier>><<goto "卢恩的催促">><</if>>
+
+
+:: 之后的事情 {"position":"1050,2925","size":"100,100"}
+”到了不死王座之后再启动，“卢恩说。
+
+”击败不死之王之后……会发生什么事？“
+”你知道了又能怎么样呢？我们只能尽力做好自己能做的事情不是吗。“卢恩说，”即便世界毁灭，你也要打破这个状况不是吗？总不能永远留在这个不毛之地吧？“
+$me.name陷入了沉默。
+
+”走吧，去做你应该做的事情。“
+
+[[离开->大墓地外围]]
 
 
 :: 交出5个史莱姆粘液 {"position":"425,375","size":"100,100"}
@@ -321,22 +336,7 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 $me.name撑开秽土净化者——
 什么都没有改变。
 
-但是就这样静静等待，两三分钟后，雨滴滴答答地落了下来。
-
-雨？
-比起雨来，更加轻飘飘的存在，就像是发光的雪花。
-那是灵魂的碎片，不一会儿就覆盖了这一片土地。
-
-缠绕不死之王的瘴气变弱了。
-
-[[返回->不死王座]]
-<<silently>>\
-<<script>>
-	let G = State.variables;
-	reduceItemCount(G.inventory.items, '秽土净化者', 1);
-    G.undeadKing.legacy = null;
-<</script>>
-<</silently>>\
+[[静待片刻]]
 
 
 :: 关于索尔坦 {"position":"1125,1650","size":"100,100"}
@@ -360,28 +360,9 @@ $me.name撑开秽土净化者——
 ……
 复活，准确来说是躯体的无限再生。
 躯体——或者说肉体，跟灵魂异质的存在。
-他刚才说了什么来着？跟肉体有关的……
+<span class="orange">他刚才说了什么来着？跟肉体有关的</span>……
 
-于是，你终于醒悟过来，开口说，“秽土。复活的关键是秽土。”
-卢恩点点头，说，“没错，秽土。它们是没有灵魂的秽土。“
-”它们？“
-卢恩说，“你在外面的世界也见过僵尸吧，它们本质上和不死之王是一样的。”
-
-”可是僵尸被打倒之后不会复活。“
-”那是因为大坟墓以外的地方秽土不足，“卢恩说，”而且也不是每个僵尸都有死者之王那么强的恢复力。不死之王是特别的。只要击败他……“
-”只要击败他？“
-“没什么，只是自言自语罢了，”卢恩换了个话题，“我就直接告诉你答案吧，要阻止它复活，需要大量的灵魂。将灵魂溶液洒满死者之王周遭的土地，就能够将其净化，而复活自然也会被阻止。”
-“……听起来不是那么轻松的工作。”
-“我会帮你，”卢恩说，“不过你得给我准备好一些必要的东西。”
-
-[[必要的东西]]
-
-<<silently>>
-<<script>>
-let G = State.variables;
-G.talkedToRune = true;
-<</script>>
-<</silently>>
+[[对了，是那个……]]
 
 
 :: 击败卡尔剧情 {"position":"975,1900","size":"100,100"}
@@ -397,6 +378,26 @@ G.talkedToRune = true;
 let G = State.variables;
 G.karl.hp = G.karl.max_hp;
 <</script>>
+
+
+:: 击败卡尔复生者 {"position":"1975,2550","size":"100,100"}
+结束了。
+
+卡尔的头被$me.name砍下。
+
+即便他有再强的恢复力也没有用。
+没有思考能力的肉体，只是一具行尸走肉罢了。
+
+[[对付不死者之王->卡尔站了起来]]
+
+
+:: 击败卡尔无头骑士 {"position":"2100,2300","size":"100,100"}
+卡尔的身躯已经千疮百孔。
+只剩下一个头，再怎样都已经无力回天。
+
+在临死之前，卡尔开口了。
+
+[[真相]]
 
 
 :: 初始之地 {"position":"700,100","size":"100,100"}
@@ -634,12 +635,48 @@ window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一�
 [[睁开眼睛->行刑室]]
 
 
+:: 卡尔无头骑士 {"position":"1725,2300","size":"100,100"}
+在视线的角落，一个黑影窜了出来，速度非常之快， 令人来不及思考。
+必须立刻做出行动——[[挥动武器]]
+
+
+:: 卡尔站了起来 {"position":"1975,2425","size":"100,100"}
+“别以为这样就结束了。”
+卡尔的声音从背后传来。
+
+难以置信。
+$me.name回过头去。
+
+无头身躯把卡尔的头从地上捡起，抱在腰间。
+而声音正是由那颗头颅发出。
+
+“你真是怪物，”$me.name说。
+
+“怪物？”卡尔嗤笑道，“这话轮得到你来说吗？<span class="orange">你不正是这样一路走过来的吗</span>？”
+
+“[[这不是我期盼的]]”
+
+
 :: 卢恩的催促 {"position":"1175,2550","size":"100,100"}
 ”怎么了？“卢恩看着$me.name说，”害怕去战斗吗？“
 ”怎么可能，“$me.name说。
 ”如果你不知道怎么用秽土净化者，去到不死王座你就知道了。“卢恩说。
 
 [[离开->大墓地外围]]
+
+
+:: 卢恩的真相 {"position":"2225,2550","size":"100,100"}
+”他想说的无非是，<span class="orange">如果不死之王死了，瘴气消失，王国的军队就能进来搜集秽土，制造不死的士兵，征服世界</span>，“卢恩说。
+
+”也就是说，勇者最初的目的，以及最终的目的，都是为了这个，并不是什么拯救世界之类的漂亮话，“卢恩说，”这，就是真相。“
+
+”勇者……就是个笑话。“$me.name说。
+
+”可是，<span class="orange">这不是不杀死不死之王的理由</span>，“卢恩说，”我说过了，我会告诉你更多。“
+
+”什么意思？“
+
+[[继续->杀死不死之王的理由]]
 
 
 :: 去哪里找空气加湿器 {"position":"1050,2550","size":"100,100"}
@@ -963,7 +1000,7 @@ if(hasSlimeDrop){
 “那是守墓人，”兜帽说，“地下世界的引路人。”
 
 眼看着守墓人将十字架用右手托住，高高举起，展示出投掷的姿态。
-当意识到他要做什么的时候——糟糕了，你不禁这样想——已经躲不掉了。
+当意识到它要做什么的时候——糟糕了，你不禁这样想——已经躲不掉了。
 
 “你会找到真相的，”兜帽说。
 然后你感到身体腾空，兜帽用全身的力气把你撞开。
@@ -979,6 +1016,59 @@ if(hasSlimeDrop){
 这一击就没有那么好受了，你的五脏六腑和脑浆喷洒了一地。
 
 [[……->第四章]]
+
+
+:: 对了，他是…… {"position":"1425,2550","size":"100,100"}
+”怪人卢恩？“
+”是天才学者卢恩！“
+对，在哥布林巢穴见过他来着。
+
+”你怎么会在这里？“
+”我已经在这里研究很久了，在认识你之前。“
+”这究竟是什么地方？“
+
+”正如你所见，”卢恩说，“人们把它称为<span class="orange">大坟墓</span>。”
+
+你沉默片刻，认为当务之急是从这个不详的地方离开。
+[[向卢恩询问离开的方法->离开的方法]]
+
+
+:: 对了，是那个…… {"position":"1175,2925","size":"100,100"}
+你幡然醒悟：“秽土。复活的关键是秽土。”
+卢恩点点头，说，“没错，秽土。它们是没有灵魂的秽土。“
+”它们？“
+卢恩说，“你在外面的世界也见过僵尸吧，它们本质上和不死之王是一样的。”
+
+”可是僵尸被打倒之后不会复活。“
+”那是因为大坟墓以外的地方秽土不足，“卢恩说，”而且也不是每个僵尸都有死者之王那么强的恢复力。不死之王是特别的。只要击败他……“
+”只要击败他？“
+“没什么，只是自言自语罢了，”卢恩换了个话题，“我就直接告诉你答案吧，要阻止它复活，需要大量的灵魂。将灵魂溶液洒满死者之王周遭的土地，就能够将其净化，而复活自然也会被阻止。”
+“……听起来不是那么轻松的工作。”
+“我会帮你，”卢恩说，“不过你得给我准备好一些必要的东西。”
+
+[[必要的东西]]
+
+<<silently>>
+<<script>>
+let G = State.variables;
+G.talkedToRune = true;
+<</script>>
+<</silently>>
+
+
+:: 对峙卢恩 {"position":"2100,2675","size":"100,100"}
+”卢恩……你做了什么。“
+
+来者是卢恩。
+他掷出匕首，杀死了卡尔。
+
+”别急别急，“卢恩说，”他没说完的，我可以告诉你更多。“
+
+”你究竟有什么居心。“
+
+”我能有什么居心？“卢恩说，”我向你保证，我说的句句属实，需要我对天发誓天打雷劈吗？“
+
+[[……->卢恩的真相]]
 
 
 :: 小屋前十字路口 {"position":"725,525","size":"100,100"}
@@ -1009,6 +1099,23 @@ if(hasSlimeDrop){
 <</if>>
 
 返回[[哥布林前哨站]]。
+
+
+:: 开口说话 {"position":"1850,2425","size":"100,100"}
+偷袭者面无表情地蹲下，将被斩断的手腕拾起，接上。
+然后握住拳头，张开，目不转睛地看着，像是在欣赏一件艺术品。
+
+“卡尔……”
+
+没错，那无疑是卡尔。
+但是他似乎有些不太对劲，正常人的手臂断了能够接上吗？
+除非他已经变成了僵尸。
+
+$me.name不由得加强了戒备。
+
+[[继续->我是不死之王的骑士]]
+
+
 
 
 :: 必要的东西 {"position":"1175,2675","size":"100,100"}
@@ -1050,9 +1157,9 @@ G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodideCount >= 100 && G
 “要想知道怎么做，首先要理解为什么做不到，”卢恩说，“为什么你无法击败不死者之王？”
 
 答案显而易见。
-“因为它会复活。”$me.name说。
+“<span class="orange">因为它会复活</span>。”$me.name说。
 
-“没错，名字不会骗人，不死者之王会复活，”卢恩说，“可是，为什么它能复活？”
+“没错，名字不会骗人，”卢恩说，“可是，为什么它能复活？”
 ”就是因为不知道，我才会问你。“
 
 啧啧啧，卢恩摇摇头，说，”这可不行啊，和蠢人打交道不符合我的美学，毕竟我可是天才学者。“
@@ -1098,6 +1205,26 @@ State.variables.consideredInCave = true;
 <</script>>
 
 
+:: 我是不死之王的骑士 {"position":"1850,2550","size":"100,100"}
+“索尔坦是对的。”
+
+令人意外的是，卡尔开口说话了。
+看来他并非失去理智的僵尸。
+“但是他死得太草率，没能得知真相。”卡尔说。
+
+他究竟在说些什么呢？虽然不明所以，姑且回他一句吧。
+“真相？”
+
+卡尔不语，抬起右臂，手中长剑直指$me.name。
+“不死之王的骑士，参上！”话音刚落，卡尔猛然向$me.name逼近。
+
+<<link "🔴进入战斗" "战斗画面">>\
+	<<set $karlTheReviver.hp to $karlTheReviver.max_hp>>\
+	<<set $lastPassage to "击败卡尔复生者">>\
+    <<set $enemyNames to ['karlTheReviver']>>\
+<</link>>\
+
+
 :: 战斗画面 {"position":"1000,225","size":"100,100"}
 =战斗=
 <<silently>>\
@@ -1139,6 +1266,10 @@ if (!isGroupAlive(enemies)){
 			if (ally.legacy.damageReductor){
 				cb['g1'][i]['damageReductor'] = ally.legacy.damageReductor;
 			}
+			// 2025.01.20 增加回合结束回调
+			if (ally.legacy.endTurnCallback){
+				cb['g1'][i]['endTurnCallback'] = ally.legacy.endTurnCallback;
+			}
 		}
 	}
 	// 2024.10.27 循环为敌人设置callback函数
@@ -1161,6 +1292,10 @@ if (!isGroupAlive(enemies)){
 			// 2024.11.19 增加伤害减缓器
 			if (enemy.legacy.damageReductor){
 				cb['g2'][i]['damageReductor'] = enemy.legacy.damageReductor;
+			}
+			// 2025.01.20 增加回合结束回调
+			if (enemy.legacy.endTurnCallback){
+				cb['g2'][i]['endTurnCallback'] = enemy.legacy.endTurnCallback;
 			}
 		}
 	}
@@ -1197,6 +1332,14 @@ if (!isGroupAlive(enemies)){
 <<link "返回" $lastPassage>><</link>>
 
 
+:: 挥动武器 {"position":"1850,2300","size":"100,100"}
+传来切开什么东西的触感。
+
+偷袭者向后跳开。
+
+[[……->开口说话]]
+
+
 :: 接受亚哈船长的招待 {"position":"1475,2025","size":"100,100"}
 <<script>>
 const G = State.variables;
@@ -1215,6 +1358,21 @@ G.haveTicket = checkHavingItem(G.inventory.items, '亚哈船长的招待券');
     <<script>>reduceItemCount(State.variables.inventory.items, '亚哈船长的招待券', 1);<</script>>
 <</link>>
 [[死海]]
+
+
+:: 杀死不死之王的理由 {"position":"2225,2425","size":"100,100"}
+”很简单，杀死那个骷髅之后，把秽土全部净化就可以了，“卢恩说——
+”难道你想和不死之王在这个墓穴里待一辈子吗，你想代替那家伙，当不死之王的骑士？“
+
+”全部净化……做得到吗？“
+
+”当然，“卢恩说，”<span class="orange">只要我们两个一起努力，没有什么是做不到的</span>。“
+
+卢恩说的确实有道理，毕竟不能永远待在这里。
+
+”好了，去完成你作为勇者，最后的使命吧。“
+
+[[重新面对不死者之王->不死王座]]
 
 
 :: 杀死剜眼者后剧情 {"position":"1125,1525","size":"100,100"}
@@ -1567,6 +1725,23 @@ enemies.forEach(enemy => {
 [[老头的房间]]
 
 
+:: 真相 {"position":"2100,2425","size":"100,100"}
+勇者是背负命运之人。
+只有背负命运之人，才能进入阿比斯，这是预言告诉我们的。
+
+”阿比斯，就是我们现在站着的地方。“卡尔说。
+
+我们一直以为打败魔王，就能拯救世界，可是——
+”王国只是盯上了秽土，“，卡尔说，”利用秽土，来生产尸兵。“
+这正是僵尸在帝国大量出没的原因。
+
+”而索尔坦，就是要把这个秘密向世界宣告，让王国的可怕计划公之于众。“
+”你明白你在做什么了吗？“索尔坦问。
+
+[[我……->谣言终止者]]
+
+
+
 :: 破土而出 {"position":"1300,2175","size":"100,100"}
 黑暗，无尽的黑暗。令人窒息，同时又令人怀念的黑暗。
 然后是泥土的腥味。
@@ -1642,17 +1817,7 @@ $++&X&&&x::.::::.:::;::::..:...:.::.
 “瘴气的源头？”
 “你应该已经见过了，”卢恩说，“那个巨大的骷髅。”
 
-$me.name沉思片刻，说，“你说你在这里研究很久了，那你是怎么出去的？”
-卢恩说，“好问题，答案是我从来没有出去过。然后你肯定会问这怎么可能，然后我会告诉你，我的本体不在这里。”
-“本体不在这里……像是哥布林巢穴的时候那样吗？“$me.name说，”你这个身体看起来可不像是幻影。”
-
-“非本体——或者说副本——也有很多种存在形式，”卢恩说，“不过，拥有物质存在正是这个副本的特殊之处。这是只有在大坟墓内才有可能完成的副本形式。”
-“只有在大坟墓内才有可能？这是什么意思？”
-
-卢恩用手指了指地下，说，“大坟墓的泥土，是构成肉体的原料。我称之为<span class="orange">秽土</span>。”
-这番话真正的含义$me.name并不十分理解，但是比起这个，有更加急迫的问题需要问。
-
-[[怎样击败不死者之王？]]
+[[那卢恩是怎么进来的？]]
 
 
 
@@ -2033,6 +2198,58 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
         chance: 1.0,
 		count: 20
     }]}
+// 2025.1.20 新增卡尔剧情+怪物
+G.healer5EndTurnCallback = function (us, they, fightHistory = [], info = {}) {
+	const per5Heal = Math.floor(info.me.max_hp * 0.05);
+    fightHistory.push(`<span class="purple">复生者</span>为${info.me.name}回复了<span class="good">${per5Heal}</span>点血量!`);
+    info.me.hp += per5Heal;
+}
+G.useHealer5 = () => {
+	window.G.me.legacy = G.healer5;
+	window.G.showDialog('装备遗物', '成功装备了' + G.healer5.name + '!');
+}
+G.healer5 = {name: '复生者', desc: '在自己的回合结束时回复5%的血量！', endTurnCallback: G.healer5EndTurnCallback, useCallback: G.useHealer5}; 
+G.karlTheReviver = {name: '卡尔·复生者', desc: '卡尔·复生者', exp: 1200,
+    max_hp: 600,
+    hp: 600, 
+    power: 30, 
+    resistance: 30, 
+    // 遗物: 治愈者，每回合5%回复
+    legacy: G.healer5,
+    drops: [{
+    	item: G.healer5, 
+        chance: 1.0
+    }]}
+// 卡尔·无头骑士
+G.noHeadKnightEndTurnCallback = function (us, they, fightHistory = [], info = {}) {
+	const round = info.round - 1;
+	const me = info.me;
+	const words = ['奥义！', '闪电！', '五——', '连——', '鞭!'];
+	if (round < words.length){
+		fightHistory.push(`${me.name}大喊：<span class="purple">${words[round]}</span>`);
+    }else{
+		they.forEach(enemy => {
+			enemy.hp = 0;
+		})
+		fightHistory.push(`<span class="red">${me.name}杀死了所有敌人。</span>`);
+	}
+}
+G.noHeadKnightUseCallback = () => {
+	window.G.me.legacy = G.noHeadKnight;
+	window.G.showDialog('装备遗物', '成功装备了' + G.noHeadKnight.name + '!');
+}
+G.noHeadKnight = {name: '无头骑士', desc: '倒计时，必杀。', endTurnCallback: G.noHeadKnightEndTurnCallback, useCallback: G.noHeadKnightUseCallback}; 
+G.karlTheHeadless = {name: '卡尔·无头骑士', desc: '卡尔·无头骑士', exp: 1200,
+    max_hp: 1000,
+    hp: 1000, 
+    power: 10, 
+    resistance: 25, 
+    // 遗物: 无头骑士
+    legacy: G.noHeadKnight,
+    drops: [{
+    	item: G.noHeadKnight, 
+        chance: 1.0
+    }]}
 <</script>>
 <<audio "big_prison" stop>>
 <<cacheaudio "big_grave" "mp3|https://zhuobinggang.github.io/game/audio/in_big_grave.mp3">>
@@ -2096,19 +2313,14 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
 
 
 :: 获取对付不死之王的道具 {"position":"1050,2800","size":"100,100"}
-卢恩让$me.name在原地等候，一个人朝着位于风暴山丘附近的研究所去了。
-回来的时候，他手上拿了一个雨伞一样的东西。
+卢恩一个人朝着位于风暴山丘附近的研究所去了。
+回来的时候，手上拿了一个雨伞一样的东西。
+“我把它命名为秽土净化者，”说完，卢恩把它递给$me.name。
 
-“我把它命名为秽土净化者，”卢恩说。
 $me.name将秽土净化者收入囊中。
-”到了不死王座之后再启动，“卢恩说，”然后击败不死者之王。“
-”那之后会发生什么事？“
-”你知道了又能怎么样呢？我们只能尽力做好自己能做的事情不是吗。“卢恩说，”即便世界毁灭，你也要打破这个状况不是吗？总不能永远留在这个不毛之地吧？“
-$me.name陷入了沉默。
 
-”走吧，去做你应该做的事情。“
+[[继续->之后的事情]]
 
-[[离开->大墓地外围]]
 <<silently>>\
 <<script>>
 	let G = State.variables
@@ -2139,6 +2351,16 @@ $me.name陷入了沉默。
 🟢现在我们可以[[前往窄门]]。
 <</if>>
 返回[[第三巡逻点]]
+
+
+:: 谣言终止者 {"position":"2100,2550","size":"100,100"}
+就在这时——
+卡尔的头被一支匕首刺穿，化为了泥土。
+
+”害，我还以为他想说些什么呢。“
+一个声音从背后传来。
+
+[[继续->对峙卢恩]]
 
 
 :: 起居室 {"position":"700,250","size":"100,100"}
@@ -2219,17 +2441,25 @@ $me.name转过头去，看见的是一副陌生面孔——
 这声音唤起了$me.name的回忆——
 总记得在某个阴暗逼仄的地方听过这样的声音——
 
-”怪人卢恩？“
-”是天才学者卢恩！“
+[[对了，他是……]]
 
-”你怎么会在这里？“
-”我已经在这里研究很久了，在认识你之前。“
-”这究竟是什么地方？“
 
-”正如你所见，”卢恩说，“人们把它称为<span class="orange">大坟墓</span>。”
 
-你沉默片刻，认为当务之急是从这个不详的地方离开。
-[[向卢恩询问离开的方法->离开的方法]]
+:: 这不是我期盼的 {"position":"1975,2300","size":"100,100"}
+”你犯了傲慢的大罪，“卡尔说。
+
+”告诉我，你究竟为了捍卫什么而战，难道我们不能够好好谈谈吗？“$me.name说。
+
+沉默，卡尔缓缓闭上眼睛，开口道——
+”唯独和你，没有什么可以谈的。“
+
+卡尔猛然逼近！
+
+<<link "🔴进入战斗" "战斗画面">>\
+	<<set $karlTheHeadless.hp to $karlTheHeadless.max_hp>>\
+	<<set $lastPassage to "击败卡尔无头骑士">>\
+    <<set $enemyNames to ['karlTheHeadless']>>\
+<</link>>
 
 
 :: 这样的事情 {"position":"600,1150","size":"100,100"}
@@ -2417,6 +2647,19 @@ G.karl = {
 
 [[返回->不死之王初见]]
 
+<<if $testing>>
+<<link "🔴卡尔复生者" "战斗画面">>
+	<<set $karlTheReviver.hp to $karlTheReviver.max_hp>>\
+	<<set $lastPassage to "击败卡尔复生者">>\
+    <<set $enemyNames to ['karlTheReviver']>>\
+<</link>>\
+<<link "🔴卡尔无头骑士" "战斗画面">>\
+	<<set $karlTheHeadless.hp to $karlTheHeadless.max_hp>>\
+	<<set $lastPassage to passage()>>\
+    <<set $enemyNames to ['karlTheHeadless']>>\
+<</link>>
+<</if>>\
+
 
 :: 遭遇卡尔和军队 {"position":"975,1775","size":"100,100"}
 在那黑暗中，有什么东西的轮廓现了出来。
@@ -2439,6 +2682,40 @@ G.karl = {
     <<set $enemyNames to ['karl']>>\
 <</link>>
 
+
+
+:: 那卢恩是怎么进来的？ {"position":"1425,2675","size":"100,100"}
+$me.name沉思片刻，说，“你说你在这里研究很久了，那你是怎么进来的？”
+卢恩说，“和哥布林巢穴的时候一样，<span class="orange">偶然卡进来的</span>。”
+$me.name说，”你这个身体看起来可不像是幻影。”
+
+“非本体——或者说副本——也有很多种存在形式，”卢恩说，“不过，拥有物质存在正是这个副本的特殊之处。这是只有在大坟墓内才有可能完成的副本形式。”
+“只有在大坟墓内才有可能？这是什么意思？”
+
+卢恩用手指了指地下，说，“大坟墓的泥土，是构成肉体的原料。我称之为<span class="orange">秽土</span>。”
+”秽土……“
+这番话真正的含义$me.name并不十分理解，但是比起这个，有更加急迫的问题需要问。
+
+[[怎样击败不死者之王？]]
+
+
+:: 静待片刻 {"position":"1600,2550","size":"100,100"}
+但是就这样静静等待，两三分钟后，雨滴滴答答地落了下来。
+
+雨？
+比起雨来，更加轻飘飘的存在，就像是发光的雪花。
+那是灵魂的碎片，不一会儿就覆盖了这一片土地。
+
+缠绕不死之王的瘴气变弱了。
+
+[[不死王座]]
+<<silently>>\
+<<script>>
+	let G = State.variables;
+	reduceItemCount(G.inventory.items, '秽土净化者', 1);
+    G.undeadKing.legacy = null;
+<</script>>
+<</silently>>\
 
 
 :: 风暴山丘 {"position":"1600,2175","size":"100,100"}
@@ -2491,6 +2768,7 @@ function loopCall(callbackName, group1, group2, callbackFuncDict, fightHistory =
   	
 }
 
+
 window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1': {}, 'g2': {}}) {
   	window.temp2 = callbackFuncDict;
 
@@ -2541,6 +2819,10 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                     }
                 }
             }
+			// 回合结束时触发回调
+			if (i in callbackFuncDict['g1'] && 'endTurnCallback' in callbackFuncDict['g1'][i]){
+				callbackFuncDict['g1'][i]['endTurnCallback'](group1, group2, fightHistory, {round, me: obj1});
+			}
         }
 
         // 如果group2已经全部倒下，结束战斗
@@ -2579,6 +2861,10 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
                     }
                 }
             }
+			// 回合结束时触发回调
+			if (i in callbackFuncDict['g2'] && 'endTurnCallback' in callbackFuncDict['g2'][i]){
+				callbackFuncDict['g2'][i]['endTurnCallback'](group2, group1, fightHistory, {round, me: obj2});
+			}
         }
 
         // 如果group1已经全部倒下，结束战斗
@@ -2592,6 +2878,7 @@ window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1'
 
     return fightHistory;
 }
+
 
 // DONE:请更改以下代码，使掉落数量随机扰动，掉落1到drop.count个物品而非固定数量
 window.dropItems = function dropItems(drops) {
