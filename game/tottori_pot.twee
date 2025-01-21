@@ -51,8 +51,6 @@ $me.name LV$me.level
 <<set $expNeed to $nextLevelExp()>>\
 <<set _nowPassage to passage()>>\
 经验值: $me.exp / $expNeed
-固有攻击力: $me.intrinsicPower
-固有防御力: $me.intrinsicResistance
 血量: $me.hp / $me.max_hp
 武器: <<link $me.weapon.name>><<audio "menu_click" play>><<set $temp to $showWeapon()>><</link>>(攻击力: $me.weapon.power)
 防具: <<link $me.armor.name>><<audio "menu_click" play>><<set $temp to $showArmor()>><</link>> (防御力:  $me.armor.resistance)
@@ -89,6 +87,20 @@ State.variables.goblinKingTalked = true;
 [[王之间]]
 
 
+:: 一个男人 {"position":"725,1150","size":"100,100"}
+从军队中站出来一个男人，他的头上缠着厚厚的绷带。
+
+
+“哟，卡尔，你来迎接我了吗？”$me.name说，“用不着那么大排场的”。
+沉默。
+
+“你为什么露出这样的表情？”我说，“到底发生了什么事，是遇到了一种特殊的，永远无法弥补的不幸吗？我们真的无法从中恢复过来了吗？一切都完蛋了吗？”
+
+“你为什么要做出<span class='red'>那样的事情</span>？”卡尔问。
+
+“[[那样的事情->这样的事情]]？”
+
+
 :: 一些东西 {"position":"1275,1525","size":"100,100"}
 身着白色长袍的女性站在那儿，嘴唇在动。
 她的表情哀伤，唤起你的同情，你想听听她在说些什么，于是你便听见了。
@@ -106,16 +118,21 @@ State.variables.goblinKingTalked = true;
 
 
 :: 一本翻开的书 {"position":"525,250","size":"100,100"}
-仔细一看，这不是一本书，而是自己写下的笔记。
+仔细一看，这不是一本书，而是自己写下的笔记。最上面的一页写着：
 
-最上面的一页写着：
-
-明天就是我的十六岁生日了。
-从明天开始，我就要离开这个家，踏上独自一人的旅程。
 我没有过去的记忆。
 老头也不向我透露任何东西。
 也许这是一个阴谋，但是现在的我不得而知。
-希望新的旅程能够给我答案……
+
+唯独一句话，深深刻印在我的脑海里——
+“<span class="orange">你要成为勇者</span>。”
+究竟是谁说的，我想不起来了，
+可是也正因如此，才令我无法抗拒。
+那就成为勇者吧，试着拯救世界不也挺好的吗？
+
+明天就是我的十六岁生日了，
+我一定要离开这个家，踏上旅程。
+旅程会给我答案。
 
 [[返回->起居室]]
 
@@ -276,7 +293,11 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 目力所及的地方就有很多史莱姆。
 <<link "攻击史莱姆" "战斗画面">>\
 	<<set $lastPassage to '低矮林地'>>\
-    <<set $enemyNames to ['slime']>>\
+	<<if random(100) < 30>>
+		<<set $enemyNames to ['slimeZombie']>>\
+	<<else>>
+		<<set $enemyNames to ['slime']>>\
+	<</if>>
 <</link>>
 <<link "同时攻击3只史莱姆" "战斗画面">>\
 	<<set $lastPassage to '低矮林地'>>\
@@ -286,9 +307,17 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
         // spawn slimes
         G.enemyNames = []
         for (let i = 0; i < 3; i++) {
-            const enemyName = 'slime_' + i;
-            const slimeCloned = structuredClone(G.slime);
-            slimeCloned.name = '史莱姆' + i + '号';
+			const enemyName = 'slime_' + i;
+			let slimeCloned = null;
+			if (Math.random() < 0.3){
+				G.slimeZombie.legacy = null;
+				slimeCloned = structuredClone(G.slimeZombie);
+				slimeCloned.legacy = G.healer5; // 遗物有回调，没法克隆
+				G.slimeZombie.legacy = G.healer5;
+			} else {
+				slimeCloned = structuredClone(G.slime);
+			}
+            slimeCloned.name = `${slimeCloned.name}`;
             G[enemyName] = slimeCloned;
             G.enemyNames.push(enemyName);
         }
@@ -311,22 +340,21 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 :: 你能不能先从那里出来 {"position":"475,1025","size":"100,100"}
 “细微的调节尚未实现，”怪人说，“我的朋友，请告诉我这是哪里。”
 
-“方位上是<span class='important'>底里斯王国的东南</span>。”
+“方位上是王国东南。”$me.name回答道。
+王国全名其实叫底里斯王国，但是说王国大部分人也都明白。
+
 “居然给我干这种地方来了。”
 
 “你是谁，是人类吗？”
 “人类已经不足以定义我，我是人类以上的存在，天才学者卢恩！”
 只明白了他是个怪人。
 
-“没时间了，有机会的话到<span class='important'>布里斯坦王国</span>来，就说是找<span class='important'>天才学者卢恩</span>。到时候我再向你解释。”
+“没时间了，有机会的话到布里斯坦王国来，就说是找天才学者卢恩。到时候我再向你解释。”
 
 眼看着那人的腿上出现了一些亮绿色的噪点。
 当然了，$me.name不能够理解这幅光景的意味，只觉得毛骨悚然。
 
-"多亏底里斯和布里斯坦是邻近国家，我们的语言才相通。如果是更远或者是某些古怪的地方就难说了。“卢恩说。
-这还不算是古怪的地方吗。
-
-”你说你在哥布林巢穴，我待会给你<span class='important'>传送个东西过来</span>，希望能对你的冒险有帮助。我们有缘再见。"
+“又或者……“似乎想起来什么一样，卢恩开口道，”<span class='important'>命运会指引我们相遇的</span>。”
 话音戛然而止，两条腿凭空消失，只留下了和往常一样的岩石。
 
 [[片刻之后]]
@@ -337,6 +365,16 @@ $me.name撑开秽土净化者——
 什么都没有改变。
 
 [[静待片刻]]
+
+
+:: 偷偷溜走 {"position":"725,650","size":"100,100"}
+“站住！”
+身后传来老头严厉的声音。
+
+老头全天二十四小时都在警戒$me.name的出逃，
+必须想办法解决这个状况。
+
+[[返回->小屋前十字路口]]
 
 
 :: 关于索尔坦 {"position":"1125,1650","size":"100,100"}
@@ -426,10 +464,11 @@ G.karl.hp = G.karl.max_hp;
 window.G = State.variables;
 console.log('HELLO?')
 State.variables.slimeDrop =  {name: '史莱姆粘液', desc: '史莱姆掉落的粘稠液体，应该不会有人需要吧？'};
-State.variables.mountainGoblinSoul =  {name: '山岭哥布林的灵魂', desc: '山岭哥布林的坚韧灵魂。'};
-State.variables.normalGoblinSoul =  {name: '成年哥布林的灵魂', desc: '成年哥布林的卑微灵魂。'};
 State.variables.slimeSoul =  {name: '史莱姆的灵魂', desc: '史莱姆的天真灵魂。'};
-State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 5, resistance: 2, exp: 100};
+State.variables.clownMask = {
+	name: '小丑面具',  desc: '看起来有些诡异的面具，能够吓哭小孩。'
+}
+State.variables.oldMan = {name: '老头', max_hp: 100, hp: 100, power: 4, resistance: 2, exp: 100, drops: [{item: G.clownMask, chance: 1, count: 10}]};
 State.variables.slime = {
 	name: '史莱姆', 
     exp: 3,
@@ -438,34 +477,6 @@ State.variables.slime = {
     power: 1, 
     resistance: 1, 
     drops: [{item: State.variables.slimeDrop, chance: 0.8, count: 3}, {item: State.variables.slimeSoul, chance: 0.6}, ]
-}
-State.variables.mountainGoblin = {
-	name: '山岭哥布林', 
-    exp: 150,
-    max_hp: 120,
-    hp: 120, 
-    power: 10, 
-    resistance: 16, 
-    drops: [{
-    	item: State.variables.mountainGoblinSoul, 
-        chance: 1.0
-    }]
-}
-State.variables.theOutpostMountainGoblin = structuredClone(State.variables.mountainGoblin);
-State.variables.normalGoblin = {
-	name: '成年哥布林', 
-    exp: 60,
-    max_hp: 60,
-    hp: 60, 
-    power: 9, 
-    resistance: 6, 
-    drops: [{
-    	item: State.variables.normalGoblinSoul, 
-        chance: 0.4
-    }]
-}
-State.variables.clownMask = {
-	name: '小丑面具',  desc: '看起来有些诡异的面具，能够吓哭小孩。'
 }
 State.variables.oldManSlayer = {
 	name: '俄狄浦斯',  desc: '只是杀死了个老头而已，有什么好大惊小怪的。'
@@ -525,16 +536,6 @@ State.variables.showRelics = function(){
     let desc = State.variables.me.legacy.desc
 	State.variables.showDialog(title, desc)
 }
-State.variables.armorPiercingRingDamageCalculator = function (me, enemy, fightHistory = []){
-    fightHistory.push('破甲指环无视' + enemy.name + '30%防御值进行攻击!')
-	const damage = me.power - Math.floor(enemy.resistance * 0.7 + 1);
-    return Math.max(1, damage);
-}
-State.variables.armorPiercingRingUseCb = function(){
-	State.variables.me.legacy = State.variables.armorPiercingRing;
-    State.variables.showDialog('装备指环', '成功装备了破甲指环!');
-}
-State.variables.armorPiercingRing = {name: '破甲指环', desc: '指环的水晶里封存着一小片骨头。', damageCalculator : State.variables.armorPiercingRingDamageCalculator, useCallback: State.variables.armorPiercingRingUseCb}
 State.variables.globalUseCallback = function(idx){
 	console.log('globalUseCallback ' + idx);
     console.log('I am going to call ' + State.variables.inventory.items[idx].name + ' callback');
@@ -552,17 +553,22 @@ const useRodSlime = () => {
 	window.G.me.legacy = G[rodName];
 	window.G.showDialog('装备遗物', '成功装备了' + rodName + '!');
 }
+G.rodSlimeLevel = 1;
+G.rodSlimeScalar = (level) => {
+	return level * 1.0;
+}
 const rodSlimeGroupModifier = (group1, group2, fightHistory) => {
-	const rodName = '万圣节权杖';
+	const rodName = `万圣节权杖lv.${G.rodSlimeLevel}`;
 	const prototFightObj = State.variables.slime;
 	const familiarName = '【使魔】史莱姆';
-	const spawned = fightObjectCopy(prototFightObj);
+	const spawned = fightObjectCopy(prototFightObj, G.rodSlimeScalar(G.rodSlimeLevel));
+	console.log(spawned);
 	spawned.name = familiarName;
 	group1.push(spawned);
 	console.log(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
 	fightHistory.push(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
 }
-window.G['万圣节权杖'] = {name: '万圣节权杖', desc: '万圣节特典。召唤一只【使魔】史莱姆协同战斗！', groupModifier: rodSlimeGroupModifier, useCallback: useRodSlime};
+window.G['万圣节权杖'] = {name: '万圣节权杖', desc: '万圣节特典。召唤一只使魔史莱姆协同战斗！', groupModifier: rodSlimeGroupModifier, useCallback: useRodSlime};
 const useRodGoblin = () => {
 	const rodName = '哥布林王权杖';
 	window.G.me.legacy = G[rodName];
@@ -590,7 +596,29 @@ const rodGoblinGroupModifier = (group1, group2, fightHistory) => {
 	console.log(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
 	fightHistory.push(rodName + '为' + group1[0].name + '的队伍召唤了' + familiarName + '!');
 }
-window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一只【使魔】哥布林协同战斗。', groupModifier: rodGoblinGroupModifier, useCallback: useRodGoblin};
+window.G['哥布林王权杖'] = {name: '哥布林王权杖', desc: '召唤一只哥布林协同战斗。', groupModifier: rodGoblinGroupModifier, useCallback: useRodGoblin};
+// 2025.1.21 增加变异史莱姆
+G.dirt = {name: '秽土', desc: '来自阿比斯的秽土，从僵尸怪身上掉落。僵尸怪大量在王国出没。'}
+G.healer5EndTurnCallback = function (us, they, fightHistory = [], info = {}) {
+	const per5Heal = Math.floor(info.me.max_hp * 0.05);
+    fightHistory.push(`<span class="purple">复生者</span>为${info.me.name}回复了<span class="good">${per5Heal}</span>点血量!`);
+    info.me.hp += per5Heal;
+}
+G.useHealer5 = () => {
+	window.G.me.legacy = G.healer5;
+	window.G.showDialog('装备遗物', '成功装备了' + G.healer5.name + '!');
+}
+G.healer5 = {name: '复生者', desc: '在自己的回合结束时回复5%的血量！', endTurnCallback: G.healer5EndTurnCallback, useCallback: G.useHealer5}; 
+G.slimeZombie = {
+	name: '僵尸史莱姆', 
+    exp: 10,
+    max_hp: 20,
+    hp: 20, 
+    power: 2, 
+    resistance: 2, 
+	legacy: G.healer5,
+    drops: [{item: G.dirt, chance: 1, count: 2}]
+}
 <</script>>
 <<script>>
     window.dd = State.variables
@@ -695,65 +723,69 @@ $me.name回过头去。
 
 
 :: 向小丑搭话 {"position":"450,775","size":"100,100"}
-嘻嘻……嘻嘻嘻
+<<silently>>
+<<script>>
+let G = State.variables;
+G.maskCount = getItem(G.inventory.items, '小丑面具')?.count || 0;
+G.slimeRodCount = getItem(G.inventory.items, '万圣节权杖')?.count || 0;
+G.dirtCount = getItem(G.inventory.items, '秽土')?.count || 0;
+<</script>>
+<</silently>>
+
+“嘻嘻……嘻嘻嘻”
 
 <div class="aa">
 {{{
-&&&&&&&&&&&$&&&&&$XX$&&&&&&&&&&&&&&$&$
-&&&&&&&&&&&&&&&&&$xX$&&&&$X&&&&&&&&&&&
-&&&&&&&&&&&&&&&&$&&&&&&&&&$&&&&&&&&$&&
-&&&&&&&&&&&&&&&$x;::;+X&&&$&&&&&&&&&&&
-&&&&&&&&&&&&&$++X$$$Xx+;x&&&&&&&&&&&&&
-&&&&&&&&&&&&$+X;.:...:+x+x&&&&&&&&&&&&
-&&&&&&&&&&&&XXxxXX;.xXXXxx&&&&&&&&&&&&
-&&&&&&&&&&&&$X$&Xx+:$x&&$++&&&&&&&&&&&
-&&&&&&&&&&&&+;:;xx$$$xx;;;:x&&&&&&&&&&
-&&&&&&&&&&&&;.;+;;&&&;xX+;::X&&&&&&&&&
-&&&&&&&&&&$:..;x+x+xXx;++;;:.;$&&&&&&&
-&&&&&&&&&+......::;;+;;;;;;:::;$&&&&&&
-&&&&&&&$.........:xX+;;;;;;;;;:;$&&&&&
-&&&&&&X......:.....:::+xxx+;;::.;&&&&&
-&&&&&X.......   .:.::;++x+++;;:::x&&&&
-&&&&+.::.........:;::::;++++;;;;;:$&&&
-&&&;.................::::;;;;;;;;;;$&&
-&&;.........:........::::::;;;;;;;;x&&
-&;.........:...:.....:::::;;;;;;;;;;&&
-X.........:;.........:;:::;++;;;;;;;x&
-........::;;....:....:;:::;+++;;;;;;;&
-.......::;+:...::....;;:::;;+++++;;;:X
-......::;+;:...::....;;;:::;++++++;;;:
+          ___
+         /\  \
+        /  \/ \
+   ___  \   O /  ___
+  /    \ \   / /    \
+ /   __ -    -  __   \
+/___/ | <>   <> | \___\
+O  ___|    ^    |___  O
+ /     \  -^-  /    \
+/   /\  \_____/ /\   \
+\_ / /          \ \_ /
+O   /   /\   /\  \  O
+     \ /  \ /  \ /
+      O    O    O
 }}}
 </div>
 
-有人寻找灵魂，有人找寻面具，
-如果你能带给我3个面具，也许我会给你一份礼物。
+“有人寻找灵魂，有人找寻面具，
+如果你能带给我3个面具，也许我会给你一份礼物。”
 
-<<silently>>\
-<<script>>
-State.variables.temp1 = checkHavingItem(State.variables.inventory.items, '小丑面具')
-if(State.variables.temp1){
-	State.variables.temp2 = getItem(State.variables.inventory.items, '小丑面具')
-}
-<</script>>
-<</silently>>\
-\
-<<if $temp1>>\
-小丑：你现在拥有$temp2.count个小丑面具。
-<<if $temp2.count >= 3>>\
-	<<link "使用3个小丑面具换取万圣节礼物" "向小丑搭话">>
+<<if $slimeRodCount < 1>>
+* 小丑面具 ($maskCount/3) <<print (($maskCount >= 3) ? '✅' : '❌');>>
+<<if $maskCount >= 3>>>\
+	<<link "🟢换取万圣节礼物" "向小丑搭话">>
     	<<silently>>
     	<<script>>
-        const itemName =  '小丑面具';
-		reduceItemCount(State.variables.inventory.items, itemName, 3);
-		addItem(State.variables.inventory.items, State.variables['万圣节权杖'], 1);
-        State.variables.showDialog('获得物品', '获得了' + State.variables['万圣节权杖'].name + '!');
+        reduceItemCount(G.inventory.items, '小丑面具', 3);
+		addItem(G.inventory.items, G['万圣节权杖'], 1);
+        G.showDialog('获得物品', '获得了' + State.variables['万圣节权杖'].name + '!');
         <</script>>
         <</silently>>\
     <</link>>
 <</if>>
 <</if>>
-
-[[低矮林地]]
+<<if $slimeRodCount > 0 and $rodSlimeLevel < 10>>\
+	万圣节权杖等级: $rodSlimeLevel (升级后增加使魔的属性，等级上限为10)
+	* 秽土 ($dirtCount/10) <<print (($dirtCount >= 10) ? '✅' : '❌');>>
+	<<if $dirtCount >= 10>>\
+	<<link "🟢升级万圣节权杖" "向小丑搭话">>
+    	<<silently>>
+    	<<script>>
+        reduceItemCount(G.inventory.items, '秽土', 10);
+		G.rodSlimeLevel += 1;
+        G.showDialog('升级遗物', `万圣节权杖升到了等级${G.rodSlimeLevel}!`);
+        <</script>>
+        <</silently>>\
+    <</link>>
+	<</if>>
+<</if>>
+[[返回->低矮林地]]
 
 
 :: 向穿墙者搭话 {"position":"475,900","size":"100,100"}
@@ -776,31 +808,42 @@ if(State.variables.temp1){
 
 
 :: 向老头搭话 {"position":"550,375","size":"100,100"}
-老头：今天是你的十六岁生日。从今天开始，<span class='good'>$me.name</span>，你将要开始独自的冒险生活。
+老头：“<span class='good'>$me.name</span>，今天是你的成年日。可你别以为成年就可以为所欲为了。为了防止你祸害良家女孩和这个世界，我要限制你的人身自由。”
+老头：“什么时候能还你自由？<span class="orange">只要我还活着，你就别想了</span>。”
 
-老头：现在，我有一个任务交给你，去<span class='important'>杀死5只史莱姆，带回它们掉落的粘液</span>，向我证明你的能力。
+<div class="aa">
+{{{
+                       ,---.
+                       /    |
+                      /     |
+                     /      |
+                    /       |
+               ___,'        |
+             <  -'          :
+              `-.__..--'``-,_\_
+                 |o/ ` :,.)_`>
+                 :/ `     ||/)
+                 (_.).__,-` |\
+                 /( `.``   `| :
+                 \'`-.)  `  ; ;
+                 | `       /-<
+                 |     `  /   `.
+ ,-_-..____     /|  `    :__..-'\
+/,'-.__\\  ``-./ :`      ;       \
+`\ `\  `\\  \ :  (   `  /  ,   `. \
+  \` \   \\   |  | `   :  :     .\ \
+   \ `\_  ))  :  ;     |  |      ): :
+  (`-.-'\ ||  |\ \   ` ;  ;       | |
+   \-_   `;;._   ( `  /  /_       | |
+    `-.-.// ,'`-._\__/_,'         ; |
+       \:: :     /     `     ,   /  |
+        || |    (        ,' /   /   |
+        ||                ,'   / SSt|
+}}}
+</div>
 
-老头：史莱姆经常在屋外的<span class='important'>低矮林地</span>出没。你需要先出去屋外，才能前往低矮林地。
-\
-<<silently>>\
-<<script>>
-let hasSlimeDrop = checkHavingItem(State.variables.inventory.items, '史莱姆粘液')
-State.variables.hasSlimeDrop = hasSlimeDrop
-if(hasSlimeDrop){
-	State.variables.temp = getItem(State.variables.inventory.items, '史莱姆粘液')
-}
-<</script>>
-<</silently>>\
-\
-<<if $hasSlimeDrop>>
-老头： 你现在拥有$temp.count个史莱姆粘液。
-	<<if $temp.count >= 5>>
-    	🟢[[交出5个史莱姆粘液]]
-	<</if>>
-<<else>>
-老头： 你还没有拿到史莱姆粘液。
-<</if>>
 
+[[老头的任务]]
 [[返回->大厅]]
 
 
@@ -857,21 +900,27 @@ if(hasSlimeDrop){
 
 半晌，卡尔转过身去，”走吧，先离开这里。“
 ”什么意思？”兜帽狐疑地问到。
-“我会听你们的说辞，不过得先离开这里，在王国的军队抵达之前。”
+“我会听你们的说辞，不过得先离开这里，在<span class="orange">骑士团</span>抵达之前。”
 
 [[跟上卡尔]]
 
 
 :: 哥布林前哨站 {"position":"750,775","size":"100,100"}
 <<set $normalGoblin.hp to $normalGoblin.max_hp>>\
+<<set $zombieGoblin.hp to $zombieGoblin.max_hp>>\
 =哥布林前哨站=
 
 一个黑乎乎的洞口通往[[巢穴深处]]。
 
 洞口外边稍微开阔一点的地方，四处站着一些无所事事的哥布林。
-在黑暗的掩盖下，我们可以<<link "攻击哥布林" "战斗画面">>
+在黑暗的掩盖下，我们可以
+<<link "攻击哥布林" "战斗画面">>
+    <<if random(100) < 30>>
+		<<set $enemyNames to ['zombieGoblin']>>\
+	<<else>>
+		<<set $enemyNames to ['normalGoblin']>>\
+	<</if>>
 	<<set $lastPassage to '哥布林前哨站'>>\
-    <<set $enemyNames to ['normalGoblin']>>\
 <</link>>而不会引起骚乱。
 <<link "同时攻击3只哥布林" "战斗画面">>\
 	<<set $lastPassage to '哥布林前哨站'>>\
@@ -881,9 +930,20 @@ if(hasSlimeDrop){
         // spawn goblins
         G.enemyNames = []
         for (let i = 0; i < 3; i++) {
-            const enemyName = 'normalGoblin_' + i;
-            const goblinCloned = structuredClone(G.normalGoblin);
-            goblinCloned.name = '平凡哥布林' + i + '号';
+            const enemyName = 'goblin_' + i;
+            let goblinCloned = null;
+            if (Math.random() < 0.3){
+				G.zombieGoblin.legacy = null;
+				goblinCloned = structuredClone(G.zombieGoblin);
+				goblinCloned.legacy = G.healer5; // 遗物有回调，没法克隆
+				G.zombieGoblin.legacy = G.healer5;
+			} else {
+				const temp = G.normalGoblin.drops;
+				G.normalGoblin.drops = null;
+				goblinCloned = structuredClone(G.normalGoblin);
+				G.normalGoblin.drops = temp;
+				goblinCloned.drops = temp;
+			}
             G[enemyName] = goblinCloned;
             G.enemyNames.push(enemyName);
         }
@@ -911,10 +971,6 @@ if(hasSlimeDrop){
 🟢前往[[哥布林前哨站]]。
 <<if $theWallPenetrator.hp > 0 and $wallPenetratorTalked is false and random(100) < 100>>\
 🟠如果我没看错的话，岩石长出来两条腿。[[向两条腿搭话->向穿墙者搭话]]
-<<link "攻击穿墙者" "战斗画面">>\
-	<<set $lastPassage to passage()>>\
-    <<set $enemyNames to ['theWallPenetrator']>>\
-<</link>>
 <</if>>\
 <</if>>\
 
@@ -1074,12 +1130,38 @@ G.talkedToRune = true;
 :: 小屋前十字路口 {"position":"725,525","size":"100,100"}
 =小屋前十字路口=
 
+<div class="aa">
+{{{
+                 ___                          (_)
+               _/XXX\
+_             /XXXXXX\_                                    __
+X\__    __   /X XXXX XX\                          _       /XX\__      ___
+    \__/  \_/__       \ \                       _/X\__   /XX XXX\____/XXX\
+  \  ___   \/  \_      \ \               __   _/      \_/  _/  -   __  -  \__/
+ ___/   \__/   \ \__     \\__           /  \_//  _ _ \  \     __  /  \____//
+/  __    \  /     \ \_   _//_\___     _/    //           \___/  \/     __/
+__/_______\________\__\_/________\_ _/_____/_____________/_______\____/_______
+                                  /|\
+                                 / | \
+                                /  |  \
+                               /   |   \
+                              /    |    \
+                             /     |     \
+                            /      |      \
+                           /       |       \
+                          /        |        \
+                         /         |         \
+}}}
+</div>
+
 从这里可以看见破烂的[[小屋->大厅]]，和小屋背后的[[低矮林地]]。
 
 大马路如此笔直，它一定可以带我去往任何地方。
 
 <<if $oldMan.hp < 1>>
 🟢是时候[[离开这里]]了。
+<<else>>
+[[偷偷溜走]]
 <</if>>
 
 
@@ -1095,7 +1177,7 @@ G.talkedToRune = true;
 <</link>>\
 <<else>>\
 地上躺着大块头哥布林的尸体。
-🟢现在我可以前往祭坛，[[王之间]]。
+🟢现在我可以前往[[祭坛]]，[[王之间]]。
 <</if>>
 
 返回[[哥布林前哨站]]。
@@ -1114,8 +1196,6 @@ G.talkedToRune = true;
 $me.name不由得加强了戒备。
 
 [[继续->我是不死之王的骑士]]
-
-
 
 
 :: 必要的东西 {"position":"1175,2675","size":"100,100"}
@@ -1150,8 +1230,6 @@ G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodideCount >= 100 && G
 [[离开->大墓地外围]]
 
 
-
-
 :: 怎样击败不死者之王？ {"position":"1300,2675","size":"100,100"}
 “怎样才能击败不死者之王？”$me.name问。
 “要想知道怎么做，首先要理解为什么做不到，”卢恩说，“为什么你无法击败不死者之王？”
@@ -1170,7 +1248,6 @@ G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodideCount >= 100 && G
 [[“你去问不死者之王吧！“]]
 [["因为你没有母亲。"]]
 [[击败不死之王的提示]]
-
 
 
 :: 思考人生的意义 {"position":"725,1400","size":"100,100"}
@@ -1196,7 +1273,7 @@ G.taskMakeRainsComplete = G.soulsCount >= 100 && G.silverIodideCount >= 100 && G
 :: 思考我现在应该做的事情 {"position":"600,900","size":"100,100"}
 选择永远只有两种，前进，或者是后退。
 
-如今付出了惨重的代价，我已经失去了后退的选项。
+如今<span class="orange">付出了惨重的代价</span>，我已经失去了后退的选项。
 我必须取下哥布林王的头颅，以此凭吊死去的队友们。
 
 [[返回->哥布林巢穴裂缝]]
@@ -1303,6 +1380,7 @@ if (!isGroupAlive(enemies)){
     // Added 2024.10.27 merge battle log.
     const neetFightHistory = window.mergeBattleLogs(fightHistory);
 	State.variables.fightHistory = neetFightHistory; // 用于后续展示记录
+	State.variables.fightHistoryHtml = neetFightHistory.join('\n')
 	window.temp = neetFightHistory;
 	// console.log(fightHistory);
 	State.variables.me.hp = usCopy[0].hp;
@@ -1322,10 +1400,13 @@ if (!isGroupAlive(enemies)){
 <<if $me.hp < 1>>\
 <<goto "死亡">>\
 <<else>>\
+
+<div>$fightHistoryHtml</div>
+
 <span class='good'>$enemyNameString被你杀死了！</span>
 <<include '物品掉落'>>
 <<include '杀死怪物回调'>>
-<<button "查看战斗记录">><<set _temp to $showDialogFightHistory()>><</button>>
+<!--<<button "查看战斗记录">><<set _temp to $showDialogFightHistory()>><</button>>-->
 <</if>>\
 <</if>>\
 
@@ -1358,6 +1439,17 @@ G.haveTicket = checkHavingItem(G.inventory.items, '亚哈船长的招待券');
     <<script>>reduceItemCount(State.variables.inventory.items, '亚哈船长的招待券', 1);<</script>>
 <</link>>
 [[死海]]
+
+
+:: 杀人者 {"position":"475,1400","size":"100,100"}
+法官：既然如此，请你具体说明自己的作案动机。坦诚相告对量刑有好处。
+于是我说：我还杀了养育我的老头，那之后忘了收拾，尸体就摆在地上。现在天气那么热，希望房间别被弄的太臭。
+当他们好不容易理解了我的意思——“这种人是怎么成为勇者的！”终于有人忍不住站起来对我怒吼。
+这就是坦诚相告的结果吗？
+
+就这样我被<span class='red'>剜掉双眼</span>，关进大牢，等待三天后的绞刑。
+
+[[大监狱304室]]
 
 
 :: 杀死不死之王的理由 {"position":"2225,2425","size":"100,100"}
@@ -1435,6 +1527,10 @@ G.enemyNames.map(varName => {
     }else if (varName == 'theWallPenetrator'){
     	const title = {name: '趁人之危', desc: '杀死不明所以的穿墙者。'}
         addItem(State.variables.titles.items, title);
+    }else if (varName == 'theRouletteEscort'){
+    	const title = {name: '赌狗', desc: '杀死哥布林轮盘搀扶者。'}
+        addItem(State.variables.titles.items, title);
+        G.rouletteLevel = 1;
     }
 })
 <</script>>
@@ -1465,7 +1561,8 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 
 <span class='important'>你必须活下来。</span>
 
-<<button "查看战斗记录">><<set _temp to $showDialogFightHistory()>><</button>>
+<!--<<button "查看战斗记录">><<set _temp to $showDialogFightHistory()>><</button>>-->
+<div>$fightHistoryHtml</div>
 
 <<button "满血复活（使用禁忌的时间回溯魔法）">>\
 <<set _deadMark to {name: '死神的印记', desc: '继续你的旅途，这双眼睛会注视着你'}>>\
@@ -1474,7 +1571,7 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 <<goto $lastPassage>>\
 <</button>>
 
-或者你也可以点击侧边栏的"RESTART"重新开始游戏。
+或者你也可以通过侧边栏重新开始游戏。
 
 
 :: 死海 {"position":"1475,2175","size":"100,100"}
@@ -1547,7 +1644,6 @@ $enemy.name的HP余量: <meter @value="$enemy.hp" min="0" @max="$enemy.max_hp"><
 
 :: 片刻之后 {"position":"475,1150","size":"100,100"}
 稍过片刻，传来了小小的当啷声，好像有什么东西掉在了地上。
-难道说是刚刚那人说的东西吗？
 
 在地上摸索了一下，<span class='good'>找到了一枚指环</span>。
 
@@ -1588,7 +1684,7 @@ enemies.forEach(enemy => {
                 .map(([itemName, count]) => `${itemName}×${count}`)
                 .join('，'); // 用中文逗号分隔
 
-            State.variables.dropLog += enemy.name + '掉落了' + text + '\n'; // 添加换行符，便于区分多个敌人掉落的信息
+            State.variables.dropLog += enemy.name + '掉落了<span class="good">' + text + '</span>\n'; // 添加换行符，便于区分多个敌人掉落的信息
 
             // 将物品添加到库存中
             addToInventory(State.variables.inventory.items, items);
@@ -1601,7 +1697,7 @@ enemies.forEach(enemy => {
 });
 <</script>>
 <</silently>>
-<span class='good'>$dropLog</span>
+$dropLog
 
 
 :: 物品栏 {"position":"875,100","size":"100,100"}
@@ -1654,16 +1750,13 @@ enemies.forEach(enemy => {
 
 石室深处摆着一张石椅——看样子是直接从岩壁上凿出来的，
 <<if $theGoblinKing.hp > 0>>\
-上面坐着一只头戴王冠的哥布林。
-
-哥布林王。
+上面坐着一只头戴王冠的哥布林——哥布林王。
 它正是我身处此地的原因。
 我要杀死它，为死去的同伴们复仇。
 然后离开这个令人不快的地方。
 
 只不过，在能够靠近它之前，还有不得不对付的敌人——三只哥布林骑士。
 它们给人的感觉和外边的哥布林完全不一样。
-
 它们已经发现了我这个闯入者，但却按兵不动。
 因为哥布林王制止了它们。
 <<else>>\
@@ -1718,8 +1811,11 @@ enemies.forEach(enemy => {
 翻开一看，里面的书页全都被撕掉了，只剩下一张纸，上面潦草地写着：
 
 <blockquote>
-在大洪水来临之前，离开这里
-<small>PS: 我把书全都撕了，因为你是自由的</small>
+我把书全都撕了，因为你是自由的。
+
+往王城的方向去吧，命运会指引你。
+
+在大洪水来临之前，离开这里。
 </blockquote>
 
 [[老头的房间]]
@@ -1739,7 +1835,6 @@ enemies.forEach(enemy => {
 ”你明白你在做什么了吗？“索尔坦问。
 
 [[我……->谣言终止者]]
-
 
 
 :: 破土而出 {"position":"1300,2175","size":"100,100"}
@@ -1763,7 +1858,56 @@ enemies.forEach(enemy => {
 
 
 :: 祭坛 {"position":"1075,775","size":"100,100"}
-(游戏进度暂时只到这里)
+<<silently>>
+<<script>>
+let G = State.variables;
+G.rouletteCount = getItem(G.inventory.items, '命运转轮')?.count || 0;
+G.dirtCount = getItem(G.inventory.items, '秽土')?.count || 0;
+<</script>>
+<</silently>>
+=祭坛=
+
+荒废的祭坛。
+祭坛中央站着一个小丑。
+
+“嘻嘻……嘻嘻嘻”
+
+<div class="aa">
+{{{
+          ___
+         /\  \
+        /  \/ \
+   ___  \   O /  ___
+  /    \ \   / /    \
+ /   __ -    -  __   \
+/___/ | <>   <> | \___\
+O  ___|    ^    |___  O
+ /     \  -^-  /    \
+/   /\  \_____/ /\   \
+\_ / /          \ \_ /
+O   /   /\   /\  \  O
+     \ /  \ /  \ /
+      O    O    O
+}}}
+</div>
+
+“玩两把吗，用我准备的轮盘？”
+
+命运转轮等级: $rouletteLevel (升级后逐渐恢复应有的性能，存在上限)
+<<if $rouletteCount > 0 and $rouletteLevel < 12>>\
+	* 秽土 ($dirtCount/20) <<print (($dirtCount >= 20) ? '✅' : '❌');>>
+	<<if $dirtCount >= 20>>\
+	<<link "🟢升级命运转轮" "祭坛">>
+    	<<silently>>
+    	<<script>>
+        reduceItemCount(G.inventory.items, '秽土', 20);
+		G.rouletteLevel += 1;
+        G.showDialog('升级遗物', `命运转轮升到了等级${G.rouletteLevel}!`);
+        <</script>>
+        <</silently>>\
+    <</link>>
+	<</if>>
+<</if>>
 
 [[巢穴深处]]
 
@@ -1797,17 +1941,7 @@ $++&X&&&x::.::::.:::;::::..:...:.::.
 }}}
 </div>
 
-从军队中站出来一个男人，他的头上缠着厚厚的绷带。
-
-“哟，卡尔，你来迎接我了吗？”我说，“用不着那么大排场的”。
-
-沉默。
-
-“你为什么露出这样的表情？”我说，“到底发生了什么事，是遇到了一种特殊的，永远无法弥补的不幸吗？我们真的无法从中恢复过来了吗？一切都完蛋了吗？”
-
-“你为什么要做出<span class='red'>这样的事情</span>？”卡尔问。
-
-“[[这样的事情]]？”
+[[继续->一个男人]]
 
 
 :: 离开的方法 {"position":"1300,2550","size":"100,100"}
@@ -1820,16 +1954,16 @@ $++&X&&&x::.::::.:::;::::..:...:.::.
 [[那卢恩是怎么进来的？]]
 
 
-
 :: 离开这里 {"position":"600,650","size":"100,100"}
 = 第二章 =
 
-(半年后)
+半年后……
 
 [[继续->哥布林巢穴裂缝]]
 
 <<script>>
 let G = State.variables
+window.G = G;
 G.consideredInCave = false;
 healing(G.me, 1.0); // 回复满hp
 healing(G.me, -0.4); // 设置为60%HP
@@ -1841,6 +1975,48 @@ G.wallPenetratorTalked = false; //是否遇见穿墙者
 G.goblinKingTalked = false; //是否与哥布林王交谈
 const geniusScientistLeft = '天才学者的悲鸣';
 G[geniusScientistLeft] = {name: geniusScientistLeft, desc: '除了我想知道的东西，没有什么是重要的。'}
+G.mountainGoblinSoul =  {name: '山岭哥布林的灵魂', desc: '山岭哥布林的坚韧灵魂。'};
+G.normalGoblinSoul =  {name: '成年哥布林的灵魂', desc: '成年哥布林的卑微灵魂。'};
+G.boneRodUseCallback = () => {
+    window.G.me.weapon = G.boneRod;
+	window.G.showDialog('装备武器', '成功装备了' + G.boneRod.name + '!');
+}
+G.boneRod = {name: '骨棒', desc: '哥布林们自己做的武器。', power: 3, useCallback: G.boneRodUseCallback};
+State.variables.mountainGoblin = {
+	name: '山岭哥布林', 
+    exp: 150,
+    max_hp: 100,
+    hp: 100, 
+    power: 9, 
+    resistance: 6, 
+    drops: [{
+    	item: State.variables.mountainGoblinSoul, 
+        chance: 1.0
+    }]
+}
+State.variables.theOutpostMountainGoblin = structuredClone(State.variables.mountainGoblin);
+State.variables.normalGoblin = {
+	name: '成年哥布林', 
+    exp: 60,
+    max_hp: 40,
+    hp: 40, 
+    power: 5, 
+    resistance: 4, 
+    drops: [{
+    	item: State.variables.normalGoblinSoul, 
+        chance: 0.4
+    }, {item: G.boneRod, chance: 0.2}]
+}
+G.zombieGoblin = {
+	name: '僵尸哥布林', 
+    exp: 120,
+    max_hp: 60,
+    hp: 60, 
+    power: 7, 
+    resistance: 3, 
+	legacy: G.healer5,
+    drops: [{item: G.dirt, chance: 1, count: 2}]
+}
 G.theWallPenetrator = {
 	name: '穿墙者', 
     exp: 10,
@@ -1853,14 +2029,28 @@ G.theWallPenetrator = {
         chance: 1.0
     }]
 }
+State.variables.armorPiercingRingDamageCalculator = function (me, enemy, fightHistory = []){
+    fightHistory.push('破甲指环无视' + enemy.name + '30%防御值进行攻击!')
+    let resistance = Math.floor(enemy.resistance * 0.7);
+	const damage = window.calculateDamage(me.power, resistance);
+    return Math.max(1, damage);
+}
+State.variables.armorPiercingRingUseCb = function(){
+	State.variables.me.legacy = State.variables.armorPiercingRing;
+    State.variables.showDialog('装备指环', '成功装备了破甲指环!');
+}
+State.variables.armorPiercingRing = {name: '破甲指环', desc: '指环的水晶里封存着一小片骨头。', damageCalculator : State.variables.armorPiercingRingDamageCalculator, useCallback: State.variables.armorPiercingRingUseCb}
+G.rouletteLevel = 10;
+G.rouletteScalar = (level) => {
+    return level * 0.1;
+}
 G.rouletteV1DamageCalculator = function (me, enemy, fightHistory = []) {
-    fightHistory.push(me.name + '转动了命运之轮!');
-    
+    let G = window.G;
+    fightHistory.push(`${me.name}转动了<span class="purple">命运之轮 lv${G.rouletteLevel}</span>!`);
     // 随机生成1到6之间的整数
     const dice = Math.floor(Math.random() * 6) + 1;
     let tarot = '';
     let damage = 0;
-    
     // 根据骰子结果确定塔罗牌类型和伤害值
     if (dice >= 1 && dice <= 3) {
         tarot = '倒吊人';
@@ -1872,12 +2062,11 @@ G.rouletteV1DamageCalculator = function (me, enemy, fightHistory = []) {
         tarot = '死神';
         damage = Math.floor(enemy.max_hp * 1.2); // 伤害为敌人生命值的120%
     }
-
     // 将塔罗牌结果加入战斗历史
     fightHistory.push('指针停留在<span class="purple">' + tarot + '</span>!');
-
+    let scalar = G.rouletteScalar(G.rouletteLevel); // NOTE: 根据等级改变伤害数值
     // 返回计算后的伤害值
-    return damage;
+    return Math.round(damage * scalar);
 }
 G.useRouletteV1 = () => {
 	window.G.me.legacy = G.rouletteV1;
@@ -1899,8 +2088,8 @@ G.theRouletteEscort = {
 }
 // 哥布林破甲者
 G.fullDamageCalculator = function (me, enemy, fightHistory = []) {
-    fightHistory.push(me.name + '使用了穿墙者!');
-    return me.power;
+    fightHistory.push(me.name + '的遗物<span class="purple">穿墙者无视敌方防御进行攻击</span>！');
+    return me.power * 2;
 }
 G.fullArmorBreaker = {name: '穿墙者', desc: '无视防御。某种天赋的具象化。', damageCalculator: G.fullDamageCalculator};
 G.theArmorBreaker = {
@@ -1908,7 +2097,7 @@ G.theArmorBreaker = {
     exp: 500,
     max_hp: 150,
     hp: 150, 
-    power: 17, 
+    power: 16, 
     resistance: 0, 
 	legacy: G.fullArmorBreaker,
     drops: [{
@@ -2199,16 +2388,6 @@ G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回
 		count: 20
     }]}
 // 2025.1.20 新增卡尔剧情+怪物
-G.healer5EndTurnCallback = function (us, they, fightHistory = [], info = {}) {
-	const per5Heal = Math.floor(info.me.max_hp * 0.05);
-    fightHistory.push(`<span class="purple">复生者</span>为${info.me.name}回复了<span class="good">${per5Heal}</span>点血量!`);
-    info.me.hp += per5Heal;
-}
-G.useHealer5 = () => {
-	window.G.me.legacy = G.healer5;
-	window.G.showDialog('装备遗物', '成功装备了' + G.healer5.name + '!');
-}
-G.healer5 = {name: '复生者', desc: '在自己的回合结束时回复5%的血量！', endTurnCallback: G.healer5EndTurnCallback, useCallback: G.useHealer5}; 
 G.karlTheReviver = {name: '卡尔·复生者', desc: '卡尔·复生者', exp: 1200,
     max_hp: 600,
     hp: 600, 
@@ -2267,6 +2446,35 @@ G.karlTheHeadless = {name: '卡尔·无头骑士', desc: '卡尔·无头骑士',
 就这样意识逐渐沉向深渊。
 
 [[……->半梦半醒]]
+
+
+:: 老头的任务 {"position":"425,500","size":"100,100"}
+=任务：史莱姆杀手=
+
+老头：“现在，我有一个任务交给你，去<span class='important'>杀死史莱姆，带回它们掉落的粘液</span>，向我证明你的能力。”
+老头：“史莱姆经常在屋外的<span class='important'>低矮林地</span>出没。你需要先出去屋外，才能前往低矮林地。”
+
+<<silently>>\
+<<script>>
+let G = State.variables;
+G.slimeDropCount = getItem(G.inventory.items, '史莱姆粘液')?.count || 0;
+<</script>>
+<</silently>>\
+
+* 史莱姆粘液 ($slimeDropCount/5) <<print (($slimeDropCount >= 5) ? '✅' : '❌');>>
+<<if $slimeDropCount >= 5>>\
+	<<link "🟢和老头换取物品" "老头的任务">>
+    	<<silently>>
+    	<<script>>
+        reduceItemCount(G.inventory.items, '史莱姆粘液', 5);
+		addItem(G.inventory.items, G.clownMask, 1);
+        G.showDialog('获得物品', '获得了' + G.clownMask.name + '!');
+        <</script>>
+        <</silently>>\
+    <</link>>
+<</if>>
+
+[[返回->向老头搭话]]
 
 
 :: 老头的信 {"position":"1000,525","size":"100,100"}
@@ -2344,13 +2552,13 @@ $me.name将秽土净化者收入囊中。
 
 <<if $theEyeScooper.hp > 0>>\
 空间中央存在着一个[[不祥的红色灵魂]]。
+
+返回[[第三巡逻点]]
 <<else>>\
-🟢红色灵魂已经消散。
+🟢红色灵魂已经消散，现在我们可以[[前往窄门]]。
 你能够看见东西了。
 你开始觉得这个房间看起来还不赖。
-🟢现在我们可以[[前往窄门]]。
 <</if>>
-返回[[第三巡逻点]]
 
 
 :: 谣言终止者 {"position":"2100,2550","size":"100,100"}
@@ -2396,7 +2604,7 @@ $me.name将秽土净化者收入囊中。
 <<set $beginnerWeaponGot to true>>\
 <</link>>\
 <<else>>\
-🟢墙上放武器的地方空空如也。\
+墙上放武器的地方空空如也。\
 <</if>>\
 
 <<if not $beginnerArmorGot>>\
@@ -2406,7 +2614,7 @@ $me.name将秽土净化者收入囊中。
 <<set $beginnerArmorGot to true>>\
 <</link>>\
 <<else>>\
-🟢墙上放防具的地方空空如也。\
+墙上放防具的地方空空如也。\
 <</if>>\
 
 
@@ -2442,7 +2650,6 @@ $me.name转过头去，看见的是一副陌生面孔——
 总记得在某个阴暗逼仄的地方听过这样的声音——
 
 [[对了，他是……]]
-
 
 
 :: 这不是我期盼的 {"position":"1975,2300","size":"100,100"}
@@ -2490,21 +2697,7 @@ $me.name转过头去，看见的是一副陌生面孔——
 
 人群一片哗然。
 
-“不要跟他废话了，”一个男人站出来说。
-他的装备稍稍有些不同，看起来应该是他们的队长之类的。
-“$me.name，”男人说，“如果可以的话，我真想把你就地正法，可我们毕竟是王国的正规军队…”
-
-“我在和他说话，你能不要插嘴吗？”$me.name说。
-男人愣了一下，像是要说些什么，但还是闭上了嘴巴。
-
-"你想知道为什么？"$me.name径直朝着卡尔说。
-卡尔怔怔地望着$me.name。
-“因为有这样一个选项提供给我啊，点点看不是人之常情吗？”
-
-“你疯了。”卡尔说。
-“把他绑起来，带回去！”男人掷地有声地说道。
-
-[[进入第三章]]
+[[继续->队长开口]]
 
 
 :: 进入第三章 {"position":"600,1275","size":"100,100"}
@@ -2519,14 +2712,7 @@ $me.name转过头去，看见的是一副陌生面孔——
 于是我说： 我没有异议。
 人群瞬间炸开了锅，有人开始朝我扔东西。肃静，肃静！法官用木锤敲击桌子砰砰作响。
 
-法官：既然如此，请你具体说明自己的作案动机。坦诚相告对量刑有好处。
-于是我说：我还杀了养育我的老头，那之后忘了收拾，尸体就摆在那里，希望房间别被弄的太臭。
-当他们好不容易理解了我的意思——“这种人是怎么成为勇者的！”终于有人忍不住站起来对我怒吼。
-这就是坦诚相告的结果吗？
-
-就这样我被<span class='red'>剜掉双眼</span>，关进大牢，等待三天后的绞刑。
-
-[[大监狱304室]]
+[[继续->杀人者]]
 
 <<silently>>
 <<script>>
@@ -2683,7 +2869,6 @@ G.karl = {
 <</link>>
 
 
-
 :: 那卢恩是怎么进来的？ {"position":"1425,2675","size":"100,100"}
 $me.name沉思片刻，说，“你说你在这里研究很久了，那你是怎么进来的？”
 卢恩说，“和哥布林巢穴的时候一样，<span class="orange">偶然卡进来的</span>。”
@@ -2697,6 +2882,24 @@ $me.name说，”你这个身体看起来可不像是幻影。”
 这番话真正的含义$me.name并不十分理解，但是比起这个，有更加急迫的问题需要问。
 
 [[怎样击败不死者之王？]]
+
+
+:: 队长开口 {"position":"725,1275","size":"100,100"}
+“不要跟他废话了，”一个男人站出来说。
+他的装备稍稍有些不同，看起来应该是他们的队长之类的。
+“$me.name，”男人说，“如果可以的话，我真想把你就地正法，可我们毕竟是王国的正规军队…”
+
+“我在和他说话，你能不要插嘴吗？”$me.name说。
+男人愣了一下，像是要说些什么，但还是闭上了嘴巴。
+
+"你想知道为什么？"$me.name径直朝着卡尔说。
+卡尔怔怔地望着$me.name。
+“因为有这样一个选项提供给我啊，点点看不是人之常情吗？”
+
+“你疯了。”卡尔说。
+“把他绑起来，带回去！”男人掷地有声地说道。
+
+[[进入第三章]]
 
 
 :: 静待片刻 {"position":"1600,2550","size":"100,100"}
@@ -2744,13 +2947,13 @@ $me.name说，”你这个身体看起来可不像是幻影。”
 
 
 :: StoryScript [script]
-window.fightObjectCopy = function(obj){
+window.fightObjectCopy = function(obj, scalar = 1){
 	let resultObj = {};
 	resultObj.name = obj.name;
-	resultObj.hp = obj.hp;
-	resultObj.max_hp = obj.max_hp;
-	resultObj.resistance = obj.resistance;
-	resultObj.power = obj.power;
+	resultObj.hp = obj.hp * scalar;
+	resultObj.max_hp = obj.max_hp * scalar;
+	resultObj.resistance = obj.resistance * scalar;
+	resultObj.power = obj.power * scalar;
 	return resultObj;
 }
 
@@ -2768,12 +2971,13 @@ function loopCall(callbackName, group1, group2, callbackFuncDict, fightHistory =
   	
 }
 
+window.calculateDamage = (attackerPower, defenderResistance) => Math.max(2 * attackerPower - defenderResistance, 1);
 
 window.groupFight = function groupFight(group1, group2, callbackFuncDict = {'g1': {}, 'g2': {}}) {
   	window.temp2 = callbackFuncDict;
 
   
-    const calculateDamage = (attackerPower, defenderResistance) => Math.max(attackerPower - defenderResistance, 1);
+    const calculateDamage = window.calculateDamage;
     let fightHistory = [];
     let round = 1;
     
@@ -3108,6 +3312,100 @@ window.getPrevPassageName = () => {
   let dd = SugarCube.State.history;
   return dd.length > 1 ? dd[dd.length - 2].title : '';
 };
+
+
+// 2025.1.21 中文菜单
+
+(function () {
+	/* General. */
+	l10nStrings.identity = '游戏';
+	l10nStrings.aborting = '终止';
+	l10nStrings.cancel   = '取消';
+	l10nStrings.close    = '关闭';
+	l10nStrings.ok       = '确认';
+
+	/* Errors. */
+	l10nStrings.errorTitle              = '错误';
+	l10nStrings.errorNonexistentPassage = '段落"{passage}"不存在';
+	l10nStrings.errorSaveMissingData    = '存档缺少必须的数据，可能被读取的文件不是存档或者存档被损坏';
+	l10nStrings.errorSaveIdMismatch     = '保存{identity}是错误的';
+
+	/* Warnings. */
+	l10nStrings._warningIntroLacking  = '你的浏览器可能损坏或者被禁用';
+	l10nStrings._warningOutroDegraded = '，所以{identity}在受限制模式中运行。你可以继续运行，但是一些内容可能不能正确工作。';
+	l10nStrings.warningNoWebStorage   = '{_warningIntroLacking} Web Storage API {_warningOutroDegraded}';
+	l10nStrings.warningDegraded       = '{_warningIntroLacking} {identity}需要的功能 {_warningOutroDegraded}';
+
+	/* Debug View. */
+	l10nStrings.debugViewTitle  = '调试模式';
+	l10nStrings.debugViewToggle = '切换调试模式';
+
+	/* UI bar. */
+	l10nStrings.uiBarToggle   = '打开/关闭导航栏';
+	l10nStrings.uiBarBackward = '后退';
+	l10nStrings.uiBarForward  = '前进';
+	l10nStrings.uiBarJumpto   = '跳到{identity}的历史记录中的某一点';
+
+	/* Jump To. */
+	l10nStrings.jumptoTitle       = '跳到';
+	l10nStrings.jumptoTurn        = '转到';
+	l10nStrings.jumptoUnavailable = '目前没有跳跃点\u2026';
+
+	/* Saves. */
+	l10nStrings.savesTitle       = '存档';
+	l10nStrings.savesDisallowed  = '在这个段落中不允许存档';
+	l10nStrings.savesEmptySlot   = '\u2014 插槽空 \u2014';
+	l10nStrings.savesIncapable   = '{_warningIntroLacking}支持存档所需的功能，因此本次游戏的存档功能已被禁用';
+	l10nStrings.savesLabelAuto   = '自动存档';
+	l10nStrings.savesLabelDelete = '删除';
+	l10nStrings.savesLabelExport = '另存为\u2026';
+	l10nStrings.savesLabelImport = '读取\u2026';
+	l10nStrings.savesLabelLoad   = '读取';
+	l10nStrings.savesLabelClear  = '全部删除';
+	l10nStrings.savesLabelSave   = '保存';
+	l10nStrings.savesLabelSlot   = '插槽';
+	l10nStrings.savesSavedOn     = '保存在：';
+	l10nStrings.savesUnavailable = '未找到存档插槽\u2026';
+	l10nStrings.savesUnknownDate = '未知';
+
+	/* Settings. */
+	l10nStrings.settingsTitle = '设置';
+	l10nStrings.settingsOff   = '关闭';
+	l10nStrings.settingsOn    = '开启';
+	l10nStrings.settingsReset = '重置为默认值';
+
+	/* Restart. */
+	l10nStrings.restartTitle  = '重新开始';
+	l10nStrings.restartPrompt = '你确定要重新开始吗？未保存的进度将会丢失。';
+
+	/* Share. */
+	l10nStrings.shareTitle = '分享';
+
+	/* Autoload. */
+	l10nStrings.autoloadTitle  = '自动保存';
+	l10nStrings.autoloadCancel = '前往最初的段落';
+	l10nStrings.autoloadOk     = '读取自动存档';
+	l10nStrings.autoloadPrompt = '有一个自动存档，读取它还是前往最初的段落？';
+
+	/* Macros. */
+	l10nStrings.macroBackText   = '返回';
+	l10nStrings.macroReturnText = '返回';
+  	
+  	/* Adaption for sugarcube update */
+  	l10nStrings.continueTitle = '继续';
+  	l10nStrings.savesHeaderBrowser = '存储到浏览器';
+  	l10nStrings.savesHeaderDisk = '存储到本地';
+    l10nStrings.savesTextBrowserSlot = '存储槽';
+    l10nStrings.textTurn = '游戏步数';
+    l10nStrings.textExport = '导出';
+    l10nStrings.textImport = '导入';
+    l10nStrings.textClear = '清除所有存储';
+    l10nStrings.textSave = '保存';
+    l10nStrings.textLoad = '加载';
+  	l10nStrings.restartMesgPrompt = '你确定要重新开始吗？未保存的进度将会丢失！'
+  	l10nStrings.textOk = '确定';
+  	l10nStrings.textCancel = '取消';
+})();
 
 :: StoryStylesheet [stylesheet]
 .danger{
