@@ -158,10 +158,7 @@ State.variables.oldManLetterRead = true
 	<<set $lastPassage to "破土而出">>\
     <<set $enemyNames to ['undeadKing']>>\
 <</link>>
-
 [[逃跑->逃离不死者之王]]
-
-<<audio "big_grave" loop play>>\
 
 
 :: 不死王座 {"position":"1600,2300","size":"100,100"}
@@ -973,6 +970,7 @@ O   /   /\   /\  \  O
 🟠如果我没看错的话，岩石长出来两条腿。[[向两条腿搭话->向穿墙者搭话]]
 <</if>>\
 <</if>>\
+<<audio "golden_season" loop play>>
 
 
 :: 地底大空洞 {"position":"850,1775","size":"100,100"}
@@ -1037,6 +1035,7 @@ O   /   /\   /\  \  O
 <<if $testing>>
 [[测试用代码]]
 <</if>>
+<<audio "big_grave" loop play>>\
 
 
 :: 大监狱304室 {"position":"600,1400","size":"100,100"}
@@ -1047,7 +1046,7 @@ O   /   /\   /\  \  O
 
 [[思考人生的意义]]
 <<silently>>\
-<<audio "golden_season" stop>>
+<<audio ":all" stop>>
 <<audio "big_prison" loop play>>
 <</silently>>\
 
@@ -2166,7 +2165,6 @@ G.bloodedDagger = {name: '血迹斑斑的匕首', desc: '爱用的匕首。\n已
 
 <<silently>>\
 <<cacheaudio "golden_season" "mp3|https://zhuobinggang.github.io/game/audio/golden_season.mp3">>
-<<audio "golden_season" loop play>>
 <</silently>>\
 
 
@@ -2430,7 +2428,7 @@ G.karlTheHeadless = {name: '卡尔·无头骑士', desc: '卡尔·无头骑士',
         chance: 1.0
     }]}
 <</script>>
-<<audio "big_prison" stop>>
+<<audio ":all" stop>>
 <<cacheaudio "big_grave" "mp3|https://zhuobinggang.github.io/game/audio/in_big_grave.mp3">>
 <</silently>>
 
