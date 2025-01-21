@@ -217,6 +217,7 @@ State.variables.oldManLetterRead = true
 "我会帮你击败不死者之王，但是你需要准备好一些必要的东西。"卢恩说。
 
 🟠[[必要的东西]]
+[[遗物升级]]
 [[击败不死之王的提示]]
 [[返回->大墓地外围]]
 
@@ -2387,12 +2388,19 @@ G.ticketOfCaptainUseCb = function(){
 }
 G.ticketOfCaptain = {name: '亚哈船长的招待券', desc: '进入船骸的门票。使用后消失。'} // TODO: 实现使用效果
 // 鲸叉
+G.harpoonLevel = 1;
+G.harpoonExtraChance = (level) => {
+	return 30 * 0.1 * G.harpoonLevel;
+}
 G.harpoonDamageCal = function (me, enemy, fightHistory = []) {
+	let G = window.G;
 	let damage = window.calculateDamage(me.power, enemy.resistance);
     // 30% 几率造成额外 50%生命值的伤害
 	let extraDamage = 0;
 	let chance = Math.random() * 100;
-    if (chance < 30){
+	let extraChance = G.harpoonExtraChance(G.harpoonLevel);
+	console.log(`鲸叉的触发几率为${30 + extraChance}%`);
+    if (chance < (30 + extraChance)){
 		extraDamage = Math.floor(enemy.hp / 3);
 		fightHistory.push('<span class="purple">鲸叉</span>击中了要害，造成了额外<span class="purple">' + extraDamage + '</span>点伤害!');
 	}
@@ -2403,7 +2411,7 @@ G.useHarpoon = () => {
 	window.G.me.legacy = G.harpoon;
 	window.G.showDialog('装备遗物', '成功装备了' + G.harpoon.name + '!');
 }
-G.harpoon = {name: '鲸叉', desc: '与强于自己百倍的怪物战斗的武器，船长存在的证明。30%几率造成50%当前生命值的伤害。', damageCalculator: G.harpoonDamageCal, useCallback: G.useHarpoon};
+G.harpoon = {name: '鲸叉', desc: '与强于自己百倍的怪物战斗的武器，船长存在的证明。30%几率造成50%当前生命值的伤害。升级后提升几率。', damageCalculator: G.harpoonDamageCal, useCallback: G.useHarpoon};
 G.dirtPurifier = {name: '秽土净化者', desc: '卢恩出品。'}
 // 2025.1.7 新增怪物
 // 遗物：幽灵实体
@@ -2428,7 +2436,7 @@ G.silverIodideOozingOne = {name: '碘化银渗出者', desc: '外表看起来像
     drops: [{
     	item: G.silverIodidePowder, 
         count: 5,
-        chance: 1.0
+        chance: 0.8
     }]}
 G.teruTeruBozu = {name: '晴天娃娃', desc: '一种幽灵存在。掉落空气加湿器，概率10%。', exp: 400,
     max_hp: 200,
@@ -2454,6 +2462,10 @@ G.sailor = {name: '水手', desc: '游荡的水手僵尸。掉落炮弹概率50%
     	item: G.ticketOfCaptain, 
         chance: 1,
 		count: 1
+    },{
+    	item: G.dirt, 
+        count: 10,
+        chance: 0.8
     }]}
 G.captain = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落高射炮概率100%，还有某种遗物。', 
 	exp: 600,
@@ -2468,6 +2480,10 @@ G.captain = {name: '船长', desc: '游荡的船长僵尸，唯一怪。掉落�
 		count: 1
     },{
     	item: G.harpoon, 
+        chance: 1
+    },{
+    	item: G.dirt, 
+        count: 16,
         chance: 1
     }]}
 G.soulClumps = {name: '灵魂团块', desc: '随机刷新。掉落20个等待回收的灵魂。', exp: 400,
@@ -2940,6 +2956,69 @@ G.karl = {
     <<set $enemyNames to ['karlTheHeadless']>>\
 <</link>>
 <</if>>\
+
+
+:: 遗物升级 {"position":"1050,2425","size":"100,100"}
+<<silently>>
+<<script>>
+let G = State.variables;
+G.rouletteCount = getItem(G.inventory.items, '命运转轮')?.count || 0;
+G.dirtCount = getItem(G.inventory.items, '秽土')?.count || 0;
+G.slimeRodCount = getItem(G.inventory.items, '万圣节权杖')?.count || 0;
+G.harpoonCount = getItem(G.inventory.items, '鲸叉')?.count || 0;
+<</script>>
+<</silently>>
+=遗物升级=
+
+”毕竟我也是研究遗物的专家了，“卢恩说，”帮你升个级不是什么难事。“
+
+万圣节权杖等级: $rodSlimeLevel (升级后增加使魔的属性，等级上限为50)
+<<if $slimeRodCount > 0 and $rodSlimeLevel < 50>>\
+	* 秽土 ($dirtCount/10) <<print (($dirtCount >= 10) ? '✅' : '❌');>>
+	<<if $dirtCount >= 10>>\
+	<<link "🟢升级万圣节权杖" "遗物升级">>\
+    	<<silently>>
+    	<<script>>
+        reduceItemCount(G.inventory.items, '秽土', 10);
+		G.rodSlimeLevel += 1;
+        G.showDialog('升级遗物', `万圣节权杖升到了等级${G.rodSlimeLevel}!`);
+        <</script>>
+        <</silently>>\
+    <</link>>
+	<</if>>
+<</if>>
+命运转轮等级: $rouletteLevel (升级后能够突破应有的性能，最大等级为20)
+<<if $rouletteCount > 0 and $rouletteLevel < 20>>\
+	* 秽土 ($dirtCount/20) <<print (($dirtCount >= 20) ? '✅' : '❌');>>
+	<<if $dirtCount >= 20>>\
+	<<link "🟢升级命运转轮" "遗物升级">>
+    	<<silently>>\
+    	<<script>>
+        reduceItemCount(G.inventory.items, '秽土', 20);
+		G.rouletteLevel += 1;
+        G.showDialog('升级遗物', `命运转轮升到了等级${G.rouletteLevel}!`);
+        <</script>>
+        <</silently>>\
+    <</link>>
+	<</if>>
+<</if>>
+鲸叉等级: $harpoonLevel (升级后能够提高触发被动的概率，最大等级为10)
+<<if $harpoonCount > 0 and $harpoonLevel < 10>>\
+	* 秽土 ($dirtCount/30) <<print (($dirtCount >= 30) ? '✅' : '❌');>>
+	<<if $dirtCount >= 30>>\
+	<<link "🟢升级鲸叉" "遗物升级">>
+    	<<silently>>\
+    	<<script>>
+        reduceItemCount(G.inventory.items, '秽土', 30);
+		G.harpoonLevel += 1;
+        G.showDialog('升级遗物', `鲸叉升到了等级${G.harpoonLevel}!`);
+        <</script>>
+        <</silently>>\
+    <</link>>
+	<</if>>
+<</if>>
+
+[[与卢恩交谈]]
 
 
 :: 遭遇卡尔和军队 {"position":"975,1775","size":"100,100"}
