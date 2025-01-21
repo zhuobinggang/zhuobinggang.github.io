@@ -282,8 +282,9 @@ addItem(State.variables.inventory.items, State.variables.clownMask, 1)
 
 
 :: 低矮林地 {"position":"575,525","size":"100,100"}
-=低矮林地=
 <<set $slime.hp to $slime.max_hp>>\
+<<set $slimeZombie.hp to $slime.max_hp>>\
+=低矮林地=
 
 屋子旁边的小树林。
 这里生活着很多弱小的魔物。
@@ -719,7 +720,53 @@ $me.name回过头去。
 [[必要的东西]]
 
 
-:: 向小丑搭话 {"position":"450,775","size":"100,100"}
+:: 史莱姆饲育场 {"position":"475,775","size":"100,100"}
+<<set $slime.hp to $slime.max_hp>>\
+<<set $slimeZombie.hp to $slime.max_hp>>\
+=史莱姆饲育场=
+
+一块圆形空地。
+目力所及的地方有很多史莱姆。
+哥布林们将它们当作食物饲养。
+
+<<link "攻击史莱姆" "战斗画面">>\
+	<<set $lastPassage to '史莱姆饲育场'>>\
+	<<if random(100) < 30>>
+		<<set $enemyNames to ['slimeZombie']>>\
+	<<else>>
+		<<set $enemyNames to ['slime']>>\
+	<</if>>
+<</link>>
+<<link "同时攻击3只史莱姆" "战斗画面">>\
+	<<set $lastPassage to '史莱姆饲育场'>>\
+    <<silently>>\
+    <<script>>
+        const G = State.variables;
+        // spawn slimes
+        G.enemyNames = []
+        for (let i = 0; i < 3; i++) {
+			const enemyName = 'slime_' + i;
+			let slimeCloned = null;
+			if (Math.random() < 0.3){
+				G.slimeZombie.legacy = null;
+				slimeCloned = structuredClone(G.slimeZombie);
+				slimeCloned.legacy = G.healer5; // 遗物有回调，没法克隆
+				G.slimeZombie.legacy = G.healer5;
+			} else {
+				slimeCloned = structuredClone(G.slime);
+			}
+            slimeCloned.name = `${slimeCloned.name}`;
+            G[enemyName] = slimeCloned;
+            G.enemyNames.push(enemyName);
+        }
+    <</script>>
+    <</silently>>\
+<</link>>
+
+返回[[哥布林巢穴裂缝]]
+
+
+:: 向小丑搭话 {"position":"475,650","size":"100,100"}
 <<silently>>
 <<script>>
 let G = State.variables;
@@ -965,12 +1012,61 @@ O   /   /\   /\  \  O
 <<if not $consideredInCave>>
 [[思考我现在应该做的事情]]
 <<else>>
-🟢前往[[哥布林前哨站]]。
+裂缝深处通往[[史莱姆饲育场]]
+岩石裂缝外边就是[[哥布林前哨站]]
 <<if $theWallPenetrator.hp > 0 and $wallPenetratorTalked is false and random(100) < 100>>\
 🟠如果我没看错的话，岩石长出来两条腿。[[向两条腿搭话->向穿墙者搭话]]
 <</if>>\
 <</if>>\
 <<audio "golden_season" loop play>>
+
+
+:: 地下监牢 {"position":"1125,1400","size":"100,100"}
+<<set $normalGoblin.hp to $normalGoblin.max_hp>>\
+<<set $zombieGoblin.hp to $zombieGoblin.max_hp>>\
+=地下监牢=
+
+关押弱小魔物的地下监牢。
+”都是些哥布林，“兜帽说。
+
+<<link "攻击哥布林" "战斗画面">>
+    <<if random(100) < 30>>
+		<<set $enemyNames to ['zombieGoblin']>>\
+	<<else>>
+		<<set $enemyNames to ['normalGoblin']>>\
+	<</if>>
+	<<set $lastPassage to '地下监牢'>>\
+<</link>>
+<<link "同时攻击3只哥布林" "战斗画面">>\
+	<<set $lastPassage to '地下监牢'>>\
+    <<silently>>\
+    <<script>>
+        const G = State.variables;
+        // spawn goblins
+        G.enemyNames = []
+        for (let i = 0; i < 3; i++) {
+            const enemyName = 'goblin_' + i;
+            let goblinCloned = null;
+            if (Math.random() < 0.3){
+				G.zombieGoblin.legacy = null;
+				goblinCloned = structuredClone(G.zombieGoblin);
+				goblinCloned.legacy = G.healer5; // 遗物有回调，没法克隆
+				G.zombieGoblin.legacy = G.healer5;
+			} else {
+				const temp = G.normalGoblin.drops;
+				G.normalGoblin.drops = null;
+				goblinCloned = structuredClone(G.normalGoblin);
+				G.normalGoblin.drops = temp;
+				goblinCloned.drops = temp;
+			}
+            G[enemyName] = goblinCloned;
+            G.enemyNames.push(enemyName);
+        }
+    <</script>>
+    <</silently>>\
+<</link>>
+
+返回[[第三巡逻点]]
 
 
 :: 地底大空洞 {"position":"850,1775","size":"100,100"}
@@ -2195,7 +2291,6 @@ G.bloodedDagger = {name: '血迹斑斑的匕首', desc: '爱用的匕首。\n已
 这似乎是一个宽敞的空间。
 透过两个空洞的眼窝，我觉察到这里散布着人形的黄色灵魂，以及在地上匍匐前进的黄色灵魂。
 看来有一些东西是失去了视力才能够看见的。
-
 在我旁边自称“兜帽”的人的灵魂则是白色的。
 
 <<link "让兜帽给我治疗" "第三巡逻点">><<set $temp to $healMySelf(0.5)>><</link>>
@@ -2223,9 +2318,11 @@ G.bloodedDagger = {name: '血迹斑斑的匕首', desc: '爱用的匕首。\n已
     <</silently>>\
 <</link>>
 
+在兜帽的指引下，我们可以前往关押魔物的[[地下监牢]]。
+
 <<if $theWolfTrainer.hp > 0>>\
 在空间的深处，能看到一对红色的灵魂。
-“看来我们必须击败看守人才能离开，”兜帽说。
+“看来我们必须击败看守人才能继续前进，”兜帽说。
 <<link "🔴攻击红色灵魂" "战斗画面">>\
 	<<set $theWolfTrainer.hp to $theWolfTrainer.max_hp>>\
 	<<set $lastPassage to passage()>>\
