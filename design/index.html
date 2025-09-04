@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房屋模型查看器 - 自由飞行模式</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.0/dist/aframe-environment-component.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            overflow: hidden;
+            background: #2c3e50;
+        }
+        #scene-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+        .ui-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .controls-info {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            margin-bottom: 10px;
+        }
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            color: white;
+            transition: opacity 0.5s ease-out;
+        }
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        h1 {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .instruction {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .debug-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <h1>正在加载房屋模型</h1>
+        <p>请稍候...</p>
+    </div>
+
+    <div id="scene-container">
+        <a-scene 
+            loading-screen="enabled: false;"
+            cursor="rayOrigin: mouse"
+            raycaster="objects: .clickable"
+            renderer="colorManagement: true;"
+            embedded>
+
+            <!-- 场景环境 -->
+            <a-assets>
+                <!-- 房屋模型将在JS中加载 -->
+            </a-assets>
+
+            <!-- 房屋模型 -->
+            <!--a-entity id="house-model" position="0 0 0" scale="100 100 100" gltf-model="home.glb"></a-entity-->
+
+            <a-entity obj-model="obj: url(home.obj); mtl: url(home.mtl)"
+                position="0 0 0" scale="0.1 0.1 0.1" rotation="-90 0 0">
+            </a-entity>
+
+            <!-- 地面 -->
+            <a-circle id="ground" position="0 0 0" rotation="-90 0 0" radius="20" color="#445e7b" shadow></a-circle>
+
+            <!-- 天空 -->
+            <a-sky color="#87CEEB"></a-sky>
+
+            <!-- 光源 -->
+            <a-entity light="type: ambient; color: #bbb; intensity: 0.4"></a-entity>
+            <a-entity light="type: directional; color: #fff; intensity: 0.6; castShadow: true;" position="5 10 5"></a-entity>
+
+            <!-- 修改后的第一人称摄像机 - 使用自定义飞行控制 -->
+            <a-entity id="camera-rig" position="0 1.6 5">
+                <a-entity id="camera" 
+                         camera="active: true; far: 1000; fov: 80;"
+                         look-controls="pointerLockEnabled: true"
+                         wasd-controls="acceleration: 10;"
+                         simple-flight>
+                    <a-entity cursor="fuse: true; fuseTimeout: 500"
+                            position="0 0 -1"
+                            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                            material="color: white; shader: flat">
+                    </a-entity>
+                </a-entity>
+            </a-entity>
+        </a-scene>
+
+        <div class="ui-overlay">
+            <div class="controls-info">
+                <p>移动: WASD | 上升: E | 下降: Q | 视角: 鼠标拖动</p>
+                <p>加速: Shift | 退出指针锁定: Esc</p>
+            </div>
+        </div>
+
+        <div class="debug-panel" id="debugPanel">
+            位置: (0, 0, 0)
+        </div>
+    </div>
+
+    <script>
+        // 自定义简单飞行组件
+        AFRAME.registerComponent('simple-flight', {
+            init: function () {
+                // 监听键盘事件
+                this.onKeyDown = this.onKeyDown.bind(this);
+                this.onKeyUp = this.onKeyUp.bind(this);
+                window.addEventListener('keydown', this.onKeyDown);
+                window.addEventListener('keyup', this.onKeyUp);
+                
+                // 垂直速度
+                this.verticalVelocity = 0;
+                this.isAscending = false;
+                this.isDescending = false;
+            },
+            
+            onKeyDown: function (event) {
+                switch (event.keyCode) {
+                    case 69: // E键 - 上升
+                        this.isAscending = true;
+                        break;
+                    case 81: // Q键 - 下降
+                        this.isDescending = true;
+                        break;
+                }
+            },
+            
+            onKeyUp: function (event) {
+                switch (event.keyCode) {
+                    case 69: // E键 - 停止上升
+                        this.isAscending = false;
+                        break;
+                    case 81: // Q键 - 停止下降
+                        this.isDescending = false;
+                        break;
+                }
+            },
+            
+            tick: function (time, timeDelta) {
+                // 计算垂直移动
+                if (this.isAscending) {
+                    this.verticalVelocity = 0.05;
+                } else if (this.isDescending) {
+                    this.verticalVelocity = -0.05;
+                } else {
+                    // 平滑减速
+                    this.verticalVelocity *= 0.9;
+                }
+                
+                // 应用垂直移动
+                const position = this.el.getAttribute('position');
+                this.el.setAttribute('position', {
+                    x: position.x,
+                    y: position.y + this.verticalVelocity,
+                    z: position.z
+                });
+                
+                // 更新调试信息
+                const debugPanel = document.getElementById('debugPanel');
+                if (debugPanel) {
+                    debugPanel.innerHTML = `位置: (${position.x.toFixed(2)}, ${position.y.toFixed(2)}, ${position.z.toFixed(2)})`;
+                }
+            },
+            
+            remove: function () {
+                // 清理事件监听器
+                window.removeEventListener('keydown', this.onKeyDown);
+                window.removeEventListener('keyup', this.onKeyUp);
+            }
+        });
+
+        // 当场景加载完成后隐藏加载界面
+        document.querySelector('a-scene').addEventListener('loaded', function() {
+            // 模拟加载时间，实际应用中可移除或调整
+            setTimeout(function() {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.innerHTML = `
+                <h1>加载错误</h1>
+                <p>无法加载房屋模型，请确保home.glb文件存在</p>
+                <p class="instruction">${e.error ? e.error.message : ''}</p>
+            `;
+        });
+    </script>
+</body>
+</html>
