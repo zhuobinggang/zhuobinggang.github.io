@@ -110,11 +110,11 @@
             </a-assets>
 
             <!-- 房屋模型 -->
-            <!--a-entity id="house-model" position="0 0 0" scale="100 100 100" gltf-model="home.glb"></a-entity-->
+            <a-entity id="house-model" position="0 0 0" rotation="-90 0 0" scale="0.2 0.2 0.2" gltf-model="lingkong.glb"></a-entity>
 
-            <a-entity obj-model="obj: url(home.obj); mtl: url(home.mtl)"
+            <!--a-entity obj-model="obj: url(lingkong.obj); mtl: url(lingkong.mtl)"
                 position="0 0 0" scale="0.1 0.1 0.1" rotation="-90 0 0">
-            </a-entity>
+            </a-entity-->
 
             <!-- 地面 -->
             <a-circle id="ground" position="0 0 0" rotation="-90 0 0" radius="20" color="#445e7b" shadow></a-circle>
@@ -123,7 +123,8 @@
             <a-sky color="#87CEEB"></a-sky>
 
             <!-- 光源 -->
-            <a-entity light="type: ambient; color: #bbb; intensity: 0.4"></a-entity>
+            <!--a-entity light="color: #AFA; intensity: 1.5" position="-1 1 0"></a-entity-->
+            <a-entity light="type: ambient; color: #bbb; intensity: 0.6"></a-entity>
             <a-entity light="type: directional; color: #fff; intensity: 0.6; castShadow: true;" position="5 10 5"></a-entity>
 
             <!-- 修改后的第一人称摄像机 - 使用自定义飞行控制 -->
@@ -131,7 +132,7 @@
                 <a-entity id="camera" 
                          camera="active: true; far: 1000; fov: 80;"
                          look-controls="pointerLockEnabled: true"
-                         wasd-controls="acceleration: 10;"
+                         wasd-controls="acceleration: 20;"
                          simple-flight>
                     <a-entity cursor="fuse: true; fuseTimeout: 500"
                             position="0 0 -1"
